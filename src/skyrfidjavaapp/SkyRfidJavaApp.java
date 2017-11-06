@@ -38,10 +38,10 @@ public class SkyRfidJavaApp extends Application {
   
     @Override public void start(Stage primaryStage) 
     {
-        System.out.println("app start. jav libraries " + System.getProperty("java.library.path"));
-        System.out.println("app start. jna libraries " + System.getProperty("jna.library.path"));
-        System.setProperty("jna.library.path", "c:\\windows\\system32;");
-        System.out.println("after set property. jna libraries " + System.getProperty("jna.library.path"));
+//        System.out.println("app start. java libraries " + System.getProperty("java.library.path"));
+//        System.out.println("app start. jna libraries " + System.getProperty("jna.library.path"));
+//        System.setProperty("java.library.path", "c:\\windows\\system32;");
+//        System.out.println("after set property. java libraries " + System.getProperty("jna.library.path"));
         BorderPane rootPane = new BorderPane();
         GlobalParameters globalParams = new GlobalParameters(rootPane); 
         // sets default parameters: anti theft--no action, program mode--idle, multi read--false

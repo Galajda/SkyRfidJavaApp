@@ -15,6 +15,12 @@ import javafx.scene.layout.Pane;
  */
 public class GlobalParameters 
 {
+    public static final char READ_SINGLE_CARD = 0x36;
+    public static final char CARD_TYPE_ISO15693 = 0x31;
+    
+    public static final int USB_PORT = 100;
+    
+    
     private AntiTheftEnum antiTheftAction;
     private ProgramModeEnum pgmMode;
     private boolean multiRead;
