@@ -1,5 +1,5 @@
 Version 1 features
-Only reading is implemented. Raw hex output to console.
+Only reading is implemented. Manual control of port and read command. Raw hex output to console. 
 
 Problems
 Unsatisfied Link Error. Cannot load umf.dll. SO 30767478 says that the dll must be in SysWOW64 folder
