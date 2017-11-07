@@ -1,14 +1,24 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 Michal G. <Michal.G at cogitatummagnumtelae.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package skyrfidjavaapp;
 
 import com.sun.jna.Library;
 import com.sun.jna.Native;
-//import com.sun.jna.Platform;
-//import com.sun.jna.*;
+
 
 /**
  *
@@ -16,11 +26,7 @@ import com.sun.jna.Native;
  */
 
 public interface RfidNativeInterface extends Library {
-//    RfidNativeInterface INSTANCE = (RfidNativeInterface) Native.loadLibrary("C:\\Windows\\System32\\umf.dll", RfidNativeInterface.class);
-    
-//    addSearchPath("lib name", "path");
     RfidNativeInterface INSTANCE = (RfidNativeInterface) Native.loadLibrary("umf", RfidNativeInterface.class);
-//    RfidNativeInterface INSTANCE = (RfidNativeInterface) Native.
     
     int fw_init(int i, long l);   
     int fw_config_card(int handle,char card_type); 
@@ -36,9 +42,8 @@ public interface RfidNativeInterface extends Library {
     
     int fw_readblock(int handle,char flags, char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
-    //readblock(HANDLE icdev,unsigned char flags, unsigned char startblock,
-    //unsigned char blocknumm,unsigned char *UID,unsigned char *rlen,unsigned char *rbuffer)
     
+    //add anticoll, stay quiet
     
     short fw_exit(int i);
 }

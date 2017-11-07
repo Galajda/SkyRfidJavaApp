@@ -1,7 +1,18 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright (C) 2017 Michal G. <Michal.G at cogitatummagnumtelae.com>
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package skyrfidjavaapp;
 
@@ -20,19 +31,19 @@ import javafx.scene.input.MouseEvent;
  */
 public class MenuBarPane 
 {
-    private HBox pane;
-    private MenuBar menu;
+    private final HBox pane;
+    private final MenuBar menu;
     
-    private Menu fileMenu;
-    private MenuItem resetMenu;
-    private MenuItem smallWinMenu;
-    private MenuItem largeWinMenu;
-    private MenuItem exitMenu;
+    private final Menu fileMenu;
+    private final MenuItem resetMenu;
+    private final MenuItem smallWinMenu;
+    private final MenuItem largeWinMenu;
+    private final MenuItem exitMenu;
     
-    private Menu readWriteMenu;
-    private MenuItem readMenu;
-    private MenuItem writeMenu;
-    private MenuItem idleMenu;
+    private final Menu readWriteMenu;
+    private final MenuItem readMenu;
+    private final MenuItem writeMenu;
+    private final MenuItem idleMenu;
     
     MenuBarPane(GlobalParameters parms)
     {
@@ -77,19 +88,22 @@ public class MenuBarPane
     {
         if (e.getSource() == resetMenu)
         {
-            FxMsgBox.show("reset", "Menu action");
+            FxMsgBox.show("pretend to reset", "Menu action");
+            //change global params, reload window
+            
         }
         if (e.getSource() == smallWinMenu)
         {
-            FxMsgBox.show("small window", "Menu action");
+            FxMsgBox.show("pretend you see a small window", "Menu action");
         }
         if (e.getSource() == largeWinMenu)
         {
-            FxMsgBox.show("large window", "Menu action");
+            FxMsgBox.show("pretend you see a large window", "Menu action");
         }
         if (e.getSource() == exitMenu)
         {
             FxMsgBox.show("exit", "Menu action");
+            System.exit(0);
         }
         // why can't i use switch case?
         MenuItem eventSource = (MenuItem)e.getSource();

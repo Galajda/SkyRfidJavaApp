@@ -1,0 +1,9 @@
+<#if licenseFirst??>
+${licenseFirst}
+</#if>
+${licensePrefix}As this project depends on the Java Native Access library
+${licensePrefix}It copies the Lesser General Public License 2.1 of that project
+${licensePrefix} http://gnu.org/licenses/licenses.html
+<#if licenseLast??>
+${licenseLast}
+</#if>
