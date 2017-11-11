@@ -17,6 +17,8 @@
 package skyrfidjavaapp;
 
 
+import java.util.HashSet;
+import java.util.Set;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleGroup;
@@ -37,23 +39,24 @@ public class AntiTheftPane {
     VBox pane;
     
     //constructor
-    AntiTheftPane(GlobalParameters parms)
+//    AntiTheftPane(AppConstants parms)
+    AntiTheftPane()
     {
         lblTheftState = new Label(); //("Current theft bit state is\n" + parms.getAntiTheftAction().name());
         
         tglTheftButtons = new ToggleGroup();
         rdoTurnOn = new RadioButton("Turn theft bit o_n");
         rdoTurnOn.setToggleGroup(tglTheftButtons);
-        rdoTurnOn.setOnAction(e->RadioChange(parms, "on"));
+        rdoTurnOn.setOnAction(e->RadioChange("on"));
         rdoTurnOff = new RadioButton("Turn theft bit _off");
         rdoTurnOff.setToggleGroup(tglTheftButtons);
-        rdoTurnOff.setOnAction(e->RadioChange(parms, "off"));
+        rdoTurnOff.setOnAction(e->RadioChange("off"));
         rdoNoAction = new RadioButton("Ta_ke no action");     
         rdoNoAction.setToggleGroup(tglTheftButtons);
-        rdoNoAction.setOnAction(e->RadioChange(parms, "neither"));
+        rdoNoAction.setOnAction(e->RadioChange("neither"));
         
         //borrow event handler to initialize label text and radio button
-        RadioChange( parms, "neither");
+        RadioChange("neither");
         
         pane = new VBox();
         pane.setMinWidth(200);
@@ -65,31 +68,33 @@ public class AntiTheftPane {
         return this.pane;
     }
     //action events. change text of label and button, change enum theft state
-    private void RadioChange(GlobalParameters parms, String whichState)
+    private void RadioChange(String whichState)
     {
         //FxMsgBox.show("The current selection is " + tglTheftButtons.getSelectedToggle().toString(), "Radio button change");
-        
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         switch (whichState)
         {
             case "on":
-                //FxMsgBox.show("turning on", "in switch");
-                parms.setAntiTheftAction(AntiTheftEnum.TURN_ON);
+                //FxMsgBox.show("turning on", "in switch");                
+                state.setAntiTheftAction(AntiTheftEnum.TURN_ON);                
                 rdoTurnOn.fire();
                 break;
             case "off":
                 //FxMsgBox.show("turning off", "in switch");
-                parms.setAntiTheftAction(AntiTheftEnum.TURN_OFF);
+//                parms.setAntiTheftAction(AntiTheftEnum.TURN_OFF);
+                state.setAntiTheftAction(AntiTheftEnum.TURN_OFF);
                 rdoTurnOff.fire();
                 break;
                 
             case "neither":
                 //FxMsgBox.show("turning idle", "in switch");
-                parms.setAntiTheftAction(AntiTheftEnum.NO_ACTION);
+//                parms.setAntiTheftAction(AntiTheftEnum.NO_ACTION);
+                state.setAntiTheftAction(AntiTheftEnum.NO_ACTION);
                 rdoNoAction.fire();
                 break;
                 
         }
-        lblTheftState.setText("Current theft bit action is\n" + parms.getAntiTheftAction().name());
+        lblTheftState.setText("Current theft bit action is\n" + state.getAntiTheftAction().name());
         
     }
 }

@@ -26,6 +26,8 @@ import javafx.scene.control.Button;
  */
 public class ReadPane 
 {
+    private final AppState appState;
+    
     private final VBox pane;
     private final Label lblWelcome;
     private final Button btnOpenPort;
@@ -33,14 +35,15 @@ public class ReadPane
     private final Button btnClosePort;
 //    private javacall reader;
     private final RfidNativeInterface rfidDll = RfidNativeInterface.INSTANCE;
-    private final char READ_TAG_START_BLOCK = 0x0;
-    private final char READ_TAG_END_BLOCK = 0x05;
+    private final char READ_TAG_START_BLOCK = 0x1;
+    private final char READ_TAG_BLOCK_LEN = 0x05;
     private int readerHdl;
     
     
     ReadPane()
     {
         System.out.println("constructor running");
+        appState = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         pane = new VBox();
         pane.setMinWidth(300);
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
@@ -58,7 +61,6 @@ public class ReadPane
         btnClosePort.setOnAction(e -> btnClosePort_Click());
         pane.getChildren().add(btnClosePort);
         
-//        reader = new javacall();
         readerHdl = -1;
         System.out.println("constructor finished. reader initialized");
         
@@ -71,7 +73,7 @@ public class ReadPane
     private void btnOpenPort_Click() {
 //        System.out.println("got click to open port");
         try {
-            readerHdl = rfidDll.fw_init(GlobalParameters.USB_PORT, 0); //100=USB
+            readerHdl = rfidDll.fw_init(AppConstants.USB_PORT, 0); //ignore baud rate
             System.out.println("initialized reader. handle = " + readerHdl);
         }
         catch (Exception ex) {
@@ -81,14 +83,16 @@ public class ReadPane
     
     private void btnReadData_Click() {
         System.out.println("got click to read data");
-        int configStatus = rfidDll.fw_config_card(readerHdl, GlobalParameters.CARD_TYPE_ISO15693);        
+        int configStatus = rfidDll.fw_config_card(readerHdl, AppConstants.CARD_TYPE_ISO15693);        
         System.out.println("config card status " + (configStatus==0));
         
         char[] returnedUidLen = {0x0};
         System.out.println("returned len init hex val " + String.format("%04x", (int)returnedUidLen[0]) );
         char[] uidBuffer = new char[256];
-        int inventoryStatus = rfidDll.fw_inventory(readerHdl, GlobalParameters.READ_SINGLE_CARD,
-                READ_TAG_START_BLOCK, READ_TAG_END_BLOCK, returnedUidLen, uidBuffer);
+//        int inventoryStatus = rfidDll.fw_inventory(readerHdl, AppConstants.READ_SINGLE_CARD,
+//                READ_TAG_START_BLOCK, READ_TAG_BLOCK_LEN, returnedUidLen, uidBuffer);
+        int inventoryStatus = rfidDll.fw_inventory(readerHdl, AppConstants.READ_SINGLE_CARD,
+                (char)0x0, (char)0x0, returnedUidLen, uidBuffer);
         System.out.println("inventory status " + (inventoryStatus==0));
         System.out.println("\treturned uid length hex val" + String.format("%04x", (int)returnedUidLen[0]));
         System.out.println("\tuid buffer hex vals");
@@ -109,20 +113,21 @@ public class ReadPane
         char[] returnedReadLength = {0x0};
         System.out.println("returned read block len init hex val " + String.format("%04x", (int)returnedReadLength[0]) );
         char[] readDataBuffer = new char[256];
-//        int securityInfoStatus = rfidDll.fw_get_securityinfo(readerHdl, (char)0x22, (char)0x0, 
-//            (char)0x05, uidBuffer, returnedReadLength, readDataBuffer);
+//        int securityInfoStatus = rfidDll.fw_get_securityinfo(readerHdl, (char)0x22, READ_TAG_START_BLOCK, 
+//            READ_TAG_BLOCK_LEN, uidBuffer, returnedReadLength, readDataBuffer);
 //        System.out.println("get security info status " + (securityInfoStatus==0));
 //        System.out.println("\treturned read block length hex val " + String.format("%04x", (int)returnedReadLength[0]));
         //security info status does not appear to be necessary
         
-        int readBlockStatus = rfidDll.fw_readblock(readerHdl, (char)0x22, (char)0x0, 
-            (char)0x05, uidBuffer, returnedReadLength, readDataBuffer);
+        int readBlockStatus = rfidDll.fw_readblock(readerHdl, (char)0x22, READ_TAG_START_BLOCK, 
+            READ_TAG_BLOCK_LEN, uidBuffer, returnedReadLength, readDataBuffer);
         System.out.println("read block status " + (readBlockStatus==0));
         //len of returned data is a better indicator than read block status
         System.out.println("\treturned read block length hex val " + String.format("%04x", (int)returnedReadLength[0]));
         System.out.println("\tread block buffer hex vals");
         System.out.print("\t");
-        for (int i = 0; i <256; i++) {
+//        int lastReadBlock = 
+        for (int i = 0; i <=READ_TAG_BLOCK_LEN + 1; i++) {
             System.out.print("element" + i + ": " + String.format("%04x", (int)readDataBuffer[i]) + ", ");
         }
         System.out.println();

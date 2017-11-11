@@ -32,18 +32,18 @@ public class ChooseSingleMultiPane
     private VBox pane;
     private Label lblCurrentSingleMulti;
     private Button btnChooseSingleMulti;
-    
+    private AppState state;
     
     //constructor
-    ChooseSingleMultiPane(GlobalParameters parms)
+    ChooseSingleMultiPane()
     {
         
         pane = new VBox();
         pane.setMinWidth(200);
         lblCurrentSingleMulti = new Label();
         btnChooseSingleMulti = new Button();
-        btnChooseSingleMulti.setOnAction(e-> btnChooseSingleMulti_Click(parms));
-        setLblAndButtonTxt(parms);
+        btnChooseSingleMulti.setOnAction(e-> btnChooseSingleMulti_Click());
+        setLblAndButtonTxt();
         
         pane.getChildren().addAll(lblCurrentSingleMulti,btnChooseSingleMulti);
     }
@@ -51,10 +51,19 @@ public class ChooseSingleMultiPane
     {
         return this.pane;
     }
-    
-    private void setLblAndButtonTxt(GlobalParameters parms)
+        //action events. change text of label and button, change bool multi read mode
+    private void btnChooseSingleMulti_Click()
     {
-        if (parms.isMultiRead())
+//        parms.setMultiRead(!state.isMultiRead());
+        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        state.setMultiRead(!state.isMultiRead());
+        setLblAndButtonTxt();
+    }
+    
+    private void setLblAndButtonTxt()
+    {
+        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        if (state.isMultiRead())
         {
             lblCurrentSingleMulti.setText("Reading multiple tags");
             btnChooseSingleMulti.setText("Switch to _single tag");
@@ -65,10 +74,5 @@ public class ChooseSingleMultiPane
             btnChooseSingleMulti.setText("Switch to _multiple tags");
         }
     }
-    //action events. change text of label and button, change bool multi read mode
-    private void btnChooseSingleMulti_Click(GlobalParameters parms)
-    {
-        parms.setMultiRead(!parms.isMultiRead());
-        setLblAndButtonTxt(parms);
-    }
+
 }

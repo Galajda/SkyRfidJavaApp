@@ -18,10 +18,12 @@ package skyrfidjavaapp;
 
 import javafx.event.ActionEvent;
 import javafx.scene.layout.HBox;
+
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.layout.Pane;
 import javafx.scene.input.MouseEvent;
 
 
@@ -45,30 +47,41 @@ public class MenuBarPane
     private final MenuItem writeMenu;
     private final MenuItem idleMenu;
     
-    MenuBarPane(GlobalParameters parms)
+    private final static String FILE_MENU_RESET = "Rese_t";
+    private final static String FILE_MENU_SM_WIN = "_Small window";
+    private final static String FILE_MENU_LG_WIN = "_Large window";
+    private final static String FILE_MENU_EXIT = "E_xit";
+    
+    private final static String R_W_MENU_READ = "R_ead tags";
+    private final static String R_W_MENU_WRITE = "_Write tags";
+    private final static String R_W_MENU_IDLE = "_Idle";
+    private AppState state;
+    
+    MenuBarPane()
     {
+        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         pane = new HBox();
         menu = new MenuBar();
         
-        fileMenu = new Menu("_File");
-        resetMenu = new MenuItem("Rese_t");
+        fileMenu = new Menu("_File");        
+        resetMenu = new MenuItem(MenuBarPane.FILE_MENU_RESET);
         resetMenu.setOnAction(e-> FileMenuItem_Click(e));
-        smallWinMenu = new MenuItem("_Small window");
+        smallWinMenu = new MenuItem(MenuBarPane.FILE_MENU_SM_WIN);
         smallWinMenu.setOnAction(e-> FileMenuItem_Click(e));
-        largeWinMenu = new MenuItem("_Large window");
+        largeWinMenu = new MenuItem(MenuBarPane.FILE_MENU_LG_WIN);
         largeWinMenu.setOnAction(e-> FileMenuItem_Click(e));
-        exitMenu = new MenuItem("E_xit");
+        exitMenu = new MenuItem(MenuBarPane.FILE_MENU_EXIT);
         exitMenu.setOnAction(e-> FileMenuItem_Click(e));
         fileMenu.getItems().addAll(resetMenu, new SeparatorMenuItem(), smallWinMenu, largeWinMenu,
                 new SeparatorMenuItem(), exitMenu);
            
         readWriteMenu = new Menu ("_Read/Write");
-        readMenu = new MenuItem("R_ead tags");
-        readMenu.setOnAction(e->ModeSelectMenu_Click(e, parms));
-        writeMenu = new MenuItem("_Write tags");
-        writeMenu.setOnAction(e->ModeSelectMenu_Click(e, parms));
-        idleMenu = new MenuItem("_Idle");
-        idleMenu.setOnAction(e->ModeSelectMenu_Click(e, parms));
+        readMenu = new MenuItem(MenuBarPane.R_W_MENU_READ);
+        readMenu.setOnAction(e->ModeSelectMenu_Click(e));
+        writeMenu = new MenuItem(MenuBarPane.R_W_MENU_WRITE);
+        writeMenu.setOnAction(e->ModeSelectMenu_Click(e));
+        idleMenu = new MenuItem(MenuBarPane.R_W_MENU_IDLE);
+        idleMenu.setOnAction(e->ModeSelectMenu_Click(e));
 
         
         readWriteMenu.getItems().addAll(readMenu, writeMenu, idleMenu);
@@ -85,75 +98,58 @@ public class MenuBarPane
     }
     //action events
     private void FileMenuItem_Click(ActionEvent e)
-    {
-        if (e.getSource() == resetMenu)
-        {
-            FxMsgBox.show("pretend to reset", "Menu action");
-            //change global params, reload window
-            
-        }
-        if (e.getSource() == smallWinMenu)
-        {
-            FxMsgBox.show("pretend you see a small window", "Menu action");
-        }
-        if (e.getSource() == largeWinMenu)
-        {
-            FxMsgBox.show("pretend you see a large window", "Menu action");
-        }
-        if (e.getSource() == exitMenu)
-        {
-            FxMsgBox.show("exit", "Menu action");
-            System.exit(0);
-        }
-        // why can't i use switch case?
+    {        
         MenuItem eventSource = (MenuItem)e.getSource();
-        
-        FxMsgBox.show("event source is " + eventSource.getText(), "source debugging");
-        FxMsgBox.show("event type is " +e.getEventType().toString(), "source debugging");
+        switch (eventSource.getText()) {
+            case MenuBarPane.FILE_MENU_RESET:                
+//                FxMsgBox.show("pretend to reset", "Menu action");
+                //change global params, reload window
+                AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+                state.resetAppState(); //could reload scene here, but I also want
+                //to reset the current parameters
+                
+                break;
+            case MenuBarPane.FILE_MENU_SM_WIN:
+                FxMsgBox.show("pretend you see a small window", "Menu action");
+                break;
+            case MenuBarPane.FILE_MENU_LG_WIN:
+                FxMsgBox.show("pretend you see a large window", "Menu action");
+                break;
+            case MenuBarPane.FILE_MENU_EXIT:                
+                FxMsgBox.show("exit", "Menu action");
+                System.exit(0);
+            default:                
+                FxMsgBox.show("event source is " + eventSource.getText(), "source debugging");
+                FxMsgBox.show("event type is " +e.getEventType().toString(), "source debugging");                
+        }
         
     }
-    private void ModeSelectMenu_Click (ActionEvent e, GlobalParameters parms)
+    private void ModeSelectMenu_Click (ActionEvent e)
     {
+        Pane p;
         MenuItem eventSource = (MenuItem)e.getSource();
-        switch (eventSource.getText())
-        {
-            case "R_ead tags":
-                parms.setPgmMode(ProgramModeEnum.READ_MODE);
+        switch (eventSource.getText()) {
+            case MenuBarPane.R_W_MENU_READ:
+                state.setReadWriteMode(ReadWriteModeEnum.READ_MODE);
                 //FxMsgBox.show("Change mode to read", "Mode select event");
+                ReadPane readPane = new ReadPane();
+                p = readPane.getPane();
                 break;
-            case "_Write tags":
-                parms.setPgmMode(ProgramModeEnum.WRITE_MODE);
+            case MenuBarPane.R_W_MENU_WRITE:
+                state.setReadWriteMode(ReadWriteModeEnum.WRITE_MODE);
                 //FxMsgBox.show("Change mode to write", "Mode select event");
+                WritePane writePane = new WritePane();
+                p = writePane.getPane();
                 break;
-            case "_Idle":
-                parms.setPgmMode(ProgramModeEnum.IDLE_MODE);
+            case MenuBarPane.R_W_MENU_IDLE:                
                 //FxMsgBox.show("Change mode to idle", "Mode select event");
-                break;
+                //fall through to default
+            default:
+                state.setReadWriteMode(ReadWriteModeEnum.IDLE_MODE);
+                IdlePane idlePane = new IdlePane();
+                p = idlePane.getPane();
         }
-        switch (parms.getPgmMode())
-        {
-            //eliminate pgm mode field from parms? 
-            //window title does not change
-            case IDLE_MODE:
-            {
-                IdlePane ctrPane = new IdlePane();
-                parms.setCtrPane(ctrPane.getPane());
-                break;
-            }
-            case READ_MODE:
-            {
-                ReadPane ctrPane = new ReadPane();
-                parms.setCtrPane(ctrPane.getPane());
-                break;
-            }
-            case WRITE_MODE:
-            {
-                WritePane ctrPane = new WritePane();
-                parms.setCtrPane(ctrPane.getPane());
-                break;
-            }
-                
-        }
+        state.setCenterPane(p);   
         
         
     }

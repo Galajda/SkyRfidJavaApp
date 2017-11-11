@@ -1,8 +1,13 @@
 Version 1 features
 Only reading is implemented. Manual control of port and read command. Raw hex output to console. 
 
+Why use enums and constant strings for app state? Enums control fcn arguments. Constant strings reduce 
+    spelling errors.
+
 Problems
 Unsatisfied Link Error. Cannot load umf.dll. SO 30767478 says that the dll must be in SysWOW64 folder
 when running a 32-bit JRE on a 64-bit computer. (I think this is the explanation.)
 Previous versions have used other workarounds, such as putting the dll in the root directory, which
 did not work in this application for an unknown reason.
+
+AppState file path may not work when packaged as jar.

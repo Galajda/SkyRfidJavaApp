@@ -32,7 +32,7 @@ import javafx.stage.Stage;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SkyRfidJavaApp extends Application {
-    
+    public static BorderPane rootPane;
     
     /**
      * @param args the command line arguments
@@ -44,38 +44,39 @@ public class SkyRfidJavaApp extends Application {
     
     //how to make these accessible to anti theft, multi read and menu?
     //define a class for params?
-    
-    
   
     @Override public void start(Stage primaryStage) 
-    {
-//        System.out.println("app start. java libraries " + System.getProperty("java.library.path"));
-//        System.out.println("app start. jna libraries " + System.getProperty("jna.library.path"));
-//        System.setProperty("java.library.path", "c:\\windows\\system32;");
-//        System.out.println("after set property. java libraries " + System.getProperty("jna.library.path"));
-        BorderPane rootPane = new BorderPane();
-        GlobalParameters globalParams = new GlobalParameters(rootPane); 
-        // sets default parameters: anti theft--no action, program mode--idle, multi read--false
+    {        
+        rootPane = new BorderPane();
+        // get default app state
         
         // add menu bar and multi read status to rootPane.
-        MenuBarPane pgmMenu = new MenuBarPane(globalParams);
+        MenuBarPane pgmMenu = new MenuBarPane();
         rootPane.setTop(pgmMenu.getPane());
-        ChooseSingleMultiPane singleMultiStatus = new ChooseSingleMultiPane(globalParams);
-        rootPane.setLeft(singleMultiStatus.getPane());
-        IdlePane pane = new IdlePane();
+        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
+        rootPane.setLeft(singleMultiPane.getPane());
+        IdlePane pane = new IdlePane(); //get app state default, choose ctr pane
         rootPane.setCenter(pane.getPane());
-        AntiTheftPane antiTheft = new AntiTheftPane(globalParams);
+        AntiTheftPane antiTheft = new AntiTheftPane();
         rootPane.setRight(antiTheft.getPane());
-        
-        
+                
         Scene scene = new Scene(rootPane, 700, 250);
         
-        primaryStage.setTitle(globalParams.getPgmMode().toString());    //does not change with center pane
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_DEFAULT);
+        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
         primaryStage.setTitle("RFID program");
-        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));
-                //add("javarhino.jpg");
+        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));                
         primaryStage.setScene(scene);
         primaryStage.show();
+        
     }
-
+    public static void loadRootPane() {
+        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
+        rootPane.setLeft(singleMultiPane.getPane());
+        IdlePane pane = new IdlePane(); //get app state default, choose ctr pane
+        rootPane.setCenter(pane.getPane());
+        AntiTheftPane antiTheft = new AntiTheftPane();
+        rootPane.setRight(antiTheft.getPane());
+        
+    }
 }
