@@ -24,7 +24,7 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.layout.Pane;
-import javafx.scene.input.MouseEvent;
+//import javafx.scene.input.MouseEvent;
 
 
 /**
@@ -55,11 +55,12 @@ public class MenuBarPane
     private final static String R_W_MENU_READ = "R_ead tags";
     private final static String R_W_MENU_WRITE = "_Write tags";
     private final static String R_W_MENU_IDLE = "_Idle";
-    private AppState state;
+   
     
     MenuBarPane()
     {
-        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state;
+//        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         pane = new HBox();
         menu = new MenuBar();
         
@@ -103,10 +104,11 @@ public class MenuBarPane
         switch (eventSource.getText()) {
             case MenuBarPane.FILE_MENU_RESET:                
 //                FxMsgBox.show("pretend to reset", "Menu action");
-                //change global params, reload window
+                //reset the current parameters to the defaults
                 AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
-                state.resetAppState(); //could reload scene here, but I also want
-                //to reset the current parameters
+                state.resetAppState(); 
+                 //reload stage
+                SkyRfidJavaApp.loadRootPane();
                 
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
@@ -128,28 +130,30 @@ public class MenuBarPane
     {
         Pane p;
         MenuItem eventSource = (MenuItem)e.getSource();
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         switch (eventSource.getText()) {
             case MenuBarPane.R_W_MENU_READ:
+                
                 state.setReadWriteMode(ReadWriteModeEnum.READ_MODE);
                 //FxMsgBox.show("Change mode to read", "Mode select event");
-                ReadPane readPane = new ReadPane();
-                p = readPane.getPane();
+//                ReadPane readPane = new ReadPane();
+//                p = readPane.getPane();
                 break;
             case MenuBarPane.R_W_MENU_WRITE:
                 state.setReadWriteMode(ReadWriteModeEnum.WRITE_MODE);
                 //FxMsgBox.show("Change mode to write", "Mode select event");
-                WritePane writePane = new WritePane();
-                p = writePane.getPane();
+//                WritePane writePane = new WritePane();
+//                p = writePane.getPane();
                 break;
             case MenuBarPane.R_W_MENU_IDLE:                
                 //FxMsgBox.show("Change mode to idle", "Mode select event");
                 //fall through to default
             default:
                 state.setReadWriteMode(ReadWriteModeEnum.IDLE_MODE);
-                IdlePane idlePane = new IdlePane();
-                p = idlePane.getPane();
+//                IdlePane idlePane = new IdlePane();
+//                p = idlePane.getPane();
         }
-        state.setCenterPane(p);   
+        SkyRfidJavaApp.loadRootPane();
         
         
     }

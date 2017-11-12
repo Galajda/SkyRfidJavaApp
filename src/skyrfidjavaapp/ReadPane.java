@@ -26,7 +26,7 @@ import javafx.scene.control.Button;
  */
 public class ReadPane 
 {
-    private final AppState appState;
+//    private final AppState appState;
     
     private final VBox pane;
     private final Label lblWelcome;
@@ -42,8 +42,7 @@ public class ReadPane
     
     ReadPane()
     {
-        System.out.println("constructor running");
-        appState = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        System.out.println("read pane constructor running");        
         pane = new VBox();
         pane.setMinWidth(300);
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
@@ -62,7 +61,11 @@ public class ReadPane
         pane.getChildren().add(btnClosePort);
         
         readerHdl = -1;
-        System.out.println("constructor finished. reader initialized");
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        System.out.println("read pane constructor sees multi read " + state.isMultiRead());
+        System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
+        
+        System.out.println("read pane constructor finished. reader initialized");
         
     }
     public VBox getPane()

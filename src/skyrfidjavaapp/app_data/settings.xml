@@ -10,8 +10,8 @@
     </parameter_set>
     <parameter_set>
         <type>current</type>
-        <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>false</multi_read>
+        <theft_bit_action>TURN_ON</theft_bit_action>
+        <read_write_mode>READ_MODE</read_write_mode>
+        <multi_read>true</multi_read>
     </parameter_set>
 </settings>

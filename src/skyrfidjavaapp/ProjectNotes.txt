@@ -4,6 +4,10 @@ Only reading is implemented. Manual control of port and read command. Raw hex ou
 Why use enums and constant strings for app state? Enums control fcn arguments. Constant strings reduce 
     spelling errors.
 
+The logic of the AppState. The default state is managed through a settings screen that has not been
+    implemented yet. When the program launches, or when reset is chosen from the file menu, the 
+    default values are copied to the current values. The current values are always used to load panes.
+
 Problems
 Unsatisfied Link Error. Cannot load umf.dll. SO 30767478 says that the dll must be in SysWOW64 folder
 when running a 32-bit JRE on a 64-bit computer. (I think this is the explanation.)
@@ -11,3 +15,4 @@ Previous versions have used other workarounds, such as putting the dll in the ro
 did not work in this application for an unknown reason.
 
 AppState file path may not work when packaged as jar.
+    

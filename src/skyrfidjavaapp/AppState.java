@@ -17,20 +17,20 @@
 package skyrfidjavaapp;
 
 //import com.sun.glass.ui.Application;
-import javafx.scene.layout.Pane;
+//import javafx.scene.layout.Pane;
 import java.io.File;
-import java.io.InputStream;
-import java.io.FileReader;
-import java.io.FileWriter;
+//import java.io.InputStream;
+//import java.io.FileReader;
+//import java.io.FileWriter;
 import java.io.FileOutputStream;
-import java.io.IOException;
+//import java.io.IOException;
 import nu.xom.Builder;
-import nu.xom.Attribute;
+//import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Text;
-import nu.xom.Node;
+//import nu.xom.Node;
 import nu.xom.Serializer;
 
 /**
@@ -39,9 +39,9 @@ import nu.xom.Serializer;
  */
 public class AppState {
     
-    private AntiTheftEnum antiTheftAction;
-    private ReadWriteModeEnum pgmMode;
-    private boolean multiRead;
+//    private AntiTheftEnum antiTheftAction;
+//    private ReadWriteModeEnum pgmMode;
+//    private boolean multiRead;
     
     private AppSettingsEnum settingsGroup;
     String settingsPath;
@@ -51,7 +51,7 @@ public class AppState {
     Elements settingsColl;
     private Element settingsSection;
     
-    private Serializer outputWriter;
+//    private Serializer outputWriter;
 
     public AppState(AppSettingsEnum settingsGrp) {
 
@@ -60,16 +60,13 @@ public class AppState {
         settingsGroup = settingsGrp;
         try {
 //            File settingsFile = new File("skyrfidjavaapp.app_data/settings.xml");    
-//            InputStream inStream = AppState.class.getResourceAsStream("skyrfidjavaapp/app_data/settings.xml");
             String basePath = new File("").getAbsolutePath();
 //            System.out.println("abs docRoot path " + basePath);
             settingsPath = basePath.concat("/src/skyrfidjavaapp/app_data/settings.xml");            
             settingsFile = new File(settingsPath);      
             
             Builder builder = new Builder(true); //validates xml.                 
-//            Builder builder = new Builder();
             settingsDoc = builder.build(settingsFile);
-//            Document settingsDoc = builder.build(inStream);
             docRoot = settingsDoc.getRootElement();
             settingsColl = docRoot.getChildElements();            
         }
@@ -92,15 +89,15 @@ public class AppState {
 //        Element antiTheftEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_THEFT_BIT);
 //        Text antiTheftValue = (Text) antiTheftEle.getChild(0);
 //        System.out.println("anti theft text value" + antiTheftValue.getValue());
-        String value = this.getSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT);
+        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT);
         System.out.println("anti theft text value" + value);
-        switch (value) {
-            case AppConstants.THEFT_MODE_NONE:
-                return AntiTheftEnum.NO_ACTION;                
+        switch (value) {            
             case AppConstants.THEFT_MODE_OFF:
                 return AntiTheftEnum.TURN_OFF;
             case AppConstants.THEFT_MODE_ON:
-                return AntiTheftEnum.TURN_ON;
+                return AntiTheftEnum.TURN_ON;                
+            case AppConstants.THEFT_MODE_NONE:
+                //fall through to default    
             default:
                 return AntiTheftEnum.NO_ACTION;    
         }        
@@ -108,7 +105,7 @@ public class AppState {
         
     public void setAntiTheftAction(AntiTheftEnum antiTheftAction) {
         System.out.println("app state setAntiTheftAction");
-        this.antiTheftAction = antiTheftAction;
+//        this.antiTheftAction = antiTheftAction;
         //write file
         String newValue;
         switch (antiTheftAction) {            
@@ -124,6 +121,7 @@ public class AppState {
                 newValue = AppConstants.THEFT_MODE_NONE;                
         }        
         this.setSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT, newValue);
+        SkyRfidJavaApp.loadRootPane();
     }
     public ReadWriteModeEnum getReadWriteMode() {
         System.out.println("app state getReadWriteMode");
@@ -131,7 +129,7 @@ public class AppState {
 //        Element pgmModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_R_W_MODE);
 //        Text pgmModeValue = (Text) pgmModeEle.getChild(0);
 //        System.out.println("pgm mode text" + pgmModeValue.getValue());
-        String value = this.getSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE);
+        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE);
         System.out.println("pgm mode text" + value);        
         switch (value) {
             case AppConstants.R_W_MODE_IDLE:
@@ -146,9 +144,8 @@ public class AppState {
     }
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
         System.out.println("app state setReadWriteMode");
-        this.pgmMode = readWriteMode;
-        //write file
-        
+//        this.pgmMode = readWriteMode;
+        //write file        
         String newValue;
         switch (readWriteMode) {                 
             case READ_MODE:
@@ -163,6 +160,7 @@ public class AppState {
                 newValue = AppConstants.R_W_MODE_IDLE;                
         }        
         this.setSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE, newValue);
+        SkyRfidJavaApp.loadRootPane();
         
     }
 
@@ -172,33 +170,33 @@ public class AppState {
 //        Element singleMultiModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_TYPE_MULTI_READ);
 //        Text pgmModeValue = (Text) singleMultiModeEle.getChild(0);
 //        System.out.println("pgm mode text" + pgmModeValue.getValue());   
-        String value = this.getSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ);
+        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ);
         System.out.println("pgm mode text" + value);           
             return (value.equalsIgnoreCase("true")) ;                    
     }
     
     public void setMultiRead(boolean multiRead) {
         System.out.println("app state setMultiRead");
-        this.multiRead = multiRead;
+//        this.multiRead = multiRead;
         //write file        
         String newValue = String.valueOf(multiRead);
-        this.setSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ, newValue);        
+        setSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ, newValue);  
+        SkyRfidJavaApp.loadRootPane();
     }
     
     public void resetAppState() {
         System.out.println("app state resetAppState");   
         //write file
-        this.setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
-        this.setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
-        this.setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_TYPE_MULTI_READ, "false");   
-        //reload stage
-       SkyRfidJavaApp.loadRootPane();
+        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
+        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
+        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_TYPE_MULTI_READ, "false");   
+       
     }
     
-    public void setCenterPane(Pane p) {
-        System.out.println("app state setCenterPane");        
-        SkyRfidJavaApp.rootPane.setCenter(p);
-    }
+//    public void setCenterPane(Pane p) {
+//        System.out.println("app state setCenterPane");        
+//        SkyRfidJavaApp.rootPane.setCenter(p);
+//    }
 
     /**
      * @param settings_category the set that you wish to retrieve: current or default
@@ -243,7 +241,7 @@ public class AppState {
             fos.close();            
         }        
         catch (Exception ex) {                
-            System.out.println("error get setting value " + ex.getMessage());
+            System.out.println("error set setting value " + ex.getMessage());
             ex.printStackTrace();
         }             
     }

@@ -29,10 +29,10 @@ public class ChooseSingleMultiPane
     //display current mode in label
     //alter button text for the other choice
     
-    private VBox pane;
-    private Label lblCurrentSingleMulti;
-    private Button btnChooseSingleMulti;
-    private AppState state;
+    private final VBox pane;
+    private final Label lblCurrentSingleMulti;
+    private final Button btnChooseSingleMulti;
+    
     
     //constructor
     ChooseSingleMultiPane()
@@ -54,7 +54,7 @@ public class ChooseSingleMultiPane
         //action events. change text of label and button, change bool multi read mode
     private void btnChooseSingleMulti_Click()
     {
-//        parms.setMultiRead(!state.isMultiRead());
+        AppState state;
         state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setMultiRead(!state.isMultiRead());
         setLblAndButtonTxt();
@@ -62,6 +62,7 @@ public class ChooseSingleMultiPane
     
     private void setLblAndButtonTxt()
     {
+        AppState state;
         state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         if (state.isMultiRead())
         {
