@@ -1,3 +1,4 @@
+
 # SkyRfidJavaApp
 ***************
 Description: 
@@ -9,6 +10,12 @@ Manufacturer's website:
 http://www.skyrfid.com/index.php?pr=Readers_HF_1356
 
 A Java Native Access interface is used to access dll functions in place of the 
-manufacturer's javacall class because this class lacks critical functions.
+manufacturer's javacall class because this class lacks critical functions. It is covered by the 
+LGPL license.
+https://github.com/java-native-access/jna
+
+The nu.xom package is used for XML reading and writing. It is covered by the 
+LGPL license.
+https://xom.nu/
 
 
