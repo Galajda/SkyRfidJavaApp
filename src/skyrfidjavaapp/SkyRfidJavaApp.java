@@ -21,6 +21,7 @@ import static javafx.application.Application.launch;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
@@ -32,7 +33,7 @@ import javafx.stage.Stage;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SkyRfidJavaApp extends Application {
-    
+    private static BorderPane rootPane;
     
     /**
      * @param args the command line arguments
@@ -42,40 +43,58 @@ public class SkyRfidJavaApp extends Application {
         launch(args);
     }
     
-    //how to make these accessible to anti theft, multi read and menu?
-    //define a class for params?
-    
-    
-  
     @Override public void start(Stage primaryStage) 
-    {
-//        System.out.println("app start. java libraries " + System.getProperty("java.library.path"));
-//        System.out.println("app start. jna libraries " + System.getProperty("jna.library.path"));
-//        System.setProperty("java.library.path", "c:\\windows\\system32;");
-//        System.out.println("after set property. java libraries " + System.getProperty("jna.library.path"));
-        BorderPane rootPane = new BorderPane();
-        GlobalParameters globalParams = new GlobalParameters(rootPane); 
-        // sets default parameters: anti theft--no action, program mode--idle, multi read--false
-        
+    {        
+        rootPane = new BorderPane();
+        //return app state to default before loading panes        
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        state.resetAppState(); 
         // add menu bar and multi read status to rootPane.
-        MenuBarPane pgmMenu = new MenuBarPane(globalParams);
+        MenuBarPane pgmMenu = new MenuBarPane();
         rootPane.setTop(pgmMenu.getPane());
-        ChooseSingleMultiPane singleMultiStatus = new ChooseSingleMultiPane(globalParams);
-        rootPane.setLeft(singleMultiStatus.getPane());
-        IdlePane pane = new IdlePane();
-        rootPane.setCenter(pane.getPane());
-        AntiTheftPane antiTheft = new AntiTheftPane(globalParams);
-        rootPane.setRight(antiTheft.getPane());
         
-        
+        SkyRfidJavaApp.loadRootPane();
+//        SkyRfidJavaApp.loadRootPane();
+//        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
+//        rootPane.setLeft(singleMultiPane.getPane());
+//        IdlePane pane = new IdlePane(); //get app state default, choose ctr pane
+//        rootPane.setCenter(pane.getPane());
+//        AntiTheftPane antiTheft = new AntiTheftPane();
+//        rootPane.setRight(antiTheft.getPane());
+                
         Scene scene = new Scene(rootPane, 700, 250);
         
-        primaryStage.setTitle(globalParams.getPgmMode().toString());    //does not change with center pane
+//        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
         primaryStage.setTitle("RFID program");
-        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));
-                //add("javarhino.jpg");
+        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));                
         primaryStage.setScene(scene);
         primaryStage.show();
+        
     }
-
+    public static void loadRootPane() {        
+        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
+        rootPane.setLeft(singleMultiPane.getPane());
+        AntiTheftPane antiTheft = new AntiTheftPane();
+        rootPane.setRight(antiTheft.getPane());
+        
+        //need app state to choose center pane
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        ReadWriteModeEnum rw_state = state.getReadWriteMode();        
+        switch (rw_state) {            
+            case READ_MODE:
+                ReadPane rp = new ReadPane();
+                rootPane.setCenter(rp.getPane());
+                break;
+            case WRITE_MODE:
+                WritePane wp = new WritePane();
+                rootPane.setCenter(wp.getPane());
+                break;
+            case IDLE_MODE:
+                //fall through to default
+            default:                
+                IdlePane ip = new IdlePane();
+                rootPane.setCenter(ip.getPane());            
+        }
+        
+    }
 }

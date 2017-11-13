@@ -40,7 +40,7 @@ public class FxMsgBox {
         Label msgArea = new Label(message);
         Button btnOk = new Button("OK");
         btnOk.setOnAction(e->stage.close());
-        VBox pane = new VBox(20);
+        VBox pane = new VBox(40);
         pane.getChildren().addAll(msgArea, btnOk);
         pane.setAlignment(Pos.CENTER);
         Scene scene = new Scene(pane);
