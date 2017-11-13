@@ -65,7 +65,7 @@ public class ReadPane
         System.out.println("read pane constructor sees multi read " + state.isMultiRead());
         System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
         
-        System.out.println("read pane constructor finished. reader initialized");
+        System.out.println("read pane constructor finished.");
         
     }
     public VBox getPane()

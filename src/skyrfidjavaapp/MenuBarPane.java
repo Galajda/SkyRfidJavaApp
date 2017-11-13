@@ -132,8 +132,7 @@ public class MenuBarPane
         MenuItem eventSource = (MenuItem)e.getSource();
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         switch (eventSource.getText()) {
-            case MenuBarPane.R_W_MENU_READ:
-                
+            case MenuBarPane.R_W_MENU_READ:                
                 state.setReadWriteMode(ReadWriteModeEnum.READ_MODE);
                 //FxMsgBox.show("Change mode to read", "Mode select event");
 //                ReadPane readPane = new ReadPane();

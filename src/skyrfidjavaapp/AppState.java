@@ -55,7 +55,7 @@ public class AppState {
 
     public AppState(AppSettingsEnum settingsGrp) {
 
-        System.out.println("initialize app state");
+//        System.out.println("initialize app state");
 //        System.out.println("xml parser " + org.xml.sax.driver);
         settingsGroup = settingsGrp;
         try {
@@ -83,14 +83,14 @@ public class AppState {
     }
     
     public AntiTheftEnum getAntiTheftAction() {
-        System.out.println("app state getAntiTheftAction");
+//        System.out.println("app state getAntiTheftAction");
         //read file
         
 //        Element antiTheftEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_THEFT_BIT);
 //        Text antiTheftValue = (Text) antiTheftEle.getChild(0);
 //        System.out.println("anti theft text value" + antiTheftValue.getValue());
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT);
-        System.out.println("anti theft text value" + value);
+//        System.out.println("anti theft text value" + value);
         switch (value) {            
             case AppConstants.THEFT_MODE_OFF:
                 return AntiTheftEnum.TURN_OFF;
@@ -104,7 +104,7 @@ public class AppState {
     }
         
     public void setAntiTheftAction(AntiTheftEnum antiTheftAction) {
-        System.out.println("app state setAntiTheftAction");
+//        System.out.println("app state setAntiTheftAction");
 //        this.antiTheftAction = antiTheftAction;
         //write file
         String newValue;
@@ -124,13 +124,13 @@ public class AppState {
         SkyRfidJavaApp.loadRootPane();
     }
     public ReadWriteModeEnum getReadWriteMode() {
-        System.out.println("app state getReadWriteMode");
+//        System.out.println("app state getReadWriteMode");
         //read file
 //        Element pgmModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_R_W_MODE);
 //        Text pgmModeValue = (Text) pgmModeEle.getChild(0);
 //        System.out.println("pgm mode text" + pgmModeValue.getValue());
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE);
-        System.out.println("pgm mode text" + value);        
+//        System.out.println("r/w mode text: " + value);        
         switch (value) {
             case AppConstants.R_W_MODE_IDLE:
                 return ReadWriteModeEnum.IDLE_MODE;
@@ -143,7 +143,7 @@ public class AppState {
         }        
     }
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
-        System.out.println("app state setReadWriteMode");
+//        System.out.println("app state setReadWriteMode");
 //        this.pgmMode = readWriteMode;
         //write file        
         String newValue;
@@ -165,18 +165,18 @@ public class AppState {
     }
 
     public boolean isMultiRead() {
-        System.out.println("app state isMultiRead");
+//        System.out.println("app state isMultiRead");
         //read file
 //        Element singleMultiModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_TYPE_MULTI_READ);
 //        Text pgmModeValue = (Text) singleMultiModeEle.getChild(0);
 //        System.out.println("pgm mode text" + pgmModeValue.getValue());   
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ);
-        System.out.println("pgm mode text" + value);           
+//        System.out.println("theft mode text: " + value);           
             return (value.equalsIgnoreCase("true")) ;                    
     }
     
     public void setMultiRead(boolean multiRead) {
-        System.out.println("app state setMultiRead");
+//        System.out.println("app state setMultiRead");
 //        this.multiRead = multiRead;
         //write file        
         String newValue = String.valueOf(multiRead);
