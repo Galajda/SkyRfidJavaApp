@@ -13,24 +13,19 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *
+ * XML read/write technique copied from Rogers Cadenhead, "Sams Teach Yourself
+ * Java in 21 Days." DTD follows w3schools.com example.
  */
 package skyrfidjavaapp;
 
-//import com.sun.glass.ui.Application;
-//import javafx.scene.layout.Pane;
 import java.io.File;
-//import java.io.InputStream;
-//import java.io.FileReader;
-//import java.io.FileWriter;
 import java.io.FileOutputStream;
-//import java.io.IOException;
 import nu.xom.Builder;
-//import nu.xom.Attribute;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Text;
-//import nu.xom.Node;
 import nu.xom.Serializer;
 
 /**
@@ -38,11 +33,7 @@ import nu.xom.Serializer;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class AppState {
-    
-//    private AntiTheftEnum antiTheftAction;
-//    private ReadWriteModeEnum pgmMode;
-//    private boolean multiRead;
-    
+        
     private AppSettingsEnum settingsGroup;
     String settingsPath;
     private File settingsFile;
@@ -51,7 +42,6 @@ public class AppState {
     Elements settingsColl;
     private Element settingsSection;
     
-//    private Serializer outputWriter;
 
     public AppState(AppSettingsEnum settingsGrp) {
 
@@ -85,10 +75,6 @@ public class AppState {
     public AntiTheftEnum getAntiTheftAction() {
 //        System.out.println("app state getAntiTheftAction");
         //read file
-        
-//        Element antiTheftEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_THEFT_BIT);
-//        Text antiTheftValue = (Text) antiTheftEle.getChild(0);
-//        System.out.println("anti theft text value" + antiTheftValue.getValue());
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT);
 //        System.out.println("anti theft text value" + value);
         switch (value) {            
@@ -105,7 +91,6 @@ public class AppState {
         
     public void setAntiTheftAction(AntiTheftEnum antiTheftAction) {
 //        System.out.println("app state setAntiTheftAction");
-//        this.antiTheftAction = antiTheftAction;
         //write file
         String newValue;
         switch (antiTheftAction) {            
@@ -126,9 +111,6 @@ public class AppState {
     public ReadWriteModeEnum getReadWriteMode() {
 //        System.out.println("app state getReadWriteMode");
         //read file
-//        Element pgmModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_R_W_MODE);
-//        Text pgmModeValue = (Text) pgmModeEle.getChild(0);
-//        System.out.println("pgm mode text" + pgmModeValue.getValue());
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE);
 //        System.out.println("r/w mode text: " + value);        
         switch (value) {
@@ -144,7 +126,6 @@ public class AppState {
     }
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
 //        System.out.println("app state setReadWriteMode");
-//        this.pgmMode = readWriteMode;
         //write file        
         String newValue;
         switch (readWriteMode) {                 
@@ -167,9 +148,6 @@ public class AppState {
     public boolean isMultiRead() {
 //        System.out.println("app state isMultiRead");
         //read file
-//        Element singleMultiModeEle = settingsSection.getFirstChildElement(AppConstants.XML_ELE_TYPE_MULTI_READ);
-//        Text pgmModeValue = (Text) singleMultiModeEle.getChild(0);
-//        System.out.println("pgm mode text" + pgmModeValue.getValue());   
         String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ);
 //        System.out.println("theft mode text: " + value);           
             return (value.equalsIgnoreCase("true")) ;                    
@@ -177,15 +155,16 @@ public class AppState {
     
     public void setMultiRead(boolean multiRead) {
 //        System.out.println("app state setMultiRead");
-//        this.multiRead = multiRead;
         //write file        
         String newValue = String.valueOf(multiRead);
         setSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ, newValue);  
         SkyRfidJavaApp.loadRootPane();
     }
-    
+    /**
+     * 
+     */
     public void resetAppState() {
-        System.out.println("app state resetAppState");   
+//        System.out.println("app state resetAppState");   
         //write file
         setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
         setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
@@ -193,11 +172,6 @@ public class AppState {
        
     }
     
-//    public void setCenterPane(Pane p) {
-//        System.out.println("app state setCenterPane");        
-//        SkyRfidJavaApp.rootPane.setCenter(p);
-//    }
-
     /**
      * @param settings_category the set that you wish to retrieve: current or default
      * @param  setting_name the key that you wish to find: r/w, theft, single/multi

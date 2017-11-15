@@ -15,4 +15,15 @@ Previous versions have used other workarounds, such as putting the dll in the ro
 did not work in this application for an unknown reason.
 
 AppState file path may not work when packaged as jar.
+
+Cannot initialize reader in ReadPane constructor. Set a timer and retry?
+
+TODO:
+Theft bit uses AFI byte. On = 07. Off = 00.
+Add Settings pane to change defaults and advanced properties.
+    Add extra keystrokes element to xml.
+    Add read frequency element. How often does reader check for tag in field?
+Read pane:
+    Open port in constructor. Loop to read repeatedly. Close port when exit.
+    If detect multiple
     

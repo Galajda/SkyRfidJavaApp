@@ -29,8 +29,13 @@ public interface RfidNativeInterface extends Library {
     RfidNativeInterface INSTANCE = (RfidNativeInterface) Native.loadLibrary("umf", RfidNativeInterface.class);
     
     
-    
-    int fw_init(int i, long l);   
+    /**
+     * Initialize the RFID device
+     * @param port
+     * @param baud_rate
+     * @return handle to device
+     */
+    int fw_init(int port, long baud_rate);   
     
     
     int fw_config_card(int handle,char card_type); 
@@ -46,10 +51,27 @@ public interface RfidNativeInterface extends Library {
     int fw_get_securityinfo(int handle,char flags,char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
     
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param startblock first block 
+     * @param number_of_blocks_to_read
+     * @param card_id
+     * @param returned_data_length
+     * @param returned_data
+     * @return 
+     */
     int fw_readblock(int handle,char flags, char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
     
-    //add anticoll, stay quiet
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @param flags
+     * @param card_id
+     * @return 
+     */
     int fw_stay_quiet(int handle, char flags, char[] card_id);
 //    st=fw_stay_quiet(icdev,0x22,&UID[1])
     
@@ -57,11 +79,17 @@ public interface RfidNativeInterface extends Library {
     //st=fw_stay_quiet(icdev,0x22,&UID[1])
     
     
+    //add anticoll
+    
     //write
     //__int16 fw_writeblock(HANDLE icdev,unsigned char flags, unsigned charstartblock,
     //unsigned char blocknum,unsigned char *UID,unsigned char wlen,unsigned char *rbuffer);
     
     
-    
-    short fw_exit(int i);
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @return 
+     */
+    short fw_exit(int handle);
 }

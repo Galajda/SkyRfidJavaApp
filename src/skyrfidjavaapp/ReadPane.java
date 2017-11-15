@@ -30,27 +30,26 @@ public class ReadPane
     
     private final VBox pane;
     private final Label lblWelcome;
-    private final Button btnOpenPort;
+//    private final Button btnOpenPort;
     private final Button btnReadData;
     private final Button btnClosePort;
-//    private javacall reader;
+    private final Label lblDecodedData;
     private final RfidNativeInterface rfidDll = RfidNativeInterface.INSTANCE;
     private final char READ_TAG_START_BLOCK = 0x1;
     private final char READ_TAG_BLOCK_LEN = 0x05;
     private int readerHdl;
     
     
-    ReadPane()
-    {
-        System.out.println("read pane constructor running");        
+    ReadPane() {
+//        System.out.println("read pane constructor running");        
         pane = new VBox();
         pane.setMinWidth(300);
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
         pane.getChildren().add(lblWelcome);        
         
-        btnOpenPort = new Button("Open USB port");
-        btnOpenPort.setOnAction(e -> btnOpenPort_Click());
-        pane.getChildren().add(btnOpenPort);
+//        btnOpenPort = new Button("Open USB port");
+//        btnOpenPort.setOnAction(e -> btnOpenPort_Click());
+//        pane.getChildren().add(btnOpenPort);
         
         btnReadData = new Button("Read data");
         btnReadData.setOnAction(e -> btnReadData_Click());
@@ -60,12 +59,23 @@ public class ReadPane
         btnClosePort.setOnAction(e -> btnClosePort_Click());
         pane.getChildren().add(btnClosePort);
         
-        readerHdl = -1;
+        lblDecodedData = new Label("your number here");        
+        lblDecodedData.setStyle("-fx-border-color: black; -fx-border-width: 2;"
+                + "-fx-font-size:16px; -fx-alignment: center;" 
+                + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;");
+        pane.getChildren().add(lblDecodedData);
+        
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         System.out.println("read pane constructor sees multi read " + state.isMultiRead());
         System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
         
-        System.out.println("read pane constructor finished.");
+        readerHdl = this.getDeviceHandle();
+        System.out.println("initialized reader. handle = " + readerHdl);
+        if (readerHdl<0) {
+            lblDecodedData.setStyle("-fx-text-fill:#dc143c");
+            lblDecodedData.setText("Error connecting to device. Try resetting or restarting.");
+        }
+//        System.out.println("read pane constructor finished.");
         
     }
     public VBox getPane()
@@ -73,16 +83,16 @@ public class ReadPane
         return this.pane;
     }
     
-    private void btnOpenPort_Click() {
-//        System.out.println("got click to open port");
-        try {
-            readerHdl = rfidDll.fw_init(AppConstants.USB_PORT, 0); //ignore baud rate
-            System.out.println("initialized reader. handle = " + readerHdl);
-        }
-        catch (Exception ex) {
-            System.out.println("cannot initialize reader. " + ex.getMessage());
-        }        
-    }
+//    private void btnOpenPort_Click() {
+////        System.out.println("got click to open port");
+//        try {
+//            readerHdl = rfidDll.fw_init(AppConstants.USB_PORT, 0); //ignore baud rate
+//            System.out.println("initialized reader. handle = " + readerHdl);
+//        }
+//        catch (Exception ex) {
+//            System.out.println("cannot initialize reader. " + ex.getMessage());
+//        }        
+//    }
     
     private void btnReadData_Click() {
         System.out.println("got click to read data");
@@ -134,9 +144,10 @@ public class ReadPane
             System.out.print("element" + i + ": " + String.format("%04x", (int)readDataBuffer[i]) + ", ");
         }
         System.out.println();
+        String decodedData = TagEncoding.Decode(readDataBuffer, READ_TAG_BLOCK_LEN + 2);
+        System.out.println("read pane got decoded data " + decodedData);
+        lblDecodedData.setText(decodedData);
         
-        
-                
     }
     private void btnClosePort_Click() {
 //        System.out.println("got click to close port");
@@ -148,5 +159,18 @@ public class ReadPane
             System.out.println("cannot close reader. " + ex.getMessage());
         }
         
+    }
+    /**
+     * The device may not be available immediately. Try for 2 seconds.
+     * @return a positive integer if reader is found, -1 if fail
+     */
+    private int getDeviceHandle() {
+        int h = -1;
+        long startTime = System.currentTimeMillis();        
+        do {
+            h = rfidDll.fw_init(AppConstants.USB_PORT, 0); //ignore baud rate on USB port
+        }
+        while (((System.currentTimeMillis()-startTime)<2000) && (h < 0));        
+        return h;        
     }
 }

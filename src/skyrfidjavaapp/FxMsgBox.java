@@ -35,9 +35,11 @@ public class FxMsgBox {
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(title);
-        stage.setMinWidth(250);
+        stage.setMinWidth(300);
+        stage.setMaxWidth(500);
+        //set width according to content. 
         
-        Label msgArea = new Label(message);
+        Label msgArea = new Label(message); //how to wrap message?
         Button btnOk = new Button("OK");
         btnOk.setOnAction(e->stage.close());
         VBox pane = new VBox(40);
