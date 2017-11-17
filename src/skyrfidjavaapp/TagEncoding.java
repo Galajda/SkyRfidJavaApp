@@ -27,7 +27,7 @@ public class TagEncoding {
      * @param inputStream the array of char bytes as read by the USB device
      * @return a human-readable sequence of numbers representing a barcode
      */
-    public static String Decode(char[] inputStream, int arrayLength) {
+    public static String decode(char[] inputStream, int arrayLength) {
         System.out.println("decoding char array");
 //        System.out.println("char array length " + inputStream.length);
         for (int i = 0; i <arrayLength; i++) {
@@ -42,12 +42,12 @@ public class TagEncoding {
         }
         return builder.toString();
     }
-    /**
+    /**UNDER CONSTRUCTION
      * Used when writing data to a tag
      * @param barcode the human-readable barcode of the item to be tagged
-     * @return an array of char bytes
+     * @return an array of char bytes which are written to the tag
      */
-    public static char[] Encode(String barcode) {
+    public static char[] encode(String barcode) {
         //what if bc has odd length?
         char[] writeBuffer = new char[256];
         

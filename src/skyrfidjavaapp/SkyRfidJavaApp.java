@@ -33,8 +33,7 @@ import javafx.stage.Stage;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SkyRfidJavaApp extends Application {
-    private static BorderPane rootPane;
-    
+    private static BorderPane rootPane;    
     /**
      * @param args the command line arguments
      */
@@ -100,4 +99,5 @@ public class SkyRfidJavaApp extends Application {
         }
         
     }
+   
 }

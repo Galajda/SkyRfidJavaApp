@@ -1,29 +1,39 @@
-Version 1 features
-Only reading is implemented. Manual control of port and read command. Raw hex output to console. 
+***Description***
+Features: Only reading is implemented. Manual control of read command. Raw hex output to console 
+    plus decoded number in application window.
 
-Why use enums and constant strings for app state? Enums control fcn arguments. Constant strings reduce 
-    spelling errors.
+Why use enums and constant strings for app state? Enums control value of fcn arguments. 
+    Constant strings reduce spelling errors.
 
 The logic of the AppState. The default state is managed through a settings screen that has not been
     implemented yet. When the program launches, or when reset is chosen from the file menu, the 
     default values are copied to the current values. The current values are always used to load panes.
+    Each pane is responsible for retrieving app state and configuring accordingly. When a pane
+    changes the state, it must notify the application by calling loadRootPane().
 
-Problems
-Unsatisfied Link Error. Cannot load umf.dll. SO 30767478 says that the dll must be in SysWOW64 folder
-when running a 32-bit JRE on a 64-bit computer. (I think this is the explanation.)
-Previous versions have used other workarounds, such as putting the dll in the root directory, which
-did not work in this application for an unknown reason.
+Control of device port. I cannot find a good place to close the port. For now, I will open and 
+    close it for each read operation.
+
+***Problems***
+Unsatisfied Link Error. Cannot load umf.dll. 
+    Solution: SO 30767478 says that the dll must be in SysWOW64 folder
+    when running a 32-bit JRE on a 64-bit computer. (I think this is the explanation.)
+    Previous versions have used other workarounds, such as putting the dll in the root 
+    directory, which did not work in this application for an unknown reason.
 
 AppState file path may not work when packaged as jar.
 
-Cannot initialize reader in ReadPane constructor. Set a timer and retry?
+Cannot initialize reader in ReadPane constructor. 
+    Solution: Set a timer and retry. It usually succeeds within 2 sec.
 
-TODO:
-Theft bit uses AFI byte. On = 07. Off = 00.
+
+***TODO***
+Take action on theft bit setting. It currently has no effect.
 Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml.
     Add read frequency element. How often does reader check for tag in field?
+
 Read pane:
-    Open port in constructor. Loop to read repeatedly. Close port when exit.
-    If detect multiple
+    Loop to read repeatedly. Close port when exit.
+    If detect multiple tags in single mode, throw error.
     
