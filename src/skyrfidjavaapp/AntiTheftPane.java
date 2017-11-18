@@ -89,7 +89,7 @@ public class AntiTheftPane {
     //action events. change text of label and button, change enum theft state
     private void RadioChange(AntiTheftEnum whichState)
     {
-        System.out.println("radio change event");
+//        System.out.println("radio change event");
         //FxMsgBox.show("The current selection is " + tglTheftButtons.getSelectedToggle().toString(), "Radio button change");
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setAntiTheftAction(whichState);

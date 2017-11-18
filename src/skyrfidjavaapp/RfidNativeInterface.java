@@ -29,27 +29,90 @@ public interface RfidNativeInterface extends Library {
     RfidNativeInterface INSTANCE = (RfidNativeInterface) Native.loadLibrary("umf", RfidNativeInterface.class);
     
     
+    /**
+     * Open the port to the RFID device
+     * @param port This application is designed exclusively for the USB reader.
+     * See manufacturer's documentation for serial device.
+     * @param baud_rate Ignored for USB.
+     * @return handle to device. >0 = success. <0 = fail.
+     */
+    int fw_init(int port, long baud_rate);   
     
-    int fw_init(int i, long l);   
-    
-    
+    /**
+     * Configures the USB device to read the desired type of tag.
+     * @param handle handle to USB device
+     * @param card_type  This application uses ISO15693 exclusively.
+     * See manufacturer's documentation for ISO14443 Type A and B.
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_config_card(int handle,char card_type); 
     
-    int fw_inventory(int handle, char single_multi_flag, char app_id, 
+    /**
+     * 
+     * @param handle handle to USB device
+     * @param single_multi_flag
+     * @param app_id Can be 0. Pass char var to get AFI back?
+     * @param mask_length
+     * @param returned_length
+     * @param returned_buffer
+     * @return 0 = success. Nonzero = fail.
+     */
+    int fw_inventory(int handle, char single_multi_flag, char[] app_id, 
             char mask_length, char[] returned_length, char[] returned_buffer);   
     
+    /**
+     * 
+     * @param handle handle to USB device
+     * @param flags
+     * @param card_id
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_select_uid(int handle,char flags, char[] card_id); 
     
-    
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param card_id
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_reset_to_ready(int handle,char flags, char[] card_id);
      
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param startblock
+     * @param number_of_blocks_to_read
+     * @param card_id
+     * @param returned_data_length
+     * @param returned_data
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_get_securityinfo(int handle,char flags,char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
     
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param startblock first block 
+     * @param number_of_blocks_to_read
+     * @param card_id
+     * @param returned_data_length
+     * @param returned_data
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_readblock(int handle,char flags, char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
     
-    //add anticoll, stay quiet
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @param flags
+     * @param card_id
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_stay_quiet(int handle, char flags, char[] card_id);
 //    st=fw_stay_quiet(icdev,0x22,&UID[1])
     
@@ -57,11 +120,25 @@ public interface RfidNativeInterface extends Library {
     //st=fw_stay_quiet(icdev,0x22,&UID[1])
     
     
+    //add anticoll
+    
     //write
     //__int16 fw_writeblock(HANDLE icdev,unsigned char flags, unsigned charstartblock,
     //unsigned char blocknum,unsigned char *UID,unsigned char wlen,unsigned char *rbuffer);
     
     
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @return 0 = success. Nonzero = fail.
+     */
+    short fw_exit(int handle);
     
-    short fw_exit(int i);
+    // this messes up the reader
+    int fw_getAIDs_desfire(int handle,char[] rlen,char[] AIDS);
+    
+    int fw_get_systeminfo(int handle,char flags,char[] card_id, char[] returned_data_length,char[] returned_data);
+    
+    int fw_authentication(int handle, char _Mode, char _SecNr);
+    
 }
