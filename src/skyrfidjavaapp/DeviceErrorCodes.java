@@ -23,4 +23,5 @@ package skyrfidjavaapp;
 public class DeviceErrorCodes {
     public static final String ERR_NO_HANDLE = "cannot find the USB device";
     public static final String ERR_MULTIPLE_CARDS = "multiple cards detected in single-read mode";
+    public static final String ERR_NO_CARD = "cannot find any cards in field";
 }

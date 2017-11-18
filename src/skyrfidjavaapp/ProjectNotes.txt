@@ -14,6 +14,8 @@ The logic of the AppState. The default state is managed through a settings scree
 Control of device port. I cannot find a good place to close the port. For now, I will open and 
     close it for each read operation.
 
+Should I use the dll's hex_a and a_hex functions to convert data?
+
 ***Problems***
 Unsatisfied Link Error. Cannot load umf.dll. 
     Solution: SO 30767478 says that the dll must be in SysWOW64 folder
@@ -25,6 +27,7 @@ AppState file path may not work when packaged as jar.
 
 Cannot initialize reader in ReadPane constructor. 
     Solution: Set a timer and retry. It usually succeeds within 2 sec.
+RF.exe shows AFI. How does it read this value? I see only functions to write the value.
 
 
 ***TODO***
@@ -32,6 +35,8 @@ Take action on theft bit setting. It currently has no effect.
 Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml.
     Add read frequency element. How often does reader check for tag in field?
+    Add more configurations. Allow user to choose a config, rather than individual 
+    parameters.
 
 Read pane:
     Loop to read repeatedly. Close port when exit.

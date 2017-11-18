@@ -51,13 +51,13 @@ public interface RfidNativeInterface extends Library {
      * 
      * @param handle handle to USB device
      * @param single_multi_flag
-     * @param app_id Can be 0
+     * @param app_id Can be 0. Pass char var to get AFI back?
      * @param mask_length
      * @param returned_length
      * @param returned_buffer
-     * @return 
+     * @return 0 = success. Nonzero = fail.
      */
-    int fw_inventory(int handle, char single_multi_flag, char app_id, 
+    int fw_inventory(int handle, char single_multi_flag, char[] app_id, 
             char mask_length, char[] returned_length, char[] returned_buffer);   
     
     /**
@@ -65,13 +65,30 @@ public interface RfidNativeInterface extends Library {
      * @param handle handle to USB device
      * @param flags
      * @param card_id
-     * @return 
+     * @return 0 = success. Nonzero = fail.
      */
     int fw_select_uid(int handle,char flags, char[] card_id); 
     
-    
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param card_id
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_reset_to_ready(int handle,char flags, char[] card_id);
      
+    /**
+     * 
+     * @param handle
+     * @param flags
+     * @param startblock
+     * @param number_of_blocks_to_read
+     * @param card_id
+     * @param returned_data_length
+     * @param returned_data
+     * @return 0 = success. Nonzero = fail.
+     */
     int fw_get_securityinfo(int handle,char flags,char startblock,
             char number_of_blocks_to_read, char[] card_id, char[] returned_data_length, char[] returned_data);
     
@@ -113,7 +130,15 @@ public interface RfidNativeInterface extends Library {
     /**
      * 
      * @param handle handle to the RFID device
-     * @return 
+     * @return 0 = success. Nonzero = fail.
      */
     short fw_exit(int handle);
+    
+    // this messes up the reader
+    int fw_getAIDs_desfire(int handle,char[] rlen,char[] AIDS);
+    
+    int fw_get_systeminfo(int handle,char flags,char[] card_id, char[] returned_data_length,char[] returned_data);
+    
+    int fw_authentication(int handle, char _Mode, char _SecNr);
+    
 }

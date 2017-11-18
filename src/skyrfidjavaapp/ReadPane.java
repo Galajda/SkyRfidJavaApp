@@ -32,6 +32,12 @@ public class ReadPane
     private final Label lblWelcome;
     private final Button btnReadData;  
     private final Label lblDecodedData;
+    private final String LBL_STYLE_ERROR = "-fx-border-color: black; -fx-border-width: 2;"
+                + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #dc143c;" 
+                + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";            
+    private final String LBL_STYLE_OK = "-fx-border-color: black; -fx-border-width: 2;"
+                + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #000000;" 
+                + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";
     
     //constructor
     ReadPane() {
@@ -46,19 +52,12 @@ public class ReadPane
         pane.getChildren().add(btnReadData);
         
         lblDecodedData = new Label("your number here");        
-        lblDecodedData.setStyle("-fx-border-color: black; -fx-border-width: 2;"
-                + "-fx-font-size:16px; -fx-alignment: center;" 
-                + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;");
+        lblDecodedData.setStyle(this.LBL_STYLE_OK);
         pane.getChildren().add(lblDecodedData);
-        
         
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         System.out.println("read pane constructor sees multi read " + state.isMultiRead());
         System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
-        
-        
-            lblDecodedData.setStyle("-fx-text-fill:#dc143c");
-            lblDecodedData.setText("Error connecting to device. Try resetting or restarting.");
         
 //        System.out.println("read pane constructor finished.");
         
@@ -72,8 +71,19 @@ public class ReadPane
     private void btnReadData_Click() {
         System.out.println("got click to read data");
         TagReader reader = new TagReader();
-        String cardData = reader.readCards()[0];
-        lblDecodedData.setText(cardData);
-        
+        String cardData = reader.readOneCard()[0];        
+        switch (cardData) {
+            case DeviceErrorCodes.ERR_NO_HANDLE:                
+                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                lblDecodedData.setText("Error connecting to device. Try resetting or restarting.");
+                break;
+            case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
+                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                lblDecodedData.setText("Multiple tags detected in single-card mode.");
+                break;
+            default:
+                lblDecodedData.setStyle(this.LBL_STYLE_OK);
+                lblDecodedData.setText(cardData);        
+        }
     }
 }
