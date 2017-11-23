@@ -51,10 +51,10 @@ public interface RfidNativeInterface extends Library {
      * 
      * @param handle handle to USB device
      * @param single_multi_flag
-     * @param app_id Can be 0. Pass char var to get AFI back?
-     * @param mask_length
-     * @param returned_length
-     * @param returned_buffer
+     * @param app_id Can be 0. Pass char var to get AFI back? No.
+     * @param mask_length Can be 0.
+     * @param returned_length Must be object (not primitive) that Java can change in the fcn.
+     * @param returned_buffer Must be object (not primitive) that Java can change in the fcn.
      * @return 0 = success. Nonzero = fail.
      */
     int fw_inventory(int handle, char single_multi_flag, char[] app_id, 
@@ -63,7 +63,7 @@ public interface RfidNativeInterface extends Library {
     /**
      * 
      * @param handle handle to USB device
-     * @param flags
+     * @param flags Can be 0x22.
      * @param card_id
      * @return 0 = success. Nonzero = fail.
      */
@@ -71,8 +71,8 @@ public interface RfidNativeInterface extends Library {
     
     /**
      * 
-     * @param handle
-     * @param flags
+     * @param handle handle to USB device
+     * @param flags Can be 0x22.
      * @param card_id
      * @return 0 = success. Nonzero = fail.
      */
@@ -80,8 +80,8 @@ public interface RfidNativeInterface extends Library {
      
     /**
      * 
-     * @param handle
-     * @param flags
+     * @param handle handle to USB device
+     * @param flags Can be 0x22.
      * @param startblock
      * @param number_of_blocks_to_read
      * @param card_id
@@ -94,10 +94,10 @@ public interface RfidNativeInterface extends Library {
     
     /**
      * 
-     * @param handle
-     * @param flags
-     * @param startblock first block 
-     * @param number_of_blocks_to_read
+     * @param handle handle to USB device
+     * @param flags Can be 0x22.
+     * @param startblock first block. Range: 0 to 27.
+     * @param number_of_blocks_to_read Range: 1 to 6.
      * @param card_id
      * @param returned_data_length
      * @param returned_data
@@ -109,7 +109,7 @@ public interface RfidNativeInterface extends Library {
     /**
      * 
      * @param handle handle to the RFID device
-     * @param flags
+     * @param flags Can be 0x22.
      * @param card_id
      * @return 0 = success. Nonzero = fail.
      */
@@ -122,10 +122,29 @@ public interface RfidNativeInterface extends Library {
     
     //add anticoll
     
-    //write
-    //__int16 fw_writeblock(HANDLE icdev,unsigned char flags, unsigned charstartblock,
-    //unsigned char blocknum,unsigned char *UID,unsigned char wlen,unsigned char *rbuffer);
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @param flags Can be 0x22.
+     * @param startblock first block. Range: 0 to 27.
+     * @param number_of_blocks_to_write Range: 1 to 6.
+     * @param card_id
+     * @param write_buffer_length
+     * @param write_buffer
+     * @return 0 = success. Nonzero = fail.
+     */
+    int fw_writeblock(int handle,char flags,char startblock,
+        char number_of_blocks_to_write,char[] card_id,char[] write_buffer_length,char[] write_buffer);
     
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @param flags Can be 0x22.
+     * @param AFI The value that you want to write?
+     * @param card_id
+     * @return 0 = success. Nonzero = fail.
+     */
+    int fw_write_afi(int handle, char flags, char AFI, char[] card_id);
     
     /**
      * 
@@ -133,6 +152,8 @@ public interface RfidNativeInterface extends Library {
      * @return 0 = success. Nonzero = fail.
      */
     short fw_exit(int handle);
+    
+    
     
     // this messes up the reader
     int fw_getAIDs_desfire(int handle,char[] rlen,char[] AIDS);

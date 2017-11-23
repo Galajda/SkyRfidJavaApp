@@ -55,26 +55,7 @@ public class AntiTheftPane {
         rdoNoAction.setToggleGroup(tglTheftButtons);
         rdoNoAction.setOnAction(e->RadioChange(AntiTheftEnum.NO_ACTION));
         
-        //borrow some parts of event handler to initialize radio button and label text
-        //skip the state set part
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
-        AntiTheftEnum currentAction = state.getAntiTheftAction();
-        switch (currentAction) {
-            case TURN_ON:
-//                rdoTurnOn.fire();
-                rdoTurnOn.setSelected(true);
-                break;
-            case TURN_OFF:
-//                rdoTurnOff.fire();
-                rdoTurnOff.setSelected(true);
-                break;                
-            case NO_ACTION:
-//                rdoNoAction.fire();
-                rdoNoAction.setSelected(true);
-                break;                
-        }
-        lblTheftState.setText("Current theft bit action is\n" + currentAction.name());
-        
+        this.setButtons();
         pane = new VBox();
         pane.setMinWidth(200);
         pane.getChildren().addAll(lblTheftState, rdoTurnOn, rdoTurnOff, rdoNoAction);
@@ -93,32 +74,26 @@ public class AntiTheftPane {
         //FxMsgBox.show("The current selection is " + tglTheftButtons.getSelectedToggle().toString(), "Radio button change");
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setAntiTheftAction(whichState);
-        switch (whichState)
-        {
+//        this.setButtons(); //performed in resetPanes()
+        System.out.println("anti theft pane radio change event asks to reset panes");
+        SkyRfidJavaApp.resetPanes();
+        
+    }
+    public final void setButtons() {
+        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AntiTheftEnum currentAction = state.getAntiTheftAction();
+        switch (currentAction) {
             case TURN_ON:
-                //FxMsgBox.show("turning on", "in switch");                
-//                state.setAntiTheftAction(AntiTheftEnum.TURN_ON);                
-//                rdoTurnOn.fire();
                 rdoTurnOn.setSelected(true);
                 break;
             case TURN_OFF:
-                //FxMsgBox.show("turning off", "in switch");
-//                parms.setAntiTheftAction(AntiTheftEnum.TURN_OFF);
-//                state.setAntiTheftAction(AntiTheftEnum.TURN_OFF);
-//                rdoTurnOff.fire();
                 rdoTurnOff.setSelected(true);
-                break;
-                
+                break;                
             case NO_ACTION:
-                //FxMsgBox.show("turning idle", "in switch");
-//                parms.setAntiTheftAction(AntiTheftEnum.NO_ACTION);
-//                state.setAntiTheftAction(AntiTheftEnum.NO_ACTION);
-//                rdoNoAction.fire();
                 rdoNoAction.setSelected(true);
-                break;
-                
+                break;                
         }
-        lblTheftState.setText("Current theft bit action is\n" + state.getAntiTheftAction().name());
+        lblTheftState.setText("Current theft bit action is\n" + currentAction.name());
         
     }
 }

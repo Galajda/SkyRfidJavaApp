@@ -19,6 +19,8 @@ package skyrfidjavaapp;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.event.ActionEvent;
+import javafx.application.Platform;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,26 +40,45 @@ public class ReadPane
     private final String LBL_STYLE_OK = "-fx-border-color: black; -fx-border-width: 2;"
                 + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #000000;" 
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";
-    
+    private final Button btnStartReading;
+    private final Button btnStopReading;
+    private int portFailureCounter;
+    private Timer tmr;
+//    private final AutoRead readTask = new AutoRead();
+    private boolean runRabbitRun = true; //flag to stop the auto read timer
     //constructor
     ReadPane() {
 //        System.out.println("read pane constructor running");        
         pane = new VBox();
         pane.setMinWidth(300);
+        
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
         pane.getChildren().add(lblWelcome);        
         
         btnReadData = new Button("Read data");
-        btnReadData.setOnAction(e -> btnReadData_Click());
+        btnReadData.setOnAction(e -> btnReadData_Click(e));
         pane.getChildren().add(btnReadData);
         
         lblDecodedData = new Label("your number here");        
         lblDecodedData.setStyle(this.LBL_STYLE_OK);
         pane.getChildren().add(lblDecodedData);
         
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
-        System.out.println("read pane constructor sees multi read " + state.isMultiRead());
-        System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
+        btnStartReading = new Button("Start auto reader");
+        btnStartReading.setOnAction(e -> btnStartReading_Click(e));
+        pane.getChildren().add(btnStartReading);
+        
+        btnStopReading = new Button("Stop the automatic reader");
+        btnStopReading.setOnAction(e -> btnStopReading_Click(e));
+        pane.getChildren().add(btnStopReading);
+        
+        portFailureCounter = 0;
+//        tmr = new Timer();
+        
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        System.out.println("read pane constructor sees multi read " + state.isMultiRead());
+//        System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
+        
+        
         
 //        System.out.println("read pane constructor finished.");
         
@@ -68,14 +89,17 @@ public class ReadPane
     }
 
 
-    private void btnReadData_Click() {
+    private void btnReadData_Click(ActionEvent e) {
         System.out.println("got click to read data");
         TagReader reader = new TagReader();
         String cardData = reader.readOneCard()[0];        
         switch (cardData) {
             case DeviceErrorCodes.ERR_NO_HANDLE:                
                 lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
-                lblDecodedData.setText("Error connecting to device. Try resetting or restarting.");
+                lblDecodedData.setText("Error connecting to device.");
+                if (++portFailureCounter > 5) {
+                    lblDecodedData.setText("Multiple errors connecting to device. Check connections and restart.");
+                }
                 break;
             case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
                 lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
@@ -84,6 +108,60 @@ public class ReadPane
             default:
                 lblDecodedData.setStyle(this.LBL_STYLE_OK);
                 lblDecodedData.setText(cardData);        
+                portFailureCounter = 0;
         }
+//        reader = null;
     }
+    
+    private void btnStartReading_Click(ActionEvent e) {
+        this.startTimer();
+    }
+    
+    private void btnStopReading_Click(ActionEvent e) {
+//        runRabbitRun = false; //better to change flag than to call stopTimer.
+        this.stopTimer();
+//        System.out.println("btn click to stop the auto reader.");
+    }
+    
+    public void startTimer() {
+        runRabbitRun = true;
+        tmr = new Timer(); //initializing tmr here rather than in constructor allows restarting
+        tmr.schedule(new AutoRead(), 0, 1521);
+//        tmr.schedule(readTask, 0, 1521);
+    }
+    public void stopTimer() {
+        if (tmr != null) {            
+            tmr.cancel();
+            tmr.purge();
+        }
+        runRabbitRun = false; 
+        //better to change flag than to call stopTimer.
+        //the flag is communicated to all timer threads
+    }
+    class AutoRead extends TimerTask {
+        @Override
+        public void run() {
+            System.out.println("auto read task running at " + System.currentTimeMillis());
+            if (runRabbitRun) {                           
+                //JavaWorld.com exploring JavaFX's Application class
+                System.out.println("timer thread " + Thread.currentThread());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        lblDecodedData.setText("timer tick " + System.currentTimeMillis());  
+                    }
+                });                
+            }
+            else { 
+                this.cancel();    
+//                tmr.cancel();
+//                tmr.purge();
+                //this.cancel() is preferable to tmr.cancel() 
+                //in case of multiple timer threads, this will stop each thread.
+                //tmr will stop only the most recent.
+                System.out.println("timer got flag to stop");
+            }
+        }   
+    }
+    
 }

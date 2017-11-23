@@ -106,7 +106,8 @@ public class AppState {
                 newValue = AppConstants.THEFT_MODE_NONE;                
         }        
         this.setSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT, newValue);
-        SkyRfidJavaApp.loadRootPane();
+//        System.out.println("app state set anti theft asks to reset panes");
+//        SkyRfidJavaApp.resetPanes();
     }
     public ReadWriteModeEnum getReadWriteMode() {
 //        System.out.println("app state getReadWriteMode");
@@ -141,7 +142,8 @@ public class AppState {
                 newValue = AppConstants.R_W_MODE_IDLE;                
         }        
         this.setSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE, newValue);
-        SkyRfidJavaApp.loadRootPane();
+//        System.out.println("app state set read/write asks to reset panes");
+//        SkyRfidJavaApp.resetPanes();
         
     }
 
@@ -158,7 +160,8 @@ public class AppState {
         //write file        
         String newValue = String.valueOf(multiRead);
         setSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ, newValue);  
-        SkyRfidJavaApp.loadRootPane();
+//        System.out.println("app state set multi read asks to reset panes");
+//        SkyRfidJavaApp.resetPanes();
     }
     /**
      * 

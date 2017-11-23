@@ -27,7 +27,22 @@ AppState file path may not work when packaged as jar.
 
 Cannot initialize reader in ReadPane constructor. 
     Solution: Set a timer and retry. It usually succeeds within 2 sec.
+Auto-read timer runs after the read pane is changed.
+    Solution: Keep one instance of each pane in the SkyRfidJavaApp class. Create a flag 
+    to stop the timer. Create a method of the ReadPane class that changes this flag.
+    Create switch pane method in SkyRfidJavaApp. When panes are switched, turn the timer on and off.
 RF.exe shows AFI. How does it read this value? I see only functions to write the value.
+How to coordinate change of app state with change of panes?
+    1) When the user clicks a radio button, the state and the panes must change. Let the AppState
+        setSettings... fcns change the panes to ensure that it is done.
+    2) When the user changes the default settings (not yet implemented), the panes do not 
+        need to be changed. Let the button event handlers change app state and panes as separate commands.
+    3) Let the app state decide if the panes need to be reloaded by checking the settings category 
+        that is being changed.
+    I choose 2.
+
+What is the overridable method call in constructor error? NB proposed to solve it by making the
+    method final.
 
 
 ***TODO***

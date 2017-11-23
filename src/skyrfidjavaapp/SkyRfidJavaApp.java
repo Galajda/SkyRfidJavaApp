@@ -18,14 +18,17 @@ package skyrfidjavaapp;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
+import javafx.application.Platform;
+import javafx.collections.ObservableList;
+//import javafx.event.ActionEvent;
+//import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
+//import javafx.scene.layout.Pane;
+//import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.StackPane;
+//import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -33,7 +36,16 @@ import javafx.stage.Stage;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SkyRfidJavaApp extends Application {
-    private static BorderPane rootPane;    
+    
+    private static BorderPane rootPane;   
+    private static MenuBarPane pgmMenu;
+    private static ToggleSingleMultiPane singleMultiPane;
+    private static ReadPane readPane;
+    private static WritePane writePane;
+    private static IdlePane idlePane;
+    private static AntiTheftPane antiTheftPane;
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -43,29 +55,19 @@ public class SkyRfidJavaApp extends Application {
     }
     
     @Override public void start(Stage primaryStage) 
-    {        
-        rootPane = new BorderPane();
+    {                        
         //return app state to default before loading panes        
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.resetAppState(); 
-        // add menu bar and multi read status to rootPane.
-        MenuBarPane pgmMenu = new MenuBarPane();
-        rootPane.setTop(pgmMenu.getPane());
         
-        SkyRfidJavaApp.loadRootPane();
-//        SkyRfidJavaApp.loadRootPane();
-//        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
-//        rootPane.setLeft(singleMultiPane.getPane());
-//        IdlePane pane = new IdlePane(); //get app state default, choose ctr pane
-//        rootPane.setCenter(pane.getPane());
-//        AntiTheftPane antiTheft = new AntiTheftPane();
-//        rootPane.setRight(antiTheft.getPane());
+        SkyRfidJavaApp.initializeRootPane();
+        System.out.println("app start asks to reset panes");
+        SkyRfidJavaApp.resetPanes();
                 
         Scene scene = new Scene(rootPane, 700, 250);
         
-        
 //        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
-        primaryStage.setTitle("RFID program");
+        primaryStage.setTitle("RFID program");        
         primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));  
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(250);
@@ -73,29 +75,49 @@ public class SkyRfidJavaApp extends Application {
         primaryStage.show();
         
     }
-    public static void loadRootPane() {        
-        ChooseSingleMultiPane singleMultiPane = new ChooseSingleMultiPane();
+
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        System.out.println("application stop");
+        System.exit(0);
+        //Platform.exit() does not stop timer
+    }
+    private static void initializeRootPane() {
+        rootPane = new BorderPane();
+        pgmMenu = new MenuBarPane();
+        singleMultiPane = new ToggleSingleMultiPane();
+        readPane = new ReadPane();    
+        writePane = new WritePane();
+        idlePane = new IdlePane();
+        antiTheftPane = new AntiTheftPane();
+        rootPane.setTop(pgmMenu.getPane());
         rootPane.setLeft(singleMultiPane.getPane());
-        AntiTheftPane antiTheft = new AntiTheftPane();
-        rootPane.setRight(antiTheft.getPane());
-        
+        rootPane.setRight(antiTheftPane.getPane());
+    }
+    public static void resetPanes() {    
+//        ObservableList<Node> currentNodes = rootPane.getChildren();
+//        System.out.println("there are " + currentNodes.size() + " nodes in the root pane");
+//        rootPane.getChildren().clear();
+        System.out.println("app class reset panes start");
+        readPane.stopTimer();
+        singleMultiPane.setLblAndButtonTxt();
+        antiTheftPane.setButtons();
         //need app state to choose center pane
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         ReadWriteModeEnum rw_state = state.getReadWriteMode();        
         switch (rw_state) {            
-            case READ_MODE:
-                ReadPane rp = new ReadPane();
-                rootPane.setCenter(rp.getPane());
+            case READ_MODE:                     
+                rootPane.setCenter(readPane.getPane());
+                readPane.startTimer();
                 break;
-            case WRITE_MODE:
-                WritePane wp = new WritePane();
-                rootPane.setCenter(wp.getPane());
+            case WRITE_MODE:                 
+                rootPane.setCenter(writePane.getPane());
                 break;
             case IDLE_MODE:
                 //fall through to default
-            default:                
-                IdlePane ip = new IdlePane();
-                rootPane.setCenter(ip.getPane());            
+            default:                                 
+                rootPane.setCenter(idlePane.getPane());                        
         }
         
     }

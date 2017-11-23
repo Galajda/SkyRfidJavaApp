@@ -108,7 +108,8 @@ public class MenuBarPane
                 AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
                 state.resetAppState(); 
                  //reload stage
-                SkyRfidJavaApp.loadRootPane();
+                System.out.println("menu bar pane file menu asks to reset panes");
+                SkyRfidJavaApp.resetPanes();
                 
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
@@ -152,7 +153,8 @@ public class MenuBarPane
 //                IdlePane idlePane = new IdlePane();
 //                p = idlePane.getPane();
         }
-        SkyRfidJavaApp.loadRootPane();
+        System.out.println("menu bar pane mode menu asks to reset panes");
+        SkyRfidJavaApp.resetPanes();
         
         
     }
