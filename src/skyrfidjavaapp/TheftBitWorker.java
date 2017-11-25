@@ -29,7 +29,8 @@ public class TheftBitWorker {
      */
     public static void changeTheftBit(int device_handle, char[] card_id, AntiTheftEnum new_state) {
         System.out.print("theft bit worker is pretending to change the theft bit of card #");
-        System.out.println(String.format("%04x", (int)card_id[0]));
+        System.out.print(String.format("%04x", (int)card_id[0]));
+        System.out.println(" to value " + new_state);
         
     }
 }

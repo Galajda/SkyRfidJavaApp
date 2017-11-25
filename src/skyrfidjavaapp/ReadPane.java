@@ -32,19 +32,20 @@ public class ReadPane
 {
     private final VBox pane;
     private final Label lblWelcome;
-    private final Button btnReadData;  
+    private final Button btnReadMulti;  
     private final Label lblDecodedData;
     private final String LBL_STYLE_ERROR = "-fx-border-color: black; -fx-border-width: 2;"
-                + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #dc143c;" 
+                + "-fx-font-size:12px; -fx-alignment: center; -fx-text-fill: #dc143c;" 
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";            
     private final String LBL_STYLE_OK = "-fx-border-color: black; -fx-border-width: 2;"
                 + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #000000;" 
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";
     private final Button btnStartReading;
     private final Button btnStopReading;
-    private int portFailureCounter;
+    private TagReader reader;
+    private final int READ_FREQUENCY = 2012; //eventually get this from app state
+//    private int portFailureCounter;
     private Timer tmr;
-//    private final AutoRead readTask = new AutoRead();
     private boolean runRabbitRun = true; //flag to stop the auto read timer
     //constructor
     ReadPane() {
@@ -55,9 +56,9 @@ public class ReadPane
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
         pane.getChildren().add(lblWelcome);        
         
-        btnReadData = new Button("Read data");
-        btnReadData.setOnAction(e -> btnReadData_Click(e));
-        pane.getChildren().add(btnReadData);
+        btnReadMulti = new Button("Read multiple");
+        btnReadMulti.setOnAction(e -> btnReadMulti_Click(e));
+        pane.getChildren().add(btnReadMulti);
         
         lblDecodedData = new Label("your number here");        
         lblDecodedData.setStyle(this.LBL_STYLE_OK);
@@ -71,7 +72,7 @@ public class ReadPane
         btnStopReading.setOnAction(e -> btnStopReading_Click(e));
         pane.getChildren().add(btnStopReading);
         
-        portFailureCounter = 0;
+//        portFailureCounter = 0;
 //        tmr = new Timer();
         
 //        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
@@ -87,29 +88,33 @@ public class ReadPane
     {
         return this.pane;
     }
-
-
-    private void btnReadData_Click(ActionEvent e) {
+    
+    private void btnReadMulti_Click(ActionEvent e) {
+        FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
         System.out.println("got click to read data");
-        TagReader reader = new TagReader();
-        String cardData = reader.readOneCard()[0];        
-        switch (cardData) {
-            case DeviceErrorCodes.ERR_NO_HANDLE:                
-                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
-                lblDecodedData.setText("Error connecting to device.");
-                if (++portFailureCounter > 5) {
-                    lblDecodedData.setText("Multiple errors connecting to device. Check connections and restart.");
-                }
-                break;
-            case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
-                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
-                lblDecodedData.setText("Multiple tags detected in single-card mode.");
-                break;
-            default:
-                lblDecodedData.setStyle(this.LBL_STYLE_OK);
-                lblDecodedData.setText(cardData);        
-                portFailureCounter = 0;
-        }
+        reader = new TagReader();
+
+        String[] deckData = reader.readDeck();
+        System.out.println("got click to read deck");
+        System.out.println("there are " + deckData.length + " cards in the deck");
+//        switch (cardData) {
+//            case DeviceErrorCodes.ERR_NO_HANDLE:                
+//                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+//                lblDecodedData.setText("Error connecting to device.");
+//                if (++portFailureCounter > 5) {
+//                    lblDecodedData.setText("Multiple errors connecting to device. Check connections and restart.");
+//                }
+//                break;
+//            case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
+//                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+//                lblDecodedData.setText("Multiple tags detected in single-card mode.");
+//                break;
+//            default:
+//                lblDecodedData.setStyle(this.LBL_STYLE_OK);
+//                lblDecodedData.setText(cardData);        
+//                portFailureCounter = 0;
+//        }
+        reader.closePort();
 //        reader = null;
     }
     
@@ -124,12 +129,14 @@ public class ReadPane
     }
     
     public void startTimer() {
+        reader  = new TagReader();
         runRabbitRun = true;
-        tmr = new Timer(); //initializing tmr here rather than in constructor allows restarting
-        tmr.schedule(new AutoRead(), 0, 1521);
-//        tmr.schedule(readTask, 0, 1521);
+        tmr = new Timer(); //instantiating tmr here rather than in constructor allows restarting
+        tmr.schedule(new AutoRead(), 0, this.READ_FREQUENCY);
     }
     public void stopTimer() {
+        System.out.println("stop timer fcn called");
+        if (reader != null) {reader.closePort();}
         if (tmr != null) {            
             tmr.cancel();
             tmr.purge();
@@ -141,14 +148,18 @@ public class ReadPane
     class AutoRead extends TimerTask {
         @Override
         public void run() {
-            System.out.println("auto read task running at " + System.currentTimeMillis());
+            
             if (runRabbitRun) {                           
                 //JavaWorld.com exploring JavaFX's Application class
+                System.out.println("auto read task running at " + System.currentTimeMillis());
                 System.out.println("timer thread " + Thread.currentThread());
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        lblDecodedData.setText("timer tick " + System.currentTimeMillis());  
+//                        lblDecodedData.setText("timer tick " + System.currentTimeMillis());  
+                        String[] cardData = reader.readOneCard();     
+//                        System.out.println("read one card " + cardData);
+                        displayTags(cardData);                        
                     }
                 });                
             }
@@ -163,5 +174,26 @@ public class ReadPane
             }
         }   
     }
-    
+    private void displayTags(String[] deck) {
+        switch (deck[0]) {
+            case DeviceErrorCodes.ERR_NO_HANDLE:                
+                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                lblDecodedData.setText("Error connecting to device. Please check connections and restart.");
+                this.stopTimer();
+                break;
+            case DeviceErrorCodes.ERR_NO_CARD:
+                lblDecodedData.setStyle(this.LBL_STYLE_OK);
+                lblDecodedData.setText("no tag");
+                break;
+            case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
+                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                lblDecodedData.setText("Multiple tags detected in single-card mode.");
+                break;
+            default:
+                lblDecodedData.setStyle(this.LBL_STYLE_OK);
+                lblDecodedData.setText(deck[0]);        
+//                portFailureCounter = 0;
+        }
+//        lblDecodedData.setText(deck[0]);
+    }
 }

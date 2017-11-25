@@ -54,6 +54,8 @@ public class ToggleSingleMultiPane
         //action events. change text of label and button, change bool multi read mode
     private void btnChooseSingleMulti_Click()
     {
+        FxMsgBox.show("Multiple card reading\nis under construction.\nThe button changes,\nbut the action is always single.", 
+                "Change single/multi read");
         AppState state;
         state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setMultiRead(!state.isMultiRead());

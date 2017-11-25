@@ -40,6 +40,7 @@ public class MenuBarPane
     private final MenuItem resetMenu;
     private final MenuItem smallWinMenu;
     private final MenuItem largeWinMenu;
+    private final MenuItem configMenu;
     private final MenuItem exitMenu;
     
     private final Menu readWriteMenu;
@@ -50,6 +51,7 @@ public class MenuBarPane
     private final static String FILE_MENU_RESET = "Rese_t";
     private final static String FILE_MENU_SM_WIN = "_Small window";
     private final static String FILE_MENU_LG_WIN = "_Large window";
+    private final static String FILE_MENU_CONFIG = "_Configuration";
     private final static String FILE_MENU_EXIT = "E_xit";
     
     private final static String R_W_MENU_READ = "R_ead tags";
@@ -71,10 +73,12 @@ public class MenuBarPane
         smallWinMenu.setOnAction(e-> FileMenuItem_Click(e));
         largeWinMenu = new MenuItem(MenuBarPane.FILE_MENU_LG_WIN);
         largeWinMenu.setOnAction(e-> FileMenuItem_Click(e));
+        configMenu = new MenuItem(MenuBarPane.FILE_MENU_CONFIG);
+        configMenu.setOnAction(e-> FileMenuItem_Click(e));
         exitMenu = new MenuItem(MenuBarPane.FILE_MENU_EXIT);
         exitMenu.setOnAction(e-> FileMenuItem_Click(e));
         fileMenu.getItems().addAll(resetMenu, new SeparatorMenuItem(), smallWinMenu, largeWinMenu,
-                new SeparatorMenuItem(), exitMenu);
+                configMenu, new SeparatorMenuItem(), exitMenu);
            
         readWriteMenu = new Menu ("_Read/Write");
         readMenu = new MenuItem(MenuBarPane.R_W_MENU_READ);
@@ -118,8 +122,11 @@ public class MenuBarPane
             case MenuBarPane.FILE_MENU_LG_WIN:
                 FxMsgBox.show("pretend you see a large window", "Menu action");
                 break;
+            case MenuBarPane.FILE_MENU_CONFIG:                
+                FxMsgBox.show("config is not yet configged", "Menu action");
+                break;
             case MenuBarPane.FILE_MENU_EXIT:                
-                FxMsgBox.show("exit", "Menu action");
+//                FxMsgBox.show("exit", "Menu action");
                 System.exit(0);
             default:                
                 FxMsgBox.show("event source is " + eventSource.getText(), "source debugging");

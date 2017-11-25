@@ -18,12 +18,12 @@ package skyrfidjavaapp;
 
 import javafx.application.Application;
 import static javafx.application.Application.launch;
-import javafx.application.Platform;
-import javafx.collections.ObservableList;
+//import javafx.application.Platform;
+//import javafx.collections.ObservableList;
 //import javafx.event.ActionEvent;
 //import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.Node;
+//import javafx.scene.Node;
 //import javafx.scene.layout.Pane;
 //import javafx.scene.control.Button;
 import javafx.scene.image.Image;
@@ -83,6 +83,9 @@ public class SkyRfidJavaApp extends Application {
         System.exit(0);
         //Platform.exit() does not stop timer
     }
+    /**
+     * Used when application launches.
+     */
     private static void initializeRootPane() {
         rootPane = new BorderPane();
         pgmMenu = new MenuBarPane();
@@ -94,7 +97,11 @@ public class SkyRfidJavaApp extends Application {
         rootPane.setTop(pgmMenu.getPane());
         rootPane.setLeft(singleMultiPane.getPane());
         rootPane.setRight(antiTheftPane.getPane());
+        //center pane is set in resetPanes, as it varies with app state.
     }
+    /**
+     * Used when application launches and when state changes
+     */
     public static void resetPanes() {    
 //        ObservableList<Node> currentNodes = rootPane.getChildren();
 //        System.out.println("there are " + currentNodes.size() + " nodes in the root pane");
