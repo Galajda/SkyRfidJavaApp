@@ -119,6 +119,22 @@ public interface RfidNativeInterface extends Library {
     //__int16 fw_stay_quiet(HANDLE icdev,unsigned char flags,unsigned char *UID);
     //st=fw_stay_quiet(icdev,0x22,&UID[1])
     
+    /**
+     * Halts the currently selected card. To reactivate the card,
+     * remove it from the field and reintroduce it.
+     * @param handle handle to the RFID device
+     * @return 0 = success. Nonzero = fail.
+     */
+    int fw_halt(int handle);
+    
+    /**
+     * 
+     * @param handle handle to the RFID device
+     * @param mode char 0x0=single card, 0x1=multiple cards
+     * @param serial_number returned serial number of tag
+     * @return 0 = success. Nonzero = fail.
+     */
+    int fw_card(int handle, char mode, long[] serial_number);
     
     //add anticoll
     

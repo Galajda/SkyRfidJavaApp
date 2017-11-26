@@ -44,7 +44,14 @@ Auto-read timer runs after the read pane is changed.
     Create switch pane method in SkyRfidJavaApp. When panes are switched, turn the timer on and off.
 RF.exe shows AFI. How does it read this value? I see only functions to write the value.
 
+What if a tag leaves the field during the read?
 
+Multiple tags
+    Timer must adjust to number of cards read so that all can be shown before next read.
+
+dll functions
+    does stay quiet state persist after tag leaves field?
+    how does multi read work? 
 
 
     

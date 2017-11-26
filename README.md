@@ -17,6 +17,6 @@ The nu.xom package is used for XML reading and writing. It is covered by the
 LGPL license.
 https://xom.nu/
 
-See ProjectNotes.txt for technical details, issues, TODOs.
+See ProjectNotes.txt for technical details. See TODO.txt for TODOs.
 
 

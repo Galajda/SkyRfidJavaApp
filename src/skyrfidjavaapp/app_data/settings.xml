@@ -11,7 +11,7 @@
     <parameter_set>
         <type>current</type>
         <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
+        <read_write_mode>WRITE_MODE</read_write_mode>
         <multi_read>false</multi_read>
     </parameter_set>
 </settings>

@@ -51,7 +51,7 @@ public class ReadPane
     ReadPane() {
 //        System.out.println("read pane constructor running");        
         pane = new VBox();
-        pane.setMinWidth(300);
+        pane.setMinWidth(250);
         
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
         pane.getChildren().add(lblWelcome);        
@@ -91,11 +91,11 @@ public class ReadPane
     
     private void btnReadMulti_Click(ActionEvent e) {
         FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
-        System.out.println("got click to read data");
+        System.out.println("got click to read deck");       
         reader = new TagReader();
 
         String[] deckData = reader.readDeck();
-        System.out.println("got click to read deck");
+        
         System.out.println("there are " + deckData.length + " cards in the deck");
 //        switch (cardData) {
 //            case DeviceErrorCodes.ERR_NO_HANDLE:                
@@ -133,17 +133,23 @@ public class ReadPane
         runRabbitRun = true;
         tmr = new Timer(); //instantiating tmr here rather than in constructor allows restarting
         tmr.schedule(new AutoRead(), 0, this.READ_FREQUENCY);
+        //Fixed-delay execution is deliberately chosen over fixed-rate execution
+        //so that tasks do not overlap. If this works as I expect, no adjustment will be 
+        //needed for multiple cards. A possible complication is the runLater method within
+        //the timer task. If this runs independently of the timer, then the display may be confused.
     }
     public void stopTimer() {
         System.out.println("stop timer fcn called");
         if (reader != null) {reader.closePort();}
+        //cancel the current timer thread.
         if (tmr != null) {            
             tmr.cancel();
             tmr.purge();
         }
-        runRabbitRun = false; 
-        //better to change flag than to call stopTimer.
-        //the flag is communicated to all timer threads
+        //the flag is communicated to all timer threads, in case one has become detached
+        //from the current timer
+        runRabbitRun = false;                 
+        
     }
     class AutoRead extends TimerTask {
         @Override
@@ -164,36 +170,36 @@ public class ReadPane
                 });                
             }
             else { 
-                this.cancel();    
-//                tmr.cancel();
-//                tmr.purge();
+                this.cancel();
                 //this.cancel() is preferable to tmr.cancel() 
-                //in case of multiple timer threads, this will stop each thread.
-                //tmr will stop only the most recent.
+                //in case of multiple timer threads, this.cancel() will stop each thread.
+                //tmr.cancel() will stop only the most recent, the current instance of Timer.
                 System.out.println("timer got flag to stop");
             }
         }   
     }
     private void displayTags(String[] deck) {
-        switch (deck[0]) {
-            case DeviceErrorCodes.ERR_NO_HANDLE:                
-                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
-                lblDecodedData.setText("Error connecting to device. Please check connections and restart.");
-                this.stopTimer();
-                break;
-            case DeviceErrorCodes.ERR_NO_CARD:
-                lblDecodedData.setStyle(this.LBL_STYLE_OK);
-                lblDecodedData.setText("no tag");
-                break;
-            case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
-                lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
-                lblDecodedData.setText("Multiple tags detected in single-card mode.");
-                break;
-            default:
-                lblDecodedData.setStyle(this.LBL_STYLE_OK);
-                lblDecodedData.setText(deck[0]);        
-//                portFailureCounter = 0;
+        for (String oneCard : deck) {
+            switch (oneCard) {
+                case DeviceErrorCodes.ERR_NO_HANDLE:                
+                    lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                    lblDecodedData.setText("Error connecting to device. Please check connections and restart.");
+                    this.stopTimer();
+                    break;
+                case DeviceErrorCodes.ERR_NO_CARD:
+                    lblDecodedData.setStyle(this.LBL_STYLE_OK);
+                    lblDecodedData.setText("no tag");
+                    break;
+                case DeviceErrorCodes.ERR_MULTIPLE_CARDS:
+                    lblDecodedData.setStyle(this.LBL_STYLE_ERROR);
+                    lblDecodedData.setText("Multiple tags detected in single-card mode.");
+                    break;
+                default:
+                    lblDecodedData.setStyle(this.LBL_STYLE_OK);
+                    lblDecodedData.setText(oneCard);
+            }
+            //display for 1 sec, then show next number.
         }
-//        lblDecodedData.setText(deck[0]);
+        
     }
 }
