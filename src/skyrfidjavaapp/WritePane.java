@@ -17,7 +17,11 @@
 package skyrfidjavaapp;
 
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
+import javafx.scene.input.KeyEvent;
+
 
 /**
  *
@@ -27,16 +31,33 @@ public class WritePane
 {
     private VBox pane;
     private final Label lblWelcome; 
+    private TextField txtBarcodeInput;
     
     WritePane()
-    {
-        lblWelcome = new Label("Welcome to the RFID reader.\nThe write mode is under construction.");
+    {        
         pane = new VBox();
         pane.setMinWidth(300);
+        
+        lblWelcome = new Label("Welcome to the RFID reader.\nThe write mode is under construction.");
         pane.getChildren().add(lblWelcome);
+        
+        txtBarcodeInput = new TextField();
+        txtBarcodeInput.setPromptText("enter barcode");
+        txtBarcodeInput.setPrefWidth(50);
+        txtBarcodeInput.setPrefHeight(30);
+        txtBarcodeInput.setOnKeyReleased(e -> txtBarcodeInput_KeyUp(e));
+        pane.getChildren().add(txtBarcodeInput);
     }
     public VBox getPane()
     {
         return this.pane;
+    }
+    
+    private void txtBarcodeInput_KeyUp(KeyEvent e) {
+        System.out.println("key release " + e.getCode());
+        if (e.getCode().equals(KeyCode.ENTER)) {
+            System.out.println("you entered barcode " + txtBarcodeInput.getText());
+            txtBarcodeInput.clear();
+        }
     }
 }

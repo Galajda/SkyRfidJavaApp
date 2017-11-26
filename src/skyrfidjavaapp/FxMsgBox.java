@@ -18,6 +18,7 @@ package skyrfidjavaapp;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
@@ -29,15 +30,20 @@ import javafx.stage.Stage;
  * @author MichalG
  */
 public class FxMsgBox {
+    /**
+     * Displays a message box using FX tools
+     * @param message The body of the message
+     * @param title The title of the window
+     */
     public static void show(String message, String title)
-    {
-        //displays a message box using FX tools
+    {        
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(title);
         stage.setMinWidth(300);
         stage.setMaxWidth(500);
         //set width according to content. 
+        stage.getIcons().add(new Image("skyrfidjavaapp/attention.jpg"));
         
         Label msgArea = new Label(message); //how to wrap message?
         Button btnOk = new Button("OK");

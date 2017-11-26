@@ -17,20 +17,9 @@
 package skyrfidjavaapp;
 
 /**
- * No constructor. Single static method.
+ *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
-public class TheftBitWorker {
-    /**
-     * Theft bit uses AFI. On = 07. Off = 00.
-     * @param device_handle
-     * @param card_id
-     * @param new_state 
-     */
-    public static void changeTheftBit(int device_handle, char[] card_id, AntiTheftEnum new_state) {
-        System.out.print("theft bit worker is pretending to change the theft bit of card #");
-        System.out.print(String.format("%04x", (int)card_id[0]));
-        System.out.println(" to value " + new_state);
-        
-    }
+public enum WindowSizeEnum {
+    SMALL, LARGE
 }

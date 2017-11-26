@@ -1,4 +1,3 @@
-
 # SkyRfidJavaApp
 ***************
 Description: 
@@ -17,5 +16,7 @@ https://github.com/java-native-access/jna
 The nu.xom package is used for XML reading and writing. It is covered by the 
 LGPL license.
 https://xom.nu/
+
+See ProjectNotes.txt for technical details. See TODO.txt for TODOs.
 
 

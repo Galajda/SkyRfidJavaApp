@@ -24,28 +24,28 @@ import javafx.scene.control.Button;
  *
  * @author MichalG
  */
-public class ChooseSingleMultiPane 
+public class ToggleSingleMultiPane 
 {
     //display current mode in label
     //alter button text for the other choice
     
     private final VBox pane;
     private final Label lblCurrentSingleMulti;
-    private final Button btnChooseSingleMulti;
+    private final Button btnToggleSingleMulti;
     
     
     //constructor
-    ChooseSingleMultiPane()
+    ToggleSingleMultiPane()
     {
         
         pane = new VBox();
         pane.setMinWidth(200);
         lblCurrentSingleMulti = new Label();
-        btnChooseSingleMulti = new Button();
-        btnChooseSingleMulti.setOnAction(e-> btnChooseSingleMulti_Click());
+        btnToggleSingleMulti = new Button();
+        btnToggleSingleMulti.setOnAction(e-> btnChooseSingleMulti_Click());
         setLblAndButtonTxt();
         
-        pane.getChildren().addAll(lblCurrentSingleMulti,btnChooseSingleMulti);
+        pane.getChildren().addAll(lblCurrentSingleMulti,btnToggleSingleMulti);
     }
     public VBox getPane()
     {
@@ -54,25 +54,29 @@ public class ChooseSingleMultiPane
         //action events. change text of label and button, change bool multi read mode
     private void btnChooseSingleMulti_Click()
     {
+        FxMsgBox.show("Multiple card reading\nis under construction.\nThe button changes,\nbut the action is always single.", 
+                "Change single/multi read");
         AppState state;
         state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setMultiRead(!state.isMultiRead());
         setLblAndButtonTxt();
+        System.out.println("single/multi toggle event asks to reset panes");
+        SkyRfidJavaApp.resetPanes();
     }
     
-    private void setLblAndButtonTxt()
+    public final void setLblAndButtonTxt()
     {
         AppState state;
         state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         if (state.isMultiRead())
         {
             lblCurrentSingleMulti.setText("Reading multiple tags");
-            btnChooseSingleMulti.setText("Switch to _single tag");
+            btnToggleSingleMulti.setText("Switch to _single tag");
         }
         else 
         {
             lblCurrentSingleMulti.setText("Reading single tag");
-            btnChooseSingleMulti.setText("Switch to _multiple tags");
+            btnToggleSingleMulti.setText("Switch to _multiple tags");
         }
     }
 
