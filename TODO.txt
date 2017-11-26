@@ -9,5 +9,10 @@ Add Settings pane to change defaults and advanced properties.
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
+Write pane:
+    
+
 Read pane:    
     If detect multiple tags in single mode, throw error.
+    
+Send keystrokes via Robot. In read mode only.
