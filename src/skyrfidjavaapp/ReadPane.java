@@ -47,6 +47,8 @@ public class ReadPane
 //    private int portFailureCounter;
     private Timer tmr;
     private boolean runRabbitRun = true; //flag to stop the auto read timer
+    
+    private RoboWriter roboWriter;
     //constructor
     ReadPane() {
 //        System.out.println("read pane constructor running");        
@@ -72,6 +74,7 @@ public class ReadPane
         btnStopReading.setOnAction(e -> btnStopReading_Click(e));
         pane.getChildren().add(btnStopReading);
         
+        roboWriter = new RoboWriter();
 //        portFailureCounter = 0;
 //        tmr = new Timer();
         
@@ -165,7 +168,8 @@ public class ReadPane
 //                        lblDecodedData.setText("timer tick " + System.currentTimeMillis());  
                         String[] cardData = reader.readOneCard();     
 //                        System.out.println("read one card " + cardData);
-                        displayTags(cardData);                        
+                        displayTags(cardData);              
+                        
                     }
                 });                
             }
@@ -197,6 +201,7 @@ public class ReadPane
                 default:
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
+                    roboWriter.sendKeys(oneCard);
             }
             //display for 1 sec, then show next number.
         }
