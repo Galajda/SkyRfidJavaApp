@@ -1,5 +1,3 @@
-Take action on theft bit setting. It currently has no effect.
-
 Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml. Send extra keystrokes with barcode
     Add read frequency element. How often does reader check for tag in field?
@@ -16,3 +14,6 @@ Read pane:
     If detect multiple tags in single mode, throw error.
     
 Send keystrokes via Robot. In read mode only.
+
+Test barcodes that contain letters
+
