@@ -32,6 +32,8 @@ public class WritePane
     private VBox pane;
     private final Label lblWelcome; 
     private TextField txtBarcodeInput;
+    private final Label lblInputInstructions;
+    private static TagWriter writer;
     
     WritePane()
     {        
@@ -47,6 +49,11 @@ public class WritePane
         txtBarcodeInput.setPrefHeight(30);
         txtBarcodeInput.setOnKeyReleased(e -> txtBarcodeInput_KeyUp(e));
         pane.getChildren().add(txtBarcodeInput);
+        
+        lblInputInstructions = new Label("Press enter on keyboard to submit");
+        pane.getChildren().add(lblInputInstructions);
+        
+        
     }
     public VBox getPane()
     {
@@ -54,10 +61,20 @@ public class WritePane
     }
     
     private void txtBarcodeInput_KeyUp(KeyEvent e) {
-        System.out.println("key release " + e.getCode());
+//        System.out.println("key release " + e.getCode());
         if (e.getCode().equals(KeyCode.ENTER)) {
+            writer = new TagWriter();
             System.out.println("you entered barcode " + txtBarcodeInput.getText());
-            txtBarcodeInput.clear();
+            boolean writeSuccess = writer.WriteOneTag(txtBarcodeInput.getText());
+            writer.closePort();
+            System.out.println("write result " + writeSuccess);
+            if (writeSuccess) {
+                //turn label background green
+            }
+            else {
+                //turn label background red
+            }
+//            txtBarcodeInput.clear();
         }
     }
 }
