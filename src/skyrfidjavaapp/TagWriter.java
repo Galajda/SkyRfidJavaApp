@@ -26,17 +26,17 @@ public class TagWriter extends TagActor {
         super();
         System.out.println("tag writer constructor called");
         
-        System.out.println("initialized writer. handle = " + deviceHdl);  
+        System.out.println("initialized writer. handle = " + super.deviceHdl);  
     }
     
     public boolean WriteOneTag(String barcode) {
 //        System.out.println("write one tag got barcode " + barcode);
         
-        if (deviceHdl<0) {
+        if (super.deviceHdl<0) {
 //            return new String[]{DeviceErrorCodes.ERR_NO_HANDLE};
             return false;
         }
-        int configStatus = rfidDll.fw_config_card(deviceHdl, AppConstants.CARD_TYPE_ISO15693);        
+        int configStatus = super.rfidDll.fw_config_card(super.deviceHdl, AppConstants.CARD_TYPE_ISO15693);        
         System.out.println("config card status " + (configStatus==0));
         
         char[] returnedUidLen = {0x0};
@@ -45,7 +45,7 @@ public class TagWriter extends TagActor {
 //        int inventoryStatus = rfidDll.fw_inventory(deviceHdl, AppConstants.READ_SINGLE_CARD,
 //                TAG_START_BLOCK, TAG_BLOCK_LEN, returnedUidLen, uidBuffer);
         char[] afi = {0x3}; //set it to a non-standard value to see if the fcn changes it
-        int inventoryStatus = rfidDll.fw_inventory(deviceHdl, AppConstants.READ_SINGLE_CARD,
+        int inventoryStatus = super.rfidDll.fw_inventory(super.deviceHdl, AppConstants.READ_SINGLE_CARD,
                 afi, (char)0x0, returnedUidLen, uidBuffer);
         System.out.println("inventory status " + (inventoryStatus==0));
         if (inventoryStatus !=0 ) {
@@ -63,7 +63,7 @@ public class TagWriter extends TagActor {
         }
         System.out.println();
                 
-        int selectStatus = rfidDll.fw_select_uid(deviceHdl, (char)0x22, uidBuffer);
+        int selectStatus = super.rfidDll.fw_select_uid(super.deviceHdl, (char)0x22, uidBuffer);
         System.out.println("select status " + (selectStatus==0));
         
         
@@ -78,12 +78,15 @@ public class TagWriter extends TagActor {
         }
         char[] write_buffer_length = {(char)write_buffer.length};
         
-        int writeSuccess = rfidDll.fw_writeblock(deviceHdl, (char)0x22, TAG_START_BLOCK, TAG_BLOCK_LEN, 
-                    uidBuffer, write_buffer_length, write_buffer);
-        System.out.println("write status " + (writeSuccess==0));
+        int writeResponse = super.rfidDll.fw_writeblock(super.deviceHdl, (char)0x22, 
+                TAG_START_BLOCK, TAG_BLOCK_LEN, uidBuffer, write_buffer_length, write_buffer);
+        boolean writeSuccess = (writeResponse==0);
+        System.out.println("write status " + writeSuccess);
+        if (writeSuccess) {
+            TheftBitWorker.changeTheftBit(super.deviceHdl, uidBuffer, super.theftAction);
+        }
         
-        
-        return true;
+        return writeSuccess;
     }
     
 }
