@@ -68,7 +68,7 @@ public class SkyRfidJavaApp extends Application {
         
 //        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
         primaryStage.setTitle(AppConstants.APP_TITLE);        
-        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));  
+        primaryStage.getIcons().add(new Image("skyrfidjavaapp/images/javarhino.jpg"));  
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(250);
         primaryStage.setScene(scene);
