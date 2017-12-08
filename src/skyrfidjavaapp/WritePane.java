@@ -21,6 +21,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.VBox;
 import javafx.scene.input.KeyEvent;
+import java.util.Timer;
+import java.util.TimerTask;
+import javafx.application.Platform;
 
 
 /**
@@ -29,9 +32,16 @@ import javafx.scene.input.KeyEvent;
  */
 public class WritePane 
 {
-    private VBox pane;
+    private final VBox pane;
     private final Label lblWelcome; 
-    private TextField txtBarcodeInput;
+    private final TextField txtBarcodeInput;
+    private final String STYLE_WRITE_SUCCESS = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #adff2f;"; //green
+    private final String STYLE_WRITE_FAIL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ff1493;"; //red
+    private final String STYLE_WRITE_NEUTRAL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ffffff;"; //white
+    
     private final Label lblInputInstructions;
     private static TagWriter writer;
     
@@ -44,8 +54,9 @@ public class WritePane
         pane.getChildren().add(lblWelcome);
         
         txtBarcodeInput = new TextField();
-        txtBarcodeInput.setPromptText("enter barcode");
-        txtBarcodeInput.setPrefWidth(50);
+        resetTextField();
+        txtBarcodeInput.setPrefWidth(200);
+        txtBarcodeInput.setMaxWidth(200);
         txtBarcodeInput.setPrefHeight(30);
         txtBarcodeInput.setOnKeyReleased(e -> txtBarcodeInput_KeyUp(e));
         pane.getChildren().add(txtBarcodeInput);
@@ -69,12 +80,39 @@ public class WritePane
             writer.closePort();
             System.out.println("write result " + writeSuccess);
             if (writeSuccess) {
-                //turn label background green
+                txtBarcodeInput.setStyle(this.STYLE_WRITE_SUCCESS);
+                //change theft bit
             }
             else {
-                //turn label background red
+                txtBarcodeInput.setStyle(this.STYLE_WRITE_FAIL);
             }
+            //wait, reset text field 
+            Timer tmr = new Timer();
+            tmr.schedule(new DelayedResetTextField(), 1000);
+            //SO 24104313
+//            System.out.println("changed style. start wait " + System.currentTimeMillis());
+//            try {Thread.sleep(1000);}
+//            catch (InterruptedException interruptEx) {Thread.currentThread().interrupt();}
+//            System.out.println("end wait " + System.currentTimeMillis());
 //            txtBarcodeInput.clear();
+//            txtBarcodeInput.setStyle(this.STYLE_WRITE_NEUTRAL);
         }
+    }
+    class DelayedResetTextField extends TimerTask {
+        @Override
+        public void run() {
+            Platform.runLater(new Runnable () {
+                @Override
+                public void run() {
+                    resetTextField();
+                }            
+            });            
+        }        
+    }
+    private void resetTextField() {
+        txtBarcodeInput.setStyle(this.STYLE_WRITE_NEUTRAL);        
+        txtBarcodeInput.clear();
+        txtBarcodeInput.setPromptText("enter barcode");
+        //prompt text is erased when cursor enters field
     }
 }

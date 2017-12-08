@@ -67,8 +67,8 @@ public class SkyRfidJavaApp extends Application {
         Scene scene = new Scene(rootPane, 700, 250);
         
 //        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
-        primaryStage.setTitle("RFID program");        
-        primaryStage.getIcons().add(new Image("skyrfidjavaapp/javarhino.jpg"));  
+        primaryStage.setTitle(AppConstants.APP_TITLE);        
+        primaryStage.getIcons().add(new Image("skyrfidjavaapp/images/javarhino.jpg"));  
         primaryStage.setMinWidth(700);
         primaryStage.setMinHeight(250);
         primaryStage.setScene(scene);

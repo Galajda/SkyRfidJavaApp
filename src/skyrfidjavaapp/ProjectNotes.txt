@@ -1,15 +1,17 @@
 ***Description***
-Features: Only reading is implemented. Manual control of read command. Raw hex output to console 
+Features: Only single reading is implemented, despite the single/multi button. Read command
+    is executed on a timer. Button commands exist for debugging. Raw hex output to console 
     plus decoded number in application window.
 
 Why use enums and constant strings for app state? Enums control value of fcn arguments. 
-    Constant strings reduce spelling errors.
+    Constant strings reduce spelling errors in values that are used in multiple methods.
 
 The logic of the AppState. The default state is managed through a settings screen that has not been
     implemented yet. When the program launches, or when reset is chosen from the file menu, the 
     default values are copied to the current values. The current values are always used to load panes.
     Each pane is responsible for retrieving app state and configuring accordingly. When a pane
-    changes the state, it must notify the application by calling loadRootPane().
+    changes the state, it must notify the application by calling loadRootPane(), which will reset
+    the panes with the new values.
 
 Control of device port. I cannot find a good place to close the port. For now, I will open and 
     close it for each read operation.
@@ -47,7 +49,8 @@ RF.exe shows AFI. How does it read this value? I see only functions to write the
 What if a tag leaves the field during the read?
 
 Multiple handles
-    Is there a conflict if reader and writer have handles on the RFID device?
+    Is there a conflict if reader and writer have handles on the RFID device? I will avoid the
+    question by closing the port when the pane switches from read to write.
 
 Multiple tags
     Timer must adjust to number of cards read so that all can be shown before next read.

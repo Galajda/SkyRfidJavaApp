@@ -22,6 +22,8 @@ package skyrfidjavaapp;
  */
 public class AppConstants 
 {
+    //title
+    public static final String APP_TITLE = "RFID program";
     //RFID reader constants
     public static final char READ_SINGLE_CARD = 0x36;
     public static final char READ_MULTI_CARDS = 0x16;

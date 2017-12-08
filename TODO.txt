@@ -1,3 +1,29 @@
+<<<<<<< HEAD
+Take action on theft bit setting. It currently has no effect.
+
+Add Settings pane to change defaults and advanced properties.
+    Add extra keystrokes element to xml. Send extra keystrokes with barcode. Allow
+	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
+	two KeyEvent.VK_ENTER when program y is the active window.
+    Add read frequency element. How often does reader check for tag in field?
+    Add more configurations. Allow user to choose a config, rather than individual 
+    parameters.
+
+Toggle single multi pane:
+    If app state is write, do not allow multiple mode.
+
+Write pane:
+    Communicate errors to user: no device, no tag, bad input
+    
+
+Read pane:    
+    If detect multiple tags in single mode, throw error.
+TagActor:
+    Move uid to parent?
+Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
+	Catch errors related to existence of user32.dll.
+	Customize extra keystrokes according to the active window.
+=======
 Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml. Send extra keystrokes with barcode
     Add read frequency element. How often does reader check for tag in field?
@@ -8,7 +34,7 @@ Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
 Write pane:
-    
+    Add theft bit action to write action.
 
 Read pane:    
     If detect multiple tags in single mode, throw error.
@@ -17,3 +43,4 @@ Send keystrokes via Robot. In read mode only.
 
 Test barcodes that contain letters
 
+>>>>>>> master

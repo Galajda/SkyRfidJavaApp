@@ -43,7 +43,7 @@ public class FxMsgBox {
         stage.setMinWidth(300);
         stage.setMaxWidth(500);
         //set width according to content. 
-        stage.getIcons().add(new Image("skyrfidjavaapp/attention.jpg"));
+        stage.getIcons().add(new Image("skyrfidjavaapp/images/attention.jpg"));
         
         Label msgArea = new Label(message); //how to wrap message?
         Button btnOk = new Button("OK");

@@ -35,9 +35,11 @@ public class ReadPane
     private final Button btnReadMulti;  
     private final Label lblDecodedData;
     private final String LBL_STYLE_ERROR = "-fx-border-color: black; -fx-border-width: 2;"
+                + "-fx-border-radius:5;"
                 + "-fx-font-size:12px; -fx-alignment: center; -fx-text-fill: #dc143c;" 
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";            
     private final String LBL_STYLE_OK = "-fx-border-color: black; -fx-border-width: 2;"
+                + "-fx-border-radius:5;"
                 + "-fx-font-size:16px; -fx-alignment: center; -fx-text-fill: #000000;" 
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";
     private final Button btnStartReading;
@@ -47,6 +49,8 @@ public class ReadPane
 //    private int portFailureCounter;
     private Timer tmr;
     private boolean runRabbitRun = true; //flag to stop the auto read timer
+    
+    private RoboTypist roboWriter;
     //constructor
     ReadPane() {
 //        System.out.println("read pane constructor running");        
@@ -72,6 +76,7 @@ public class ReadPane
         btnStopReading.setOnAction(e -> btnStopReading_Click(e));
         pane.getChildren().add(btnStopReading);
         
+        roboWriter = new RoboTypist();
 //        portFailureCounter = 0;
 //        tmr = new Timer();
         
@@ -165,7 +170,8 @@ public class ReadPane
 //                        lblDecodedData.setText("timer tick " + System.currentTimeMillis());  
                         String[] cardData = reader.readOneCard();     
 //                        System.out.println("read one card " + cardData);
-                        displayTags(cardData);                        
+                        displayTags(cardData);              
+                        
                     }
                 });                
             }
@@ -197,6 +203,7 @@ public class ReadPane
                 default:
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
+                    roboWriter.sendKeys(oneCard);
             }
             //display for 1 sec, then show next number.
         }

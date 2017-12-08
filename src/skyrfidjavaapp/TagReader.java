@@ -34,7 +34,7 @@ public class TagReader extends TagActor{
         super();
         System.out.println("tag reader constructor begins");
         
-        System.out.println("initialized reader. handle = " + deviceHdl);  
+        System.out.println("initialized reader. handle = " + super.deviceHdl);  
         
     }
     
@@ -45,10 +45,10 @@ public class TagReader extends TagActor{
     public String[] readOneCard() {
         System.out.println("*****************************************");        
         System.out.println("read one card fcn begins");        
-        if (deviceHdl<0) {
+        if (super.deviceHdl<0) {
             return new String[]{DeviceErrorCodes.ERR_NO_HANDLE};
         }
-        int configStatus = rfidDll.fw_config_card(deviceHdl, AppConstants.CARD_TYPE_ISO15693);        
+        int configStatus = rfidDll.fw_config_card(super.deviceHdl, AppConstants.CARD_TYPE_ISO15693);        
         System.out.println("config card status " + (configStatus==0));
         
         char[] returnedUidLen = {0x0};
@@ -57,7 +57,7 @@ public class TagReader extends TagActor{
 //        int inventoryStatus = rfidDll.fw_inventory(deviceHdl, AppConstants.READ_SINGLE_CARD,
 //                TAG_START_BLOCK, TAG_BLOCK_LEN, returnedUidLen, uidBuffer);
         char[] afi = {0x3}; //set it to a non-standard value to see if the fcn changes it
-        int inventoryStatus = rfidDll.fw_inventory(deviceHdl, AppConstants.READ_SINGLE_CARD,
+        int inventoryStatus = super.rfidDll.fw_inventory(super.deviceHdl, AppConstants.READ_SINGLE_CARD,
                 afi, (char)0x0, returnedUidLen, uidBuffer);
         System.out.println("inventory status " + (inventoryStatus==0));
         if (inventoryStatus !=0 ) {return new String[] {DeviceErrorCodes.ERR_NO_CARD};}
@@ -72,7 +72,7 @@ public class TagReader extends TagActor{
         }
         System.out.println();
                 
-        int selectStatus = rfidDll.fw_select_uid(deviceHdl, (char)0x22, uidBuffer);
+        int selectStatus = super.rfidDll.fw_select_uid(super.deviceHdl, (char)0x22, uidBuffer);
         System.out.println("select status " + (selectStatus==0));
         
 //        int resetReadyStatus = rfidDll.fw_reset_to_ready(deviceHdl, (char)0x22, uidBuffer);
@@ -81,7 +81,7 @@ public class TagReader extends TagActor{
         char[] returnedReadLength = {0x0};
         System.out.println("returned read block len init hex val " + String.format("%04x", (int)returnedReadLength[0]) );
         char[] readDataBuffer = new char[256];
-        int securityInfoStatus = rfidDll.fw_get_securityinfo(deviceHdl, (char)0x22, TAG_START_BLOCK, 
+        int securityInfoStatus = super.rfidDll.fw_get_securityinfo(super.deviceHdl, (char)0x22, TAG_START_BLOCK, 
             TAG_BLOCK_LEN, uidBuffer, returnedReadLength, readDataBuffer);
         System.out.println("get security info status " + (securityInfoStatus==0));
         System.out.println("\treturned read block length hex val " + String.format("%04x", (int)returnedReadLength[0]));
@@ -99,7 +99,7 @@ public class TagReader extends TagActor{
 //        int sysInfoStatus = rfidDll.fw_get_systeminfo(deviceHdl, (char)0x22, uidBuffer, aidLength, aidBuffer);
 //        System.out.println("get sys info status " + (sysInfoStatus==0));
         
-        int authenticationStatus = rfidDll.fw_authentication(deviceHdl, (char)0, (char)4);
+        int authenticationStatus = super.rfidDll.fw_authentication(super.deviceHdl, (char)0, (char)4);
         System.out.println("authentication status " + (authenticationStatus==0) + " " + authenticationStatus);
         
         int readBlockStatus = rfidDll.fw_readblock(deviceHdl, (char)0x22, TAG_START_BLOCK, 
@@ -118,10 +118,10 @@ public class TagReader extends TagActor{
         System.out.println("tag reader got decoded data " + decodedData);
         
         if (!(this.theftAction.equals(AntiTheftEnum.NO_ACTION))) {
-            TheftBitWorker.changeTheftBit(deviceHdl, uidBuffer, this.theftAction);
+            TheftBitWorker.changeTheftBit(super.deviceHdl, uidBuffer, this.theftAction);
         }
         //halt the tag
-        int haltStatus = rfidDll.fw_halt(deviceHdl);
+        int haltStatus = super.rfidDll.fw_halt(super.deviceHdl);
         System.out.println("halted tag " + (haltStatus==0) + " return val " + haltStatus);
         
         return new String[] {decodedData};
@@ -132,14 +132,14 @@ public class TagReader extends TagActor{
         System.out.println("read deck fcn begins");       
         String[] deck = new String[] {"0"};
              
-        if (deviceHdl<0) {return new String[]{DeviceErrorCodes.ERR_NO_HANDLE};}
+        if (super.deviceHdl<0) {return new String[]{DeviceErrorCodes.ERR_NO_HANDLE};}
         
         
-        int authenticationStatus = rfidDll.fw_authentication(deviceHdl, (char)0, (char)4);
+        int authenticationStatus = super.rfidDll.fw_authentication(super.deviceHdl, (char)0, (char)4);
         System.out.println("authentication status " + (authenticationStatus==0) + " " + authenticationStatus);
                 
         long[] cardSerialNumbers = {0};
-        int cardSerNrStatus = rfidDll.fw_card(deviceHdl, (char)0x1, cardSerialNumbers);
+        int cardSerNrStatus = super.rfidDll.fw_card(super.deviceHdl, (char)0x1, cardSerialNumbers);
         System.out.println("card ser no status " + cardSerNrStatus);
         System.out.print("\t");
         for (int i=0;i<cardSerialNumbers.length;i++) {
