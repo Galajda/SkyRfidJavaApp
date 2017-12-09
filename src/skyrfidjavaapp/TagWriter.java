@@ -83,7 +83,7 @@ public class TagWriter extends TagActor {
         boolean writeSuccess = (writeResponse==0);
         System.out.println("write status " + writeSuccess);
         if (writeSuccess) {
-            TheftBitWorker.changeTheftBit(super.deviceHdl, uidBuffer, super.theftAction);
+            TheftBitWorker.changeTheftBit(super.rfidDll, super.deviceHdl, uidBuffer, super.theftAction);
         }
         
         return writeSuccess;

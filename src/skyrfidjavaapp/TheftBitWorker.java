@@ -22,15 +22,29 @@ package skyrfidjavaapp;
  */
 public class TheftBitWorker {
     /**
-     * Theft bit uses AFI. On = 07. Off = 00.
+     * Theft bit uses AFI. On = 01. Off = 00.
      * @param device_handle
      * @param card_id
      * @param new_state 
      */
-    public static void changeTheftBit(int device_handle, char[] card_id, AntiTheftEnum new_state) {
+    public static void changeTheftBit(RfidNativeInterface dll, int device_handle, 
+            char[] card_id, AntiTheftEnum new_state) {
         System.out.print("theft bit worker is pretending to change the theft bit of card #");
         System.out.print(String.format("%04x", (int)card_id[0]));
         System.out.println(" to value " + new_state);
+        switch (new_state) {
+            case TURN_ON:
+                dll.fw_write_afi(device_handle, (char)0x22, (char)0x01, card_id);
+                break;
+            case TURN_OFF:
+                dll.fw_write_afi(device_handle, (char)0x22, (char)0x00, card_id);
+                break;
+            case NO_ACTION:
+            default:
+                    
+        }
+        
+        
         
     }
 }

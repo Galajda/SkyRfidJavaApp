@@ -15,7 +15,6 @@ Toggle single multi pane:
 Write pane:
     Communicate errors to user: no device, no tag, bad input
     
-
 Read pane:    
     If detect multiple tags in single mode, throw error.
 TagActor:
@@ -42,5 +41,7 @@ Read pane:
 Send keystrokes via Robot. In read mode only.
 
 Test barcodes that contain letters
+
+Anti-theft has been lost
 
 >>>>>>> master

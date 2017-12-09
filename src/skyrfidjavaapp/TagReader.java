@@ -118,7 +118,7 @@ public class TagReader extends TagActor{
         System.out.println("tag reader got decoded data " + decodedData);
         
         if (!(this.theftAction.equals(AntiTheftEnum.NO_ACTION))) {
-            TheftBitWorker.changeTheftBit(super.deviceHdl, uidBuffer, this.theftAction);
+            TheftBitWorker.changeTheftBit(super.rfidDll, super.deviceHdl, uidBuffer, super.theftAction);
         }
         //halt the tag
         int haltStatus = super.rfidDll.fw_halt(super.deviceHdl);
