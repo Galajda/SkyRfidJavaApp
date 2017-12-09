@@ -22,15 +22,31 @@ package skyrfidjavaapp;
  */
 public class TheftBitWorker {
     /**
-     * Theft bit uses AFI. On = 07. Off = 00.
-     * @param device_handle
-     * @param card_id
-     * @param new_state 
+     * Theft bit uses AFI. On = 0x01. Off = 0x00.
+     * @param dll copy of JNA instance, avoiding creation of a new instance
+     * @param device_handle handle to the RFID device
+     * @param card_id ID of the card to be changed
+     * @param new_state enum indicating new value of AFI byte. The function 
+     *      translates the enum to the actual value written to the tag.
      */
-    public static void changeTheftBit(int device_handle, char[] card_id, AntiTheftEnum new_state) {
-        System.out.print("theft bit worker is pretending to change the theft bit of card #");
+    public static void changeTheftBit(RfidNativeInterface dll, int device_handle, 
+            char[] card_id, AntiTheftEnum new_state) {
+        System.out.print("theft bit worker is changing the theft bit of card #");
         System.out.print(String.format("%04x", (int)card_id[0]));
         System.out.println(" to value " + new_state);
+        switch (new_state) {
+            case TURN_ON:
+                dll.fw_write_afi(device_handle, (char)0x22, (char)0x01, card_id);
+                break;
+            case TURN_OFF:
+                dll.fw_write_afi(device_handle, (char)0x22, (char)0x00, card_id);
+                break;
+            case NO_ACTION:
+            default:
+                    
+        }
+        
+        
         
     }
 }
