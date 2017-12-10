@@ -44,7 +44,7 @@ public class SkyRfidJavaApp extends Application {
     private static WritePane writePane;
     private static IdlePane idlePane;
     private static AntiTheftPane antiTheftPane;
-    
+    private static SettingsPane settingsPane;
     
     /**
      * @param args the command line arguments
@@ -59,10 +59,10 @@ public class SkyRfidJavaApp extends Application {
         //return app state to default before loading panes        
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.resetAppState(); 
-        
+        SkyRfidJavaApp.initializePanes();
         SkyRfidJavaApp.initializeRootPane();
         System.out.println("app start asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
                 
         Scene scene = new Scene(rootPane, 700, 250);
         
@@ -83,10 +83,7 @@ public class SkyRfidJavaApp extends Application {
         System.exit(0);
         //Platform.exit() does not stop timer
     }
-    /**
-     * Used when application launches.
-     */
-    private static void initializeRootPane() {
+    private static void initializePanes() {
         rootPane = new BorderPane();
         pgmMenu = new MenuBarPane();
         singleMultiPane = new ToggleSingleMultiPane();
@@ -94,19 +91,33 @@ public class SkyRfidJavaApp extends Application {
         writePane = new WritePane();
         idlePane = new IdlePane();
         antiTheftPane = new AntiTheftPane();
-        rootPane.setTop(pgmMenu.getPane());
-        rootPane.setLeft(singleMultiPane.getPane());
-        rootPane.setRight(antiTheftPane.getPane());
-        //center pane is set in resetPanes, as it varies with app state.
+        settingsPane = new SettingsPane();
+    }
+    /**
+     * Used when application launches.
+     */
+    private static void initializeRootPane() {
+        
+//        rootPane.setTop(pgmMenu.getPane());
+//        rootPane.setLeft(singleMultiPane.getPane());
+//        rootPane.setRight(antiTheftPane.getPane());
+        //center pane is set in resetWorkingPanes, as it varies with app state.
+        
+        
     }
     /**
      * Used when application launches and when state changes
      */
-    public static void resetPanes() {    
+    public static void resetWorkingPanes() {    
 //        ObservableList<Node> currentNodes = rootPane.getChildren();
 //        System.out.println("there are " + currentNodes.size() + " nodes in the root pane");
 //        rootPane.getChildren().clear();
         System.out.println("app class reset panes start");
+        
+        rootPane.setTop(pgmMenu.getPane());
+        rootPane.setLeft(singleMultiPane.getPane());
+        rootPane.setRight(antiTheftPane.getPane());
+        
         readPane.stopTimer();
         singleMultiPane.setLblAndButtonTxt();
         antiTheftPane.setButtons();
@@ -127,6 +138,11 @@ public class SkyRfidJavaApp extends Application {
                 rootPane.setCenter(idlePane.getPane());                        
         }
         
+    }
+    public static void openSettingsPane() {
+        rootPane.getChildren().clear();
+        rootPane.setTop(pgmMenu.getPane());
+        rootPane.setCenter(settingsPane.getPane());
     }
    
 }

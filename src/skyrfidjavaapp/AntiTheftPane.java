@@ -74,9 +74,9 @@ public class AntiTheftPane {
         //FxMsgBox.show("The current selection is " + tglTheftButtons.getSelectedToggle().toString(), "Radio button change");
         AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state.setAntiTheftAction(whichState);
-//        this.setButtons(); //performed in resetPanes()
+//        this.setButtons(); //performed in resetWorkingPanes()
         System.out.println("anti theft pane radio change event asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
         
     }
     public final void setButtons() {

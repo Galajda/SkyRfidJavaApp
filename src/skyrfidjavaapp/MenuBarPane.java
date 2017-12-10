@@ -113,7 +113,7 @@ public class MenuBarPane
                 state.resetAppState(); 
                  //reload stage
                 System.out.println("menu bar pane file menu asks to reset panes");
-                SkyRfidJavaApp.resetPanes();
+                SkyRfidJavaApp.resetWorkingPanes();
                 
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
@@ -123,7 +123,8 @@ public class MenuBarPane
                 FxMsgBox.show("pretend you see a large window", "Menu action");
                 break;
             case MenuBarPane.FILE_MENU_CONFIG:                
-                FxMsgBox.show("config is not yet configged", "Menu action");
+//                FxMsgBox.show("config is not yet configged", "Menu action");
+                SkyRfidJavaApp.openSettingsPane();
                 break;
             case MenuBarPane.FILE_MENU_EXIT:                
 //                FxMsgBox.show("exit", "Menu action");
@@ -161,7 +162,7 @@ public class MenuBarPane
 //                p = idlePane.getPane();
         }
         System.out.println("menu bar pane mode menu asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
         
         
     }

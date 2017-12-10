@@ -61,7 +61,7 @@ public class ToggleSingleMultiPane
         state.setMultiRead(!state.isMultiRead());
         setLblAndButtonTxt();
         System.out.println("single/multi toggle event asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
     }
     
     public final void setLblAndButtonTxt()
