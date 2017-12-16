@@ -37,4 +37,7 @@ public class SettingsPane {
     public VBox getPane() {
         return this.pane;
     }
+    private void testFcn() {
+//        AppSettingsEnum.class.
+    }
 }

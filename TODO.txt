@@ -9,6 +9,8 @@ Add Settings pane to change defaults and advanced properties.
     parameters.
     Move anti theft values to settings, rather than hard-coded
 
+AppState:
+    
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
@@ -19,11 +21,11 @@ Read pane:
     If detect multiple tags in single mode, throw error.
 TagActor:
     Move uid to parent?
+=======
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
 	Catch errors related to existence of user32.dll.
 	Customize extra keystrokes according to the active window.
-=======
-    
+Make jQuery for XML.    
 
 Test barcodes that contain letters
 

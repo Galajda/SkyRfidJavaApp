@@ -43,11 +43,21 @@ public class AppConstants
     public static final String THEFT_MODE_NONE = "NO_ACTION";
     
     //xml fields
-    public static final String XML_ELE_ROOT = "settings";
-    public static final String XML_ELE_PARM_SET = "parameter_set";            
-    public static final String XML_ELE_TYPE = "type";   
-    public static final String XML_ELE_THEFT_BIT = "theft_bit_action";
-    public static final String XML_ELE_R_W_MODE = "read_write_mode";
-    public static final String XML_ELE_TYPE_MULTI_READ = "multi_read";
+    public static final String APP_STATE_XML_ELE_ROOT = "settings";
+    public static final String APP_STATE_XML_ELE_PARM_SET = "parameter_set";            
+//    public static final String XML_ELE_TYPE = "type";   
+    public static final String APP_STATE_XML_ATTR_ID = "id";
+    public static final String APP_STATE_XML_ELE_THEFT_BIT = "theft_bit_action";
+    public static final String APP_STATE_XML_ELE_R_W_MODE = "read_write_mode";
+    public static final String APP_STATE_XML_ELE_TYPE_MULTI_READ = "multi_read";
+    public static final String APP_STATE_XML_ELE_READ_FREQ = "read_frequency";
+    public static final String APP_STATE_XML_ELE_EXTRA_KEYS = "extra_keystrokes";
+    public static final String APP_STATE_XML_ELE_THEFT_ON = "anti_theft_on";
+    public static final String APP_STATE_XML_ELE_THEFT_OFF ="anti_theft_off";
     
+    public static final String CONFIG_XML_ELE_ROOT = "config_names";
+    public static final String CONFIG_XML_ELE_NAME = "config_name";
+                                    
+    
+
 }

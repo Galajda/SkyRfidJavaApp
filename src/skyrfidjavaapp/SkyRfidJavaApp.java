@@ -57,7 +57,8 @@ public class SkyRfidJavaApp extends Application {
     @Override public void start(Stage primaryStage) 
     {                        
         //return app state to default before loading panes        
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         state.resetAppState(); 
         SkyRfidJavaApp.initializePanes();
         SkyRfidJavaApp.initializeRootPane();
@@ -122,7 +123,8 @@ public class SkyRfidJavaApp extends Application {
         singleMultiPane.setLblAndButtonTxt();
         antiTheftPane.setButtons();
         //need app state to choose center pane
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         ReadWriteModeEnum rw_state = state.getReadWriteMode();        
         switch (rw_state) {            
             case READ_MODE:                     

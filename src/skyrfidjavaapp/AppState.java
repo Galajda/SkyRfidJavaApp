@@ -34,31 +34,32 @@ import nu.xom.Serializer;
  */
 public class AppState {
         
-    private AppSettingsEnum settingsGroup;
-    String settingsPath;
+//    private AppSettingsEnum configurationName;
+    private String configurationName;
+    private final String settingsPath;
     private File settingsFile;
     private Document settingsDoc;    
     private Element docRoot;
-    Elements settingsColl;
-    private Element settingsSection;
+    private Elements configurationsCollection;
+    private Element configurationSection;
     
 
-    public AppState(AppSettingsEnum settingsGrp) {
-
+//    public AppState(AppSettingsEnum configName) {
+public AppState(String configName) {
 //        System.out.println("initialize app state");
 //        System.out.println("xml parser " + org.xml.sax.driver);
-        settingsGroup = settingsGrp;
+        configurationName = configName;
+        String basePath = new File("").getAbsolutePath();
+        settingsPath = basePath.concat("/src/skyrfidjavaapp/app_data/settings.xml");
+        
         try {
-//            File settingsFile = new File("skyrfidjavaapp.app_data/settings.xml");    
-            String basePath = new File("").getAbsolutePath();
-//            System.out.println("abs docRoot path " + basePath);
-            settingsPath = basePath.concat("/src/skyrfidjavaapp/app_data/settings.xml");            
-            settingsFile = new File(settingsPath);      
-            
-            Builder builder = new Builder(true); //validates xml.                 
+//            File settingsFile = new File("skyrfidjavaapp.app_data/settings.xml");                
+//            System.out.println("abs docRoot path " + basePath);                 
+            settingsFile = new File(settingsPath);                  
+            Builder builder = new Builder(true); //true arg validates xml.                 
             settingsDoc = builder.build(settingsFile);
             docRoot = settingsDoc.getRootElement();
-            settingsColl = docRoot.getChildElements();            
+            configurationsCollection = docRoot.getChildElements();            
         }
         catch (nu.xom.ValidityException ex) {
             System.out.println("error app state constructor. invalid xml " + ex.getMessage());
@@ -69,17 +70,20 @@ public class AppState {
         catch (Exception ex) {
             System.out.println("error app state constructor " + ex.getMessage());
             ex.printStackTrace();
+            FxMsgBox.show("Problem with settings file\nPlease take a screen shot and notify author\n" 
+                    + ex.getMessage(), "Program error");
+            System.exit(1);
         }        
     }
     
     public AntiTheftEnum getAntiTheftAction() {
 //        System.out.println("app state getAntiTheftAction");
         //read file
-        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT);
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_BIT);
 //        System.out.println("anti theft text value" + value);
         switch (value) {            
             case AppConstants.THEFT_MODE_OFF:
-                return AntiTheftEnum.TURN_OFF;
+                return AntiTheftEnum.TURN_OFF;                
             case AppConstants.THEFT_MODE_ON:
                 return AntiTheftEnum.TURN_ON;                
             case AppConstants.THEFT_MODE_NONE:
@@ -92,27 +96,27 @@ public class AppState {
     public void setAntiTheftAction(AntiTheftEnum antiTheftAction) {
 //        System.out.println("app state setAntiTheftAction");
         //write file
-        String newValue;
-        switch (antiTheftAction) {            
-            case TURN_ON:
-                newValue = AppConstants.THEFT_MODE_ON;
-                break;
-            case TURN_OFF:
-                newValue = AppConstants.THEFT_MODE_OFF;
-                break;
-            case NO_ACTION:
-                //fall through to default
-            default:                
-                newValue = AppConstants.THEFT_MODE_NONE;                
-        }        
-        this.setSettingValue(settingsGroup, AppConstants.XML_ELE_THEFT_BIT, newValue);
+        String newValue = antiTheftAction.name();
+//        switch (antiTheftAction) {            
+//            case TURN_ON:
+//                newValue = AppConstants.THEFT_MODE_ON;
+//                break;
+//            case TURN_OFF:
+//                newValue = AppConstants.THEFT_MODE_OFF;
+//                break;
+//            case NO_ACTION:
+//                //fall through to default
+//            default:                
+//                newValue = AppConstants.THEFT_MODE_NONE;                
+//        }        
+        this.setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, newValue);
 //        System.out.println("app state set anti theft asks to reset panes");
 //        SkyRfidJavaApp.resetPanes();
     }
     public ReadWriteModeEnum getReadWriteMode() {
 //        System.out.println("app state getReadWriteMode");
         //read file
-        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE);
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_R_W_MODE);
 //        System.out.println("r/w mode text: " + value);        
         switch (value) {
             case AppConstants.R_W_MODE_IDLE:
@@ -128,20 +132,23 @@ public class AppState {
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
 //        System.out.println("app state setReadWriteMode");
         //write file        
-        String newValue;
-        switch (readWriteMode) {                 
-            case READ_MODE:
-                newValue = AppConstants.R_W_MODE_READ;
-                break;
-            case WRITE_MODE:
-                newValue = AppConstants.R_W_MODE_WRITE;
-                break;
-            case IDLE_MODE:
-                //fall through to default
-            default:                
-                newValue = AppConstants.R_W_MODE_IDLE;                
-        }        
-        this.setSettingValue(settingsGroup, AppConstants.XML_ELE_R_W_MODE, newValue);
+        String newValue = readWriteMode.name();
+        
+//        switch (readWriteMode) {                 
+//            case READ_MODE:
+//                newValue = AppConstants.R_W_MODE_READ;
+//                break;
+//            case WRITE_MODE:
+//                newValue = ReadWriteModeEnum.WRITE_MODE.name();
+//                newValue = AppConstants.R_W_MODE_WRITE;
+//                
+//                break;
+//            case IDLE_MODE:
+//                //fall through to default
+//            default:                
+//                newValue = AppConstants.R_W_MODE_IDLE;                
+//        }        
+        this.setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_R_W_MODE, newValue);
 //        System.out.println("app state set read/write asks to reset panes");
 //        SkyRfidJavaApp.resetPanes();
         
@@ -150,7 +157,7 @@ public class AppState {
     public boolean isMultiRead() {
 //        System.out.println("app state isMultiRead");
         //read file
-        String value = getSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ);
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ);
 //        System.out.println("theft mode text: " + value);           
             return (value.equalsIgnoreCase("true")) ;                    
     }
@@ -159,7 +166,7 @@ public class AppState {
 //        System.out.println("app state setMultiRead");
         //write file        
         String newValue = String.valueOf(multiRead);
-        setSettingValue(settingsGroup, AppConstants.XML_ELE_TYPE_MULTI_READ, newValue);  
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, newValue);  
 //        System.out.println("app state set multi read asks to reset panes");
 //        SkyRfidJavaApp.resetPanes();
     }
@@ -169,43 +176,49 @@ public class AppState {
     public void resetAppState() {
 //        System.out.println("app state resetAppState");   
         //write file
-        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
-        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
-        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.XML_ELE_TYPE_MULTI_READ, "false");   
-       
+//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
+//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
+//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, "false");   
+       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
+       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
+       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, "false");   
     }
     
     /**
-     * @param settings_category the set that you wish to retrieve: current or default
+     * @param config_name the set that you wish to retrieve: current or default
      * @param  setting_name the key that you wish to find: r/w, theft, single/multi
      * @return a String of the text content of that xml element
      */
-    private String getSettingValue(AppSettingsEnum settings_category, String setting_name) {
+//    private String getSettingValue(AppSettingsEnum settings_category, String setting_name) {
+      private String getSettingValue(String config_name, String setting_name) {  
         String result = "";
         try {
-            settingsSection = settingsColl.get(settings_category.ordinal());
-            //risky to rely on certain order of blocks
-            Element ele = settingsSection.getFirstChildElement(setting_name);
+//            configurationSection = configurationsCollection.get(settings_category.ordinal());
+            configurationSection = this.getConfig(config_name);
+            //risky to rely on certain order of blocks?
+            Element ele = configurationSection.getFirstChildElement(setting_name);
             Text eleValue = (Text) ele.getChild(0);
             result = eleValue.getValue();
         }
-            catch (Exception ex) {                
+        catch (Exception ex) {                
             System.out.println("error get setting value " + ex.getMessage());
             ex.printStackTrace();
-            }     
+        }     
         return result;
     }
     /**
-     * @param settings_category the group that you wish to change: current or default
+     * @param configName the group that you wish to change: current or default
      * @param  setting_name the key that you wish to change: r/w, theft, single/multi
      * @param new_value the new value for this key
      */
-    private void setSettingValue(AppSettingsEnum settings_category, String setting_name, String new_value) {
+//    private void setSettingValue(AppSettingsEnum settings_category, String setting_name, String new_value) {
+      private void setSettingValue(String configName, String setting_name, String new_value) {  
         //get the element that is to be changed
         try {
-            settingsSection = settingsColl.get(settings_category.ordinal());
+//            configurationSection = configurationsCollection.get(settings_category.ordinal());
+            configurationSection = this.getConfig(configName);
             //risky to rely on certain order of blocks
-            Element ele = settingsSection.getFirstChildElement(setting_name);
+            Element ele = configurationSection.getFirstChildElement(setting_name);
             ele.removeChild(0);
             ele.appendChild(new_value);
 //            FileWriter fw = new FileWriter(settingsPath);
@@ -221,5 +234,20 @@ public class AppState {
             System.out.println("error set setting value " + ex.getMessage());
             ex.printStackTrace();
         }             
+    }
+    private Element getConfig(String configName) {
+        //cycle through config coll, look for match to id
+        //if none found, return default or error?
+        Element testEle;
+        String testId;
+        Element desiredConfig = configurationsCollection.get(0);
+        
+        for (int i=0; i<configurationsCollection.size(); i++) {
+            testEle = configurationsCollection.get(i);
+            testId = testEle.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID);
+            if (configName.equals(testId)) { desiredConfig = testEle; }
+        }
+        
+        return desiredConfig;
     }
 }

@@ -36,7 +36,8 @@ public class TagActor {
     public TagActor() {
         
         System.out.println("tag actor constructor begins");
-        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        state = new AppState(AppConstants.SETTINGS_CURRENT);
         theftAction = state.getAntiTheftAction();
         r_w_mode = state.getReadWriteMode();
         
