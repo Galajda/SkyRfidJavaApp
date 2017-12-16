@@ -61,12 +61,13 @@ public class TagEncoding {
         
         
 //        char[] bcArray = new char[barcode.length()];
-//        char[] bcArray = barcode.toCharArray();
+        char[] bcArray = barcode.toCharArray();
 //        System.out.println("the barcode char array is");
 //        System.out.print("\t");
 //        for (int i=0;i<bcArray.length;i++) {
-//            System.out.print("element " + i + ": " + bcArray[i] + ", ");
+//            System.out.println("\telement " + i + ": " + bcArray[i] + ", ");
 //        }
+//        System.out.println("finish char array");
 //        System.out.println();
 //        System.out.println("the buffer array is");
 //        System.out.print("\t");
