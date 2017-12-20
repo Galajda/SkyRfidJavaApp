@@ -27,6 +27,9 @@ import nu.xom.Element;
 import nu.xom.Elements;
 import nu.xom.Text;
 import nu.xom.Serializer;
+import java.util.ArrayList;
+import javafx.collections.ObservableList;
+//import java.util.ob
 
 /**
  *
@@ -37,10 +40,10 @@ public class AppState {
 //    private AppSettingsEnum configurationName;
     private String configurationName;
     private final String settingsPath;
-    private File settingsFile;
+//    private File settingsFile;
     private Document settingsDoc;    
     private Element docRoot;
-    private Elements configurationsCollection;
+    private Elements configurationsCollection; //Elements class is not iterable
     private Element configurationSection;
     
 
@@ -55,9 +58,10 @@ public AppState(String configName) {
         try {
 //            File settingsFile = new File("skyrfidjavaapp.app_data/settings.xml");                
 //            System.out.println("abs docRoot path " + basePath);                 
-            settingsFile = new File(settingsPath);                  
+            File settingsFile = new File(settingsPath);                  
             Builder builder = new Builder(true); //true arg validates xml.                 
             settingsDoc = builder.build(settingsFile);
+//            settingsDoc = (new Builder(true)).build(settingsFile); is this better?
             docRoot = settingsDoc.getRootElement();
             configurationsCollection = docRoot.getChildElements();            
         }
@@ -216,8 +220,9 @@ public AppState(String configName) {
         //get the element that is to be changed
         try {
 //            configurationSection = configurationsCollection.get(settings_category.ordinal());
-            configurationSection = this.getConfig(configName);
             //risky to rely on certain order of blocks
+            configurationSection = this.getConfig(configName);
+            
             Element ele = configurationSection.getFirstChildElement(setting_name);
             ele.removeChild(0);
             ele.appendChild(new_value);
@@ -249,5 +254,17 @@ public AppState(String configName) {
         }
         
         return desiredConfig;
+    }
+//    public String[] getConfigNames() {
+    public ArrayList<String> getConfigNames() {
+//        String[] nameArray = new String[configurationsCollection.size()];
+        ArrayList nameArray = new ArrayList(configurationsCollection.size());
+        Element oneEle;
+        for (int i=0; i<configurationsCollection.size(); i++) {
+            oneEle = configurationsCollection.get(i);
+//            nameArray[i] = oneEle.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID); 
+            nameArray.add(oneEle.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID));
+        }
+        return nameArray;
     }
 }

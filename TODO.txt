@@ -10,7 +10,8 @@ Add Settings pane to change defaults and advanced properties.
     Move anti theft values to settings, rather than hard-coded
 
 AppState:
-    
+    Why do I use ISO-8859-1 encoding of xml instead of utf-8?
+
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
