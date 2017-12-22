@@ -28,8 +28,6 @@ import nu.xom.Elements;
 import nu.xom.Text;
 import nu.xom.Serializer;
 import java.util.ArrayList;
-import javafx.collections.ObservableList;
-//import java.util.ob
 
 /**
  *
@@ -267,4 +265,5 @@ public AppState(String configName) {
         }
         return nameArray;
     }
+    
 }

@@ -29,37 +29,48 @@ import javafx.event.ActionEvent;
 public class SettingsPane {
     
     private final GridPane pane;
-    private final AppState state;
+    private AppState state;
+    //heading
     private final Label lblGreeting;
     private final Label lblConfigSelector;
     private final ComboBox<String> configSelector;
     private final Label lblConfigName;
     private final TextField txtConfigName;
-    private final Label lblTheftAction;
-    private final ComboBox<String> theftActionSelector;
-    private final Label lblReadWriteMode;
-    private final ComboBox<String> readWriteModeSelector;
+    public static final String TXT_FLD_ID_CONFIG_NAME = "config name";
+    //single/multi
     private final Label lblMultiRead;
-    private final ComboBox<String> multiReadSelector; //make this a radio
+    private final ComboBox<String> multiReadSelector; //make this a checkbox    
+    //read/write parameters
+    private final Label lblReadWriteMode;    
+    private final ComboBox<String> readWriteModeSelector;    
     private final Label lblReadFreq;
-    private final TextField txtReadFreq;
+    private final TextField txtReadFreq;    
     private final Label lblXtraKeys;
     private final TextField txtXtraKeys;
+    
+    //anti-theft parameters
+    private final Label lblTheftAction;
+    private final ComboBox<String> theftActionSelector;   
     private final Label lblTheftOn;
     private final TextField txtTheftOn;
     private final Label lblTheftOff;
     private final TextField txtTheftOff;    
+    
+    //buttons
     private final Button btnSaveConfig;
     private final Button btnDeleteConfig;
     private final Button btnUseConfig;
+    
     //constructor
     public SettingsPane() {
-//        pane = new VBox();
         pane = new GridPane();
+        //row 0
+        //heading         
         lblGreeting = new Label("the settings pane is under construction");
-//        pane.getChildren().add(lblGreeting);
         pane.add(lblGreeting, 0, 0, 2, 1);
         
+        //row 1
+        //config name
         lblConfigSelector = new Label("Choose a configuration");
         pane.add(lblConfigSelector, 0, 1);        
         state = new AppState(AppConstants.SETTINGS_CURRENT);
@@ -68,80 +79,115 @@ public class SettingsPane {
         configSelector.getItems().addAll(state.getConfigNames());
         configSelector.getItems().add("new");
         configSelector.setOnAction(e -> configSelector_Selected(e));
-        pane.add(configSelector, 1, 1);
-        
+        pane.add(configSelector, 1, 1);        
         lblConfigName = new Label("Name");
+        lblConfigName.setVisible(false);
         pane.add(lblConfigName, 2, 1);        
         txtConfigName = new TextField();
+        txtConfigName.setId(this.TXT_FLD_ID_CONFIG_NAME);
         txtConfigName.setMaxWidth(200);
-        pane.add(txtConfigName, 3, 1);
+        txtConfigName.setOnAction(e -> this.inputValidator(e));
+        txtConfigName.setVisible(false);
+        pane.add(txtConfigName, 3, 1);        
         
-        lblTheftAction = new Label("Default theft bit action");
-        pane.add(lblTheftAction, 0, 2);
-        theftActionSelector = new ComboBox<>();
-        theftActionSelector.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
-                AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
-        pane.add(theftActionSelector, 1, 2);
+        //row 2     
+        //single/multi        
+        lblMultiRead = new Label("Multi read t/f");
+        pane.add(lblMultiRead, 0, 2);
+        multiReadSelector = new ComboBox();
+        multiReadSelector.getItems().addAll("true", "false");
+        pane.add(multiReadSelector, 1, 2);      
         
-        lblReadWriteMode = new Label("Default read/write");
+        //row 3, 4, 5
+        //read/write
+        lblReadWriteMode = new Label("read/write/idle");
         pane.add(lblReadWriteMode, 0, 3);
         readWriteModeSelector = new ComboBox<>();
         readWriteModeSelector.getItems().addAll(ReadWriteModeEnum.IDLE_MODE.name(), 
                 ReadWriteModeEnum.READ_MODE.name(), ReadWriteModeEnum.WRITE_MODE.name());
         pane.add(readWriteModeSelector, 1, 3);
-        
-        lblMultiRead = new Label("Multi read");
-        pane.add(lblMultiRead, 0, 4);
-        multiReadSelector = new ComboBox();
-        multiReadSelector.getItems().addAll("true", "false");
-        pane.add(multiReadSelector, 1, 4);
-        
-        lblReadFreq = new Label("Milliseconds between readings");
-        pane.add(lblReadFreq, 0, 5);
+                
+        lblReadFreq = new Label("Msec between readings");
+        pane.add(lblReadFreq, 0, 4);
         txtReadFreq = new TextField();
-        pane.add(txtReadFreq, 1, 5);
+        pane.add(txtReadFreq, 1, 4);
         
         lblXtraKeys = new Label("Extra keystrokes");
-        pane.add(lblXtraKeys, 0, 6);
+        pane.add(lblXtraKeys, 2, 4);
         txtXtraKeys = new TextField();
-        pane.add(txtXtraKeys, 1, 6);
+        pane.add(txtXtraKeys, 3, 4);
+        
+        //row 5, 6
+        //anti-theft
+        lblTheftAction = new Label("Theft bit action");
+        pane.add(lblTheftAction, 0, 5);
+        theftActionSelector = new ComboBox<>();
+        theftActionSelector.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
+                AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
+        pane.add(theftActionSelector, 1, 5);
         
         lblTheftOn = new Label("Value of theft on");
-        pane.add(lblTheftOn, 0, 7);
+        pane.add(lblTheftOn, 0, 6);
         txtTheftOn = new TextField();
-        pane.add(txtTheftOn, 1, 7);
+        pane.add(txtTheftOn, 1, 6);
         
         lblTheftOff = new Label("Value of theft off");
-        pane.add(lblTheftOff, 2, 7);
+        pane.add(lblTheftOff, 2, 6);
         txtTheftOff = new TextField();
-        pane.add(txtTheftOff, 3, 7);
+        pane.add(txtTheftOff, 3, 6);
         
+        //row 7
+        //buttons
         btnSaveConfig = new Button("Save");
         btnSaveConfig.setOnAction(e -> btnSaveConfig_Click(e));
-        pane.add(btnSaveConfig, 0, 8);
+        pane.add(btnSaveConfig, 0, 7);
         
         btnDeleteConfig = new Button("Delete this config");
-        btnDeleteConfig.setOnAction(null);
-        pane.add(btnDeleteConfig, 1, 8);
+        btnDeleteConfig.setOnAction(e -> btnDeleteConfig_Click(e));
+        pane.add(btnDeleteConfig, 1, 7);
         
         btnUseConfig = new Button("Use this config");
-        btnUseConfig.setOnAction(null);
-        pane.add(btnUseConfig, 2, 8);
+        btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
+        pane.add(btnUseConfig, 2, 7);
     }
 
     public GridPane getPane() {
         return this.pane;
     }
-    private void testFcn() {
-//        AppSettingsEnum.class.
-    }
 
     private void configSelector_Selected(ActionEvent e) {
-        System.out.println("you selected config " + configSelector.getValue());
-        
+        String selectedConfig = configSelector.getValue();        
+        System.out.println("you selected config " + selectedConfig);
+        Boolean isNewConfig = selectedConfig.equals("new");        
+        lblConfigName.setVisible(isNewConfig);
+        txtConfigName.setVisible(isNewConfig);        
+        //load these values
+        state = new AppState(selectedConfig);
+        System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
+        System.out.println("its r/w value is " + state.getReadWriteMode().name());
     }
 
+    private void inputValidator(ActionEvent e) {
+        System.out.println("validating field");
+        System.out.println("event type " + e.getEventType());
+        System.out.println("event source " + e.getSource());
+        TextField src = (TextField)e.getSource();
+        System.out.println("field id " + src.getId());
+    }
+    
+    
     private void btnSaveConfig_Click(ActionEvent e) {
         System.out.println("click to save config");
+        
     }
+    
+    private void btnDeleteConfig_Click(ActionEvent e) {
+        System.out.println("click to delete config");
+    }
+    
+    private void btnUseConfig_Click(ActionEvent e) {
+        System.out.println("click to use config");
+        //save these values to current
+    }
+    
 }

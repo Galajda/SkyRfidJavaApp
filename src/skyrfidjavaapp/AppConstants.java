@@ -58,6 +58,13 @@ public class AppConstants
     public static final String CONFIG_XML_ELE_ROOT = "config_names";
     public static final String CONFIG_XML_ELE_NAME = "config_name";
                                     
+    //styles    
+    public static final String STYLE_TEXT_FLD_OK = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #adff2f;"; //green
+    public static final String STYLE_TEXT_FLD_FAIL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ff1493;"; //red
+    public static final String STYLE_TEXT_FLD_NEUTRAL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ffffff;"; //white
     
 
 }
