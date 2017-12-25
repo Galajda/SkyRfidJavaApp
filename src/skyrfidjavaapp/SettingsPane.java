@@ -16,12 +16,20 @@
  */
 package skyrfidjavaapp;
 
+import java.util.HashSet;
+import java.util.Set;
+import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.SingleSelectionModel;
 import javafx.scene.control.TextField;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyEvent;
 import javafx.event.ActionEvent;
+import javafx.scene.input.KeyCode;
+
 /**
  *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
@@ -33,33 +41,43 @@ public class SettingsPane {
     //heading
     private final Label lblGreeting;
     private final Label lblConfigSelector;
+    private static final String CONFIG_SELECTOR_PROMPT = "Choose a configuration";
     private final ComboBox<String> configSelector;
+    public static final String COMBO_BOX_CONFIG_NAME = "config name combo box";
     private final Label lblConfigName;
     private final TextField txtConfigName;
-    public static final String TXT_FLD_ID_CONFIG_NAME = "config name";
+    public static final String TXT_FLD_ID_CONFIG_NAME = "config name text field";
     //single/multi
     private final Label lblMultiRead;
-    private final ComboBox<String> multiReadSelector; //make this a checkbox    
+//    private final ComboBox<String> multiReadSelector; //make this a checkbox    
+    private final CheckBox chkMultiRead;
     //read/write parameters
     private final Label lblReadWriteMode;    
-    private final ComboBox<String> readWriteModeSelector;    
+    private final ComboBox<String> readWriteModeSelector;  
+    public static final String COMBO_BOX_READ_WRITE = "read write combo box";
     private final Label lblReadFreq;
     private final TextField txtReadFreq;    
+    public static final String TXT_FLD_ID_READ_FREQ = "read freq";
     private final Label lblXtraKeys;
     private final TextField txtXtraKeys;
+    public static final String TXT_FLD_ID_XTRA_KEYS = "extra keys";
     
     //anti-theft parameters
     private final Label lblTheftAction;
-    private final ComboBox<String> theftActionSelector;   
+    private final ComboBox<String> theftActionSelector;
+    public static final String COMBO_BOX_THEFT_ACTION = "theft action combo box";
     private final Label lblTheftOn;
     private final TextField txtTheftOn;
+    public static final String TXT_FLD_ID_THEFT_ON = "theft on";
     private final Label lblTheftOff;
     private final TextField txtTheftOff;    
+    public static final String TXT_FLD_ID_THEFT_OFF = "theft off";
     
     //buttons
     private final Button btnSaveConfig;
     private final Button btnDeleteConfig;
     private final Button btnUseConfig;
+    private final Button btnCloseSettingsPane;
     
     //constructor
     public SettingsPane() {
@@ -71,10 +89,11 @@ public class SettingsPane {
         
         //row 1
         //config name
-        lblConfigSelector = new Label("Choose a configuration");
+        lblConfigSelector = new Label(SettingsPane.CONFIG_SELECTOR_PROMPT);
         pane.add(lblConfigSelector, 0, 1);        
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         configSelector = new ComboBox<>();
+        configSelector.setId(SettingsPane.COMBO_BOX_CONFIG_NAME);
         configSelector.setPromptText("Choose a configuration");
         configSelector.getItems().addAll(state.getConfigNames());
         configSelector.getItems().add("new");
@@ -83,10 +102,12 @@ public class SettingsPane {
         lblConfigName = new Label("Name");
         lblConfigName.setVisible(false);
         pane.add(lblConfigName, 2, 1);        
-        txtConfigName = new TextField();
-        txtConfigName.setId(this.TXT_FLD_ID_CONFIG_NAME);
+        txtConfigName = new TextField();        
+        txtConfigName.setId(SettingsPane.TXT_FLD_ID_CONFIG_NAME);
         txtConfigName.setMaxWidth(200);
-        txtConfigName.setOnAction(e -> this.inputValidator(e));
+//        txtConfigName.setOnAction(e -> this.txtInputValidator(e));
+//        txtConfigName.setOnKeyReleased(e -> this.txtInputValidator(e));
+        txtConfigName.setOnKeyPressed(e -> this.txtInputValidator(e));
         txtConfigName.setVisible(false);
         pane.add(txtConfigName, 3, 1);        
         
@@ -94,27 +115,37 @@ public class SettingsPane {
         //single/multi        
         lblMultiRead = new Label("Multi read t/f");
         pane.add(lblMultiRead, 0, 2);
-        multiReadSelector = new ComboBox();
-        multiReadSelector.getItems().addAll("true", "false");
-        pane.add(multiReadSelector, 1, 2);      
+        chkMultiRead = new CheckBox();
+//        multiReadSelector = new ComboBox();
+//        multiReadSelector.getItems().addAll("true", "false");
+//        pane.add(multiReadSelector, 1, 2);
+        pane.add(chkMultiRead, 1, 2);
         
         //row 3, 4, 5
         //read/write
         lblReadWriteMode = new Label("read/write/idle");
         pane.add(lblReadWriteMode, 0, 3);
         readWriteModeSelector = new ComboBox<>();
+        readWriteModeSelector.setId(SettingsPane.COMBO_BOX_READ_WRITE);
         readWriteModeSelector.getItems().addAll(ReadWriteModeEnum.IDLE_MODE.name(), 
                 ReadWriteModeEnum.READ_MODE.name(), ReadWriteModeEnum.WRITE_MODE.name());
+        readWriteModeSelector.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, readWriteModeSelector));
         pane.add(readWriteModeSelector, 1, 3);
                 
         lblReadFreq = new Label("Msec between readings");
         pane.add(lblReadFreq, 0, 4);
         txtReadFreq = new TextField();
+        txtReadFreq.setId(SettingsPane.TXT_FLD_ID_READ_FREQ);
+//        txtReadFreq.setOnKeyReleased(e -> this.txtInputValidator(e));
+        txtReadFreq.setOnKeyPressed(e -> this.txtInputValidator(e));
         pane.add(txtReadFreq, 1, 4);
         
         lblXtraKeys = new Label("Extra keystrokes");
         pane.add(lblXtraKeys, 2, 4);
         txtXtraKeys = new TextField();
+        txtXtraKeys.setId(SettingsPane.TXT_FLD_ID_XTRA_KEYS);
+//        txtXtraKeys.setOnKeyReleased(e -> this.txtInputValidator(e));
+        txtXtraKeys.setOnKeyPressed(e -> this.txtInputValidator(e));
         pane.add(txtXtraKeys, 3, 4);
         
         //row 5, 6
@@ -122,18 +153,26 @@ public class SettingsPane {
         lblTheftAction = new Label("Theft bit action");
         pane.add(lblTheftAction, 0, 5);
         theftActionSelector = new ComboBox<>();
+        theftActionSelector.setId(SettingsPane.COMBO_BOX_THEFT_ACTION);
         theftActionSelector.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
                 AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
+        theftActionSelector.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, theftActionSelector));
         pane.add(theftActionSelector, 1, 5);
         
         lblTheftOn = new Label("Value of theft on");
         pane.add(lblTheftOn, 0, 6);
         txtTheftOn = new TextField();
+        txtTheftOn.setId(TXT_FLD_ID_THEFT_ON);
+//        txtTheftOn.setOnKeyReleased(e -> this.txtInputValidator(e));
+        txtTheftOn.setOnKeyPressed(e -> this.txtInputValidator(e));
         pane.add(txtTheftOn, 1, 6);
         
         lblTheftOff = new Label("Value of theft off");
         pane.add(lblTheftOff, 2, 6);
         txtTheftOff = new TextField();
+        txtTheftOff.setId(SettingsPane.TXT_FLD_ID_THEFT_OFF);
+//        txtTheftOff.setOnKeyReleased(e -> this.txtInputValidator(e));
+        txtTheftOff.setOnKeyPressed(e -> this.txtInputValidator(e));
         pane.add(txtTheftOff, 3, 6);
         
         //row 7
@@ -149,6 +188,10 @@ public class SettingsPane {
         btnUseConfig = new Button("Use this config");
         btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
         pane.add(btnUseConfig, 2, 7);
+        
+        btnCloseSettingsPane = new Button("Close");
+        btnCloseSettingsPane.setOnAction(e -> btnCloseSettingsPane_Click(e));
+        pane.add(btnCloseSettingsPane, 3, 7);
     }
 
     public GridPane getPane() {
@@ -156,38 +199,248 @@ public class SettingsPane {
     }
 
     private void configSelector_Selected(ActionEvent e) {
-        String selectedConfig = configSelector.getValue();        
+        String selectedConfig = (configSelector.getValue() == null)? "" : configSelector.getValue();   
+        //after reset, selector value is null, which complicates following steps
         System.out.println("you selected config " + selectedConfig);
         Boolean isNewConfig = selectedConfig.equals("new");        
         lblConfigName.setVisible(isNewConfig);
         txtConfigName.setVisible(isNewConfig);        
-        //load these values
-        state = new AppState(selectedConfig);
-        System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
-        System.out.println("its r/w value is " + state.getReadWriteMode().name());
+        //if existing config, load these values
+        if (!isNewConfig && !selectedConfig.equals("")) {
+            state = new AppState(selectedConfig); //AppState returns default config in case of empty string
+            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
+            System.out.println("its r/w value is " + state.getReadWriteMode().name());
+            this.configSelector.getSelectionModel().select(selectedConfig);
+            this.chkMultiRead.setSelected(state.isMultiRead());
+            this.readWriteModeSelector.getSelectionModel().select(state.getReadWriteMode().name());
+            this.txtReadFreq.setText(Integer.toString(state.getReadFreq()));
+            this.txtXtraKeys.setText(state.getExtraKeys());
+            this.theftActionSelector.getSelectionModel().select(state.getAntiTheftAction().name());
+            this.txtTheftOn.setText(state.getAntiTheftOn());
+            this.txtTheftOff.setText(state.getAntiTheftOff());
+                    
+                    
+            
+        } 
     }
-
-    private void inputValidator(ActionEvent e) {
-        System.out.println("validating field");
-        System.out.println("event type " + e.getEventType());
-        System.out.println("event source " + e.getSource());
-        TextField src = (TextField)e.getSource();
-        System.out.println("field id " + src.getId());
+    private void comboBoxKeyboardShortcut(KeyEvent e, ComboBox<String> cbo) {
+        //idea from SO 13362607 is to check the type of each element.
+        //since I have the calling object, I think it is easier to pass this
+        //to the handler        
+        //TODO: search for next match after current item index. if none, start at 0
+        System.out.println("keyboard shortcut on combo box " + cbo.getId());        
+        System.out.println("key press in r/w selector " + e.getCode());
+        System.out.println("item text " + e.getText());
+        for (String item : cbo.getItems() ) {
+            System.out.println("option item " + item);            
+            if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
+                cbo.getSelectionModel().select(item);
+                break;
+            }
+        }        
+    }
+    private void txtInputValidator(KeyEvent e) {        
+//        System.out.println("event type " + e.getEventType());
+        
+        if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
+            System.out.println("enter or tab key pressed");
+            System.out.println("validating field");
+            System.out.println("event source " + e.getSource());            
+            TextField src = (TextField)e.getSource();            
+            System.out.println("field id:" + src.getId() + ":");
+            System.out.println("testing input:" + src.getText() + ":");
+            Boolean validInput;
+            switch (src.getId()) {
+                case SettingsPane.TXT_FLD_ID_CONFIG_NAME:
+                    validInput = DataValidation.isValidConfigName(src.getText());
+                    if (!validInput) {
+                    FxMsgBox.show(InputErrorMsg.ERR_CONFIG_NAME, InputErrorMsg.ERR_INPUT_TITLE);
+                    }
+                    break;
+                case SettingsPane.TXT_FLD_ID_READ_FREQ:
+                    validInput = DataValidation.isValidReadFreq(src.getText());
+                    if (!validInput) {
+                    FxMsgBox.show(InputErrorMsg.ERR_READ_FREQ, InputErrorMsg.ERR_INPUT_TITLE);
+                    }
+                    break;
+                case SettingsPane.TXT_FLD_ID_THEFT_OFF:
+                    validInput = DataValidation.isValidTheftValue(src.getText());
+                    if (!validInput) {
+                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+                    }
+                    break;
+                case SettingsPane.TXT_FLD_ID_THEFT_ON:
+                    validInput = DataValidation.isValidTheftValue(src.getText());
+                    if (!validInput) {
+                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+                    }
+                    break;
+                case SettingsPane.TXT_FLD_ID_XTRA_KEYS:
+                    validInput = DataValidation.isValidXtraKeys(src.getText());
+                    if (!validInput) {
+                    FxMsgBox.show(InputErrorMsg.ERR_XTRA_KEYS, InputErrorMsg.ERR_INPUT_TITLE);
+                    }
+                    break;                          
+                default:
+                    validInput = false;
+            }
+            System.out.println("data validator says " + validInput);
+            if (validInput) {
+                src.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
+            }
+            else {
+                src.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);                
+            }         
+        }
     }
     
     
     private void btnSaveConfig_Click(ActionEvent e) {
         System.out.println("click to save config");
+        //validate all controls
+//        Boolean validConfig = true;
+        //save or create?        
+        if (isValidConfig()) {
+            //convert combo box and text field values to parameters for app state functions
+            
+            if (configSelector.getValue().equals("new")) {
+            //if new, create config
+            state.createConfig(txtConfigName.getText(), AppState.theftStringToEnum(theftActionSelector.getValue()),
+                    AppState.readWriteStringToEnum(readWriteModeSelector.getValue()), chkMultiRead.isSelected(),
+                    Integer.parseInt(txtReadFreq.getText()), txtXtraKeys.getText(), 
+                    txtTheftOn.getText(), txtTheftOff.getText());
+            }
+            else {
+            //if existing, set new values
+            //fast way: delete and recreate? it created a new config with empty name
+                System.out.println("saving new values to " + this.configSelector.getValue());
+                state = new AppState(this.configSelector.getValue());
+                state.setAntiTheftAction(AppState.theftStringToEnum(theftActionSelector.getValue()));
+                state.setAntiTheftOff(txtTheftOff.getText());
+                state.setAntiTheftOn(txtTheftOn.getText());
+                state.setExtraKeys(txtXtraKeys.getText());
+                state.setMultiRead(chkMultiRead.isSelected());
+                state.setReadFreq(Integer.parseInt(txtReadFreq.getText()));
+                state.setReadWriteMode(AppState.readWriteStringToEnum(readWriteModeSelector.getValue()));
+            }
+            this.resetForm();
+        }
+        else {
+            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_SAVE_TITLE);
+        }
         
     }
     
     private void btnDeleteConfig_Click(ActionEvent e) {
         System.out.println("click to delete config");
+        if (this.isValidConfig()) {
+            //ensures that config name is not null
+            String selectedConfig = configSelector.getValue(); //might be "new", in which case delete will fail
+            if (state.deleteConfiguration(selectedConfig)) {
+                state = new AppState(AppConstants.SETTINGS_DEFAULT); //in case previous state was the deleted one?
+                this.resetForm();
+            }
+            else {
+                FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+            }
+            //do not allow delete default or current        
+        }
+        else {
+            FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+            //use different message?
+        }
+        
     }
     
     private void btnUseConfig_Click(ActionEvent e) {
         System.out.println("click to use config");
-        //save these values to current
+        //validate all controls
+//        Boolean validPage = false;
+        
+        if (isValidConfig()) {
+            //save these values to current
+            state = new AppState(AppConstants.SETTINGS_CURRENT);
+            AntiTheftEnum newTheft = AppState.theftStringToEnum(this.theftActionSelector.getValue());
+            state.setAntiTheftAction(newTheft);
+        
+        }
+        else {
+            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_USE_TITLE);
+        }
+    }
+    private void btnCloseSettingsPane_Click(ActionEvent e) {
+        System.out.println("btn click close pane");
+        //show single/multi, r/w, theft panes with current values
+        SkyRfidJavaApp.resetWorkingPanes();
+    }
+    private void resetForm() {
+        //TODO: reload config names to add any new configs
+        for (Node n : pane.getChildren()) {
+            if (n.getClass() == TextField.class) {
+//                System.out.println("found a text field node " + n.getId());
+                TextField tf = (TextField)n;
+//                n.setStyle("");
+                tf.setStyle("");
+                tf.clear();
+            }
+            if (n.getClass().equals(ComboBox.class)) {
+                ComboBox cbo = (ComboBox)n;
+                cbo.valueProperty().set(null);
+//                ComboBox<String> cbo = new ComboBox<>();
+//                ComboBox cbo = new ComboBox();
+//                try {
+//                    cbo = (ComboBox)n;
+//                }
+//                catch (ClassCastException ex) {}
+//                //SO 12142518 how to clear a combo box
+//                if (cbo.valueProperty().getClass().equals(String.class)) {
+//                    System.out.println("reset fcn clearing combo box");
+//                    cbo.valueProperty().set((String)null);    
+//                }
+            }
+            if (n.getClass().equals(CheckBox.class)) {
+                CheckBox chk = (CheckBox)n;
+                chk.setSelected(false);
+            }
+            //ignore labels and buttons
+        }
+    }
+    
+    private Boolean isValidConfig() {
+        //config name
+        Boolean configNameOk = false;
+        String config = configSelector.getValue(); 
+        if (config == null) { configNameOk = false; }
+        else {
+            if (config.equals("new")) {
+            //if new config, check name
+             configNameOk = DataValidation.isValidConfigName(txtConfigName.getText());
+            }
+            else { configNameOk = true; }
+        }    
+//            else {
+//                //if not new config, check not prompt text
+//                configNameOk = ! config.equals(SettingsPane.CONFIG_SELECTOR_PROMPT);
+//            }            
+        System.out.println("validation results");
+        System.out.println("\tconfig name " + configNameOk);
+        //theft bit action not empty
+        Boolean theftActionOk = theftActionSelector.getValue() != null;
+        System.out.println("\ttheft action " + theftActionOk);
+        //read write not empty
+        Boolean rWModeOk = readWriteModeSelector.getValue() != null;
+        System.out.println("\tr/w mode " + rWModeOk);
+        //read freq valid range
+        Boolean readFreqOk = DataValidation.isValidReadFreq(txtReadFreq.getText());
+        System.out.println("\tread freq " + readFreqOk);
+        //theft on valid value
+        Boolean theftOnOk = DataValidation.isValidTheftValue(txtTheftOn.getText());
+        System.out.println("\ttheft on " + theftOnOk);
+        //theft off valid value      
+        Boolean theftOffOk = DataValidation.isValidTheftValue(txtTheftOff.getText());
+        System.out.println("\ttheft off " + theftOffOk);
+
+        return configNameOk && theftActionOk && rWModeOk && readFreqOk && theftOnOk & theftOffOk;
     }
     
 }

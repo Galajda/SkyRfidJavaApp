@@ -41,7 +41,7 @@ public class FxMsgBox {
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle(title);
         stage.setMinWidth(300);
-        stage.setMaxWidth(500);
+        stage.setMaxWidth(600);
         //set width according to content. 
         stage.getIcons().add(new Image("skyrfidjavaapp/images/attention.jpg"));
         

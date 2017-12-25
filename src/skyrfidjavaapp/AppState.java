@@ -25,6 +25,7 @@ import nu.xom.Builder;
 import nu.xom.Document;
 import nu.xom.Element;
 import nu.xom.Elements;
+import nu.xom.Attribute;
 import nu.xom.Text;
 import nu.xom.Serializer;
 import java.util.ArrayList;
@@ -72,7 +73,7 @@ public AppState(String configName) {
         catch (Exception ex) {
             System.out.println("error app state constructor " + ex.getMessage());
             ex.printStackTrace();
-            FxMsgBox.show("Problem with settings file\nPlease take a screen shot and notify author\n" 
+            FxMsgBox.show("Unknown problem with settings file\nPlease take a screen shot and notify author\n" 
                     + ex.getMessage(), "Program error");
             System.exit(1);
         }        
@@ -81,37 +82,15 @@ public AppState(String configName) {
     public AntiTheftEnum getAntiTheftAction() {
 //        System.out.println("app state getAntiTheftAction");
         //read file
-        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_BIT);
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_ACTION);
 //        System.out.println("anti theft text value" + value);
-        switch (value) {            
-            case AppConstants.THEFT_MODE_OFF:
-                return AntiTheftEnum.TURN_OFF;                
-            case AppConstants.THEFT_MODE_ON:
-                return AntiTheftEnum.TURN_ON;                
-            case AppConstants.THEFT_MODE_NONE:
-                //fall through to default    
-            default:
-                return AntiTheftEnum.NO_ACTION;    
-        }        
-    }
-        
+        return AppState.theftStringToEnum(value);
+    }        
     public void setAntiTheftAction(AntiTheftEnum antiTheftAction) {
 //        System.out.println("app state setAntiTheftAction");
         //write file
         String newValue = antiTheftAction.name();
-//        switch (antiTheftAction) {            
-//            case TURN_ON:
-//                newValue = AppConstants.THEFT_MODE_ON;
-//                break;
-//            case TURN_OFF:
-//                newValue = AppConstants.THEFT_MODE_OFF;
-//                break;
-//            case NO_ACTION:
-//                //fall through to default
-//            default:                
-//                newValue = AppConstants.THEFT_MODE_NONE;                
-//        }        
-        this.setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, newValue);
+        this.setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_ACTION, newValue);
 //        System.out.println("app state set anti theft asks to reset panes");
 //        SkyRfidJavaApp.resetPanes();
     }
@@ -119,71 +98,98 @@ public AppState(String configName) {
 //        System.out.println("app state getReadWriteMode");
         //read file
         String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_R_W_MODE);
-//        System.out.println("r/w mode text: " + value);        
-        switch (value) {
-            case AppConstants.R_W_MODE_IDLE:
-                return ReadWriteModeEnum.IDLE_MODE;
-            case AppConstants.R_W_MODE_READ:
-                return ReadWriteModeEnum.READ_MODE;
-            case AppConstants.R_W_MODE_WRITE:
-                return ReadWriteModeEnum.WRITE_MODE;
-            default:
-                return ReadWriteModeEnum.IDLE_MODE;
-        }        
+//        System.out.println("r/w mode text: " + value);     
+        return AppState.readWriteStringToEnum(value);
+//        switch (value) {
+//            case AppConstants.R_W_MODE_IDLE:
+//                return ReadWriteModeEnum.IDLE_MODE;
+//            case AppConstants.R_W_MODE_READ:
+//                return ReadWriteModeEnum.READ_MODE;
+//            case AppConstants.R_W_MODE_WRITE:
+//                return ReadWriteModeEnum.WRITE_MODE;
+//            default:
+//                return ReadWriteModeEnum.IDLE_MODE;
+//        }        
     }
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
 //        System.out.println("app state setReadWriteMode");
         //write file        
-        String newValue = readWriteMode.name();
-        
-//        switch (readWriteMode) {                 
-//            case READ_MODE:
-//                newValue = AppConstants.R_W_MODE_READ;
-//                break;
-//            case WRITE_MODE:
-//                newValue = ReadWriteModeEnum.WRITE_MODE.name();
-//                newValue = AppConstants.R_W_MODE_WRITE;
-//                
-//                break;
-//            case IDLE_MODE:
-//                //fall through to default
-//            default:                
-//                newValue = AppConstants.R_W_MODE_IDLE;                
-//        }        
+        String newValue = readWriteMode.name();        
         this.setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_R_W_MODE, newValue);
 //        System.out.println("app state set read/write asks to reset panes");
-//        SkyRfidJavaApp.resetPanes();
-        
+//        SkyRfidJavaApp.resetPanes();        
     }
-
     public boolean isMultiRead() {
 //        System.out.println("app state isMultiRead");
         //read file
-        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ);
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE__MULTI_READ);
 //        System.out.println("theft mode text: " + value);           
             return (value.equalsIgnoreCase("true")) ;                    
-    }
-    
+    }    
     public void setMultiRead(boolean multiRead) {
 //        System.out.println("app state setMultiRead");
         //write file        
         String newValue = String.valueOf(multiRead);
-        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, newValue);  
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE__MULTI_READ, newValue);  
 //        System.out.println("app state set multi read asks to reset panes");
 //        SkyRfidJavaApp.resetPanes();
+    }
+    public int getReadFreq() {
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_READ_FREQ);
+        Integer freq;
+        try {
+            freq = Integer.parseInt(value);
+        }
+        catch (NumberFormatException ex) {
+            freq = 0;
+        }
+        return freq;
+    }
+    public void setReadFreq(int freq) {
+        String value = String.valueOf(freq);
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_READ_FREQ, value);
+    }
+    public String getExtraKeys() {
+        String value = this.getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_EXTRA_KEYS);
+        return value;
+    }
+    public void setExtraKeys(String keys) {
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_EXTRA_KEYS, keys);
+    }
+    public String getAntiTheftOn() {
+        String value = this.getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_ON);
+        return value;
+    }
+    public void setAntiTheftOn(String theft_on_value) {
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_ON, theft_on_value);
+    }    
+    public String getAntiTheftOff() {
+        String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_OFF);
+        return value;
+    }
+    public void setAntiTheftOff(String theft_off_value) {
+        setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_OFF, theft_off_value);
     }
     /**
      * 
      */
     public void resetAppState() {
 //        System.out.println("app state resetAppState");   
-        //write file
-//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
-//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
-//        setSettingValue(AppSettingsEnum.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, "false");   
-       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_BIT, AppConstants.THEFT_MODE_NONE);
-       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_R_W_MODE, AppConstants.R_W_MODE_IDLE);
-       setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_TYPE_MULTI_READ, "false");   
+        //write file        
+        String defaultTheftMode = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_THEFT_ACTION);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_ACTION, defaultTheftMode);
+        String defaultRWMode = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_R_W_MODE);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_R_W_MODE, defaultRWMode);
+        String defaultMultiRead = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE__MULTI_READ);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE__MULTI_READ, defaultMultiRead);
+        String defaultReadFreq = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_READ_FREQ);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_READ_FREQ, defaultReadFreq);
+        String defaultXtraKeys = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_EXTRA_KEYS);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_EXTRA_KEYS, defaultXtraKeys);
+        String defaultTheftOnValue = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_THEFT_ON);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_ON, defaultTheftOnValue);
+        String defaultTheftOffValue = getSettingValue(AppConstants.SETTINGS_DEFAULT, AppConstants.APP_STATE_XML_ELE_THEFT_OFF);
+        setSettingValue(AppConstants.SETTINGS_CURRENT, AppConstants.APP_STATE_XML_ELE_THEFT_OFF, defaultTheftOffValue);  
     }
     
     /**
@@ -192,15 +198,18 @@ public AppState(String configName) {
      * @return a String of the text content of that xml element
      */
 //    private String getSettingValue(AppSettingsEnum settings_category, String setting_name) {
-      private String getSettingValue(String config_name, String setting_name) {  
+    private String getSettingValue(String config_name, String setting_name) {  
         String result = "";
         try {
 //            configurationSection = configurationsCollection.get(settings_category.ordinal());
             configurationSection = this.getConfig(config_name);
             //risky to rely on certain order of blocks?
             Element ele = configurationSection.getFirstChildElement(setting_name);
-            Text eleValue = (Text) ele.getChild(0);
-            result = eleValue.getValue();
+            if (ele.getChildCount() > 0) {
+                //extra keys ele may be empty
+                Text eleValue = (Text) ele.getChild(0);
+                result = eleValue.getValue();
+            }
         }
         catch (Exception ex) {                
             System.out.println("error get setting value " + ex.getMessage());
@@ -222,25 +231,126 @@ public AppState(String configName) {
             configurationSection = this.getConfig(configName);
             
             Element ele = configurationSection.getFirstChildElement(setting_name);
-            ele.removeChild(0);
+            if (ele.getChildCount() > 0) {ele.removeChild(0);} //extra keys element may be empty
             ele.appendChild(new_value);
-//            FileWriter fw = new FileWriter(settingsPath);
-            FileOutputStream fos = new FileOutputStream(settingsPath);
-            Serializer xmlWriter = new Serializer(fos, "ISO-8859-1");
-            xmlWriter.setIndent(4); //orig is 4 spaces
-            xmlWriter.write(settingsDoc);
-            xmlWriter.flush();
-            xmlWriter.flush();
-            fos.close();            
+
+            Boolean saveXmlSuccess = this.saveXml();
         }        
         catch (Exception ex) {                
             System.out.println("error set setting value " + ex.getMessage());
             ex.printStackTrace();
         }             
     }
+      /**
+       * This function will check if the configuration name exists.
+       * Caller is responsible for validating the remaining parameters. 
+       * @param configuration_name
+       * @param theft_action
+       * @param read_write_idle
+       * @param multi_read
+       * @param read_frequency
+       * @param extra_keys
+       * @param theft_on_value
+       * @param theft_off_value
+       * @return true if successfully created, false if failed
+       */
+    public Boolean createConfig(String configuration_name, AntiTheftEnum theft_action, 
+            ReadWriteModeEnum read_write_idle, Boolean multi_read, int read_frequency, 
+            String extra_keys, String theft_on_value, String theft_off_value) {        
+        Boolean success = true;        
+        //check if it exists
+        Element testEle;
+        String testId;
+        for (int i=0; i<configurationsCollection.size(); i++) {
+            testEle = configurationsCollection.get(i);
+            testId = testEle.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID);
+            if (testId.equals(configuration_name)) { success = false; }
+        }
+        if (success) {
+            //make a new element
+            Element newConfig = new Element(AppConstants.APP_STATE_XML_ELE_PARM_SET);
+            Attribute newId = new Attribute(AppConstants.APP_STATE_XML_ATTR_ID, configuration_name);
+            
+            newConfig.addAttribute(newId);
+            Element theft = new Element(AppConstants.APP_STATE_XML_ELE_THEFT_ACTION);
+            theft.appendChild(theft_action.name());
+            newConfig.appendChild(theft); 
+            Element readWrite = new Element(AppConstants.APP_STATE_XML_ELE_R_W_MODE);
+            readWrite.appendChild(read_write_idle.name());
+            newConfig.appendChild(readWrite);
+            Element multiRead = new Element(AppConstants.APP_STATE_XML_ELE__MULTI_READ);
+            multiRead.appendChild(multi_read.toString());
+            newConfig.appendChild(multiRead);
+            Element readFreq = new Element(AppConstants.APP_STATE_XML_ELE_READ_FREQ);
+            readFreq.appendChild(Integer.toString(read_frequency));
+            newConfig.appendChild(readFreq);
+            Element xtraKeys = new Element(AppConstants.APP_STATE_XML_ELE_EXTRA_KEYS);
+            xtraKeys.appendChild(extra_keys);
+            newConfig.appendChild(xtraKeys);
+            Element theftOn = new Element(AppConstants.APP_STATE_XML_ELE_THEFT_ON);
+            theftOn.appendChild(theft_on_value);
+            newConfig.appendChild(theftOn);
+            Element theftOff = new Element(AppConstants.APP_STATE_XML_ELE_THEFT_OFF);
+            theftOff.appendChild(theft_off_value);
+            newConfig.appendChild(theftOff);
+            
+            docRoot.appendChild(newConfig);
+            //use set setting value fcn to fill the elements?
+            //write the changes
+            success = this.saveXml();
+        }
+        return success;
+    }
+    /**
+     * This function will verify the name parameter
+     * @param configuration_name
+     * @return true if deleted successfully, false if failed
+     */
+    public Boolean deleteConfiguration(String configuration_name) {
+        
+        Boolean success = false;
+        try {
+            configurationSection = this.getConfig(configuration_name);
+            //get config may return default config if name is invalid
+            String returnedName = configurationSection.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID);
+            Boolean okToDelete = !returnedName.equals(AppConstants.SETTINGS_CURRENT) &&
+                    !returnedName.equals(AppConstants.SETTINGS_DEFAULT); 
+            if (okToDelete) {
+                docRoot.removeChild(configurationSection);
+                success = this.saveXml();
+                System.out.println("app state removed the config with result " + success);
+                
+            }
+            
+        }
+        catch (Exception ex) {
+            
+        }
+        
+        return success;
+    }
+    private Boolean saveXml() {
+        Boolean success = false;
+        try {
+                FileOutputStream fos = new FileOutputStream(settingsPath);
+                Serializer xmlWriter = new Serializer(fos, "ISO-8859-1");
+                xmlWriter.setIndent(4); //orig is 4 spaces
+                xmlWriter.write(settingsDoc);
+                xmlWriter.flush();
+                xmlWriter.flush();
+                fos.close();     
+                success = true;
+        }
+        catch (Exception ex) {                             
+            System.out.println("error create config " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return success;
+    }
     private Element getConfig(String configName) {
         //cycle through config coll, look for match to id
-        //if none found, return default or error?
+        //if none found, return default. better to return error?
+        //
         Element testEle;
         String testId;
         Element desiredConfig = configurationsCollection.get(0);
@@ -256,7 +366,7 @@ public AppState(String configName) {
 //    public String[] getConfigNames() {
     public ArrayList<String> getConfigNames() {
 //        String[] nameArray = new String[configurationsCollection.size()];
-        ArrayList nameArray = new ArrayList(configurationsCollection.size());
+        ArrayList<String> nameArray = new ArrayList<>(configurationsCollection.size());
         Element oneEle;
         for (int i=0; i<configurationsCollection.size(); i++) {
             oneEle = configurationsCollection.get(i);
@@ -265,5 +375,28 @@ public AppState(String configName) {
         }
         return nameArray;
     }
+    public static AntiTheftEnum theftStringToEnum(String theft_mode) {
+        switch (theft_mode) {
+            case AppConstants.THEFT_MODE_ON:
+                return AntiTheftEnum.TURN_ON;                
+            case AppConstants.THEFT_MODE_OFF:
+                return AntiTheftEnum.TURN_OFF;                
+            case AppConstants.THEFT_MODE_NONE:
+            default:
+                return AntiTheftEnum.NO_ACTION;
+        }        
+    }
+    public static ReadWriteModeEnum readWriteStringToEnum(String read_write_mode) {
+        switch (read_write_mode) {
+            case AppConstants.R_W_MODE_READ:
+                return ReadWriteModeEnum.READ_MODE;
+            case AppConstants.R_W_MODE_WRITE:
+                return ReadWriteModeEnum.WRITE_MODE;
+            case AppConstants.R_W_MODE_IDLE:
+            default:
+                return ReadWriteModeEnum.IDLE_MODE;                
+        }
+    }
+    
     
 }

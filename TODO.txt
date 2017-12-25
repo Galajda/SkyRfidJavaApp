@@ -11,12 +11,17 @@ Add Settings pane to change defaults and advanced properties.
 
 AppState:
     Why do I use ISO-8859-1 encoding of xml instead of utf-8?
-
+    Add functions for new state elements
+    Is it good practice to exit application in case of error in constructor?
+    getConfig what if input string is null?
+    Constructor: move error messages to constants
+    
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
 Write pane:
     Communicate errors to user: no device, no tag, bad input
+    Validate input before writing
     
 Read pane:    
     If detect multiple tags in single mode, throw error.
@@ -24,9 +29,18 @@ TagActor:
     Move uid to parent?
 
 Settings pane:
-    Show new name text field only when new config is selected.
+    comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first
+        by pressing the same key again
+    Compiler warning
+        Note: C:\Users\MichalG\Documents\NetBeansProjects\SkyRfidJavaApp\src\skyrfidjavaapp\SettingsPane.java uses unchecked or unsafe operations.
+        Note: Recompile with -Xlint:unchecked for details.
+        Fix txtResetForm unchecked call to set(T)
 AppConstants:
-    Make style for text field error and ok. Use in write pane and settings pane.
+    
+
+DataValidation:
+    Check length in the reg ex pattern.
+    Do not allow spaces in config name
 =======
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
 	Catch errors related to existence of user32.dll.
