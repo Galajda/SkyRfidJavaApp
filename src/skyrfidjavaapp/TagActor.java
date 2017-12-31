@@ -29,6 +29,9 @@ public class TagActor {
     
     protected final AppState state;
     protected final AntiTheftEnum theftAction;
+    protected static char theftValue;
+    
+    
     protected final ReadWriteModeEnum r_w_mode;
     
     protected final int deviceHdl;
@@ -39,6 +42,13 @@ public class TagActor {
 //        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         theftAction = state.getAntiTheftAction();
+        if (theftAction.equals(AntiTheftEnum.TURN_ON)) {
+            theftValue = (char)Integer.parseInt(state.getAntiTheftOn());
+        }
+        else {
+            theftValue = (char)Integer.parseInt(state.getAntiTheftOff());
+        }
+        
         r_w_mode = state.getReadWriteMode();
         
         deviceHdl = this.getDeviceHandle();
@@ -75,7 +85,16 @@ public class TagActor {
         }
     }
     
-    
+    public static void changeTheftBit(RfidNativeInterface dll, int device_handle, 
+            char[] card_id) {
+        System.out.print("tag actor is changing the theft bit of card #");
+        System.out.print(String.format("%04x", (int)card_id[0]));
+        System.out.println(" to value " + String.format("%04x", (int)TagActor.theftValue));
+        
+        dll.fw_write_afi(device_handle, (char)0x22, TagActor.theftValue , card_id);
+                
+                            
+    }
     
     
 }
