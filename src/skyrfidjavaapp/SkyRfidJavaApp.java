@@ -54,7 +54,8 @@ public class SkyRfidJavaApp extends Application {
         launch(args);
     }
     
-    @Override public void start(Stage primaryStage) 
+    @Override 
+    public void start(Stage primaryStage) 
     {                        
         //return app state to default before loading panes        
 //        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
@@ -84,6 +85,10 @@ public class SkyRfidJavaApp extends Application {
         System.exit(0);
         //Platform.exit() does not stop timer
     }
+    /**
+     * Creates instances for all of the panes used in the application. One instance of each
+     * is used throughout operation.
+     */
     private static void initializePanes() {
         rootPane = new BorderPane();
         pgmMenu = new MenuBarPane();
@@ -95,7 +100,7 @@ public class SkyRfidJavaApp extends Application {
         settingsPane = new SettingsPane();
     }
     /**
-     * Used when application launches.
+     * Used when application launches. Marked for removal. Superseded by resetWorkingPanes().
      */
     private static void initializeRootPane() {
         
@@ -107,7 +112,11 @@ public class SkyRfidJavaApp extends Application {
         
     }
     /**
-     * Used when application launches and when state changes
+     * Used when application launches and when state changes. Also used to return to normal operation after
+     * viewing the settings pane. The working panes are the panes that display operational features, 
+     * such as displaying the data from a tag and providing quick access to common parameters. The 
+     * working panes are contrasted with the settings pane, where more advanced changes may 
+     * be made to the configuration.
      */
     public static void resetWorkingPanes() {    
 //        ObservableList<Node> currentNodes = rootPane.getChildren();
@@ -129,6 +138,11 @@ public class SkyRfidJavaApp extends Application {
         switch (rw_state) {            
             case READ_MODE:                     
                 rootPane.setCenter(readPane.getPane());
+                //adjust read params
+                readPane.setReadFreq(state.getReadFreq());
+//                readPane.setTheftOffValue(state.getAntiTheftOff());
+//                readPane.setTheftOnValue(state.getAntiTheftOn());
+                readPane.setXtraKeys(state.getExtraKeys());
                 readPane.startTimer();
                 break;
             case WRITE_MODE:                 
@@ -141,6 +155,9 @@ public class SkyRfidJavaApp extends Application {
         }
         
     }
+    /**
+     * Replaces the working panes with a settings pane
+     */
     public static void openSettingsPane() {
         rootPane.getChildren().clear();
         rootPane.setTop(pgmMenu.getPane());

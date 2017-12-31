@@ -31,12 +31,22 @@ import nu.xom.Serializer;
 import java.util.ArrayList;
 
 /**
- *
+ * The logic of the AppState. Parameters that determine the application's operation are stored in
+ * an XML file. The AppState object does not hold these values in fields. The values are retrieved
+ * from the XML when needed in order to ensure accuracy. When the state changes, the new values
+ * are immediately written to the XML for the same reason.
+ * The default state is managed through a settings screen, where custom configurations may be defined. 
+ * When the program launches, or when reset is chosen from the file menu, the default values are copied
+ * to the current values. The current values are always used to load panes.
+ * Each pane is responsible for retrieving app state and configuring accordingly. When a pane
+ * changes the state, it must notify the application by calling resetWorkingPanes(), which will reset
+ * the panes with the new values.
+ * Custom enum conversion functions are provided in place of the built-in valueOf() method of the Enum class.
+ * The custom methods do not throw the IllegalArgumentException.
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class AppState {
         
-//    private AppSettingsEnum configurationName;
     private String configurationName;
     private final String settingsPath;
 //    private File settingsFile;
@@ -46,7 +56,6 @@ public class AppState {
     private Element configurationSection;
     
 
-//    public AppState(AppSettingsEnum configName) {
 public AppState(String configName) {
 //        System.out.println("initialize app state");
 //        System.out.println("xml parser " + org.xml.sax.driver);
@@ -66,15 +75,14 @@ public AppState(String configName) {
         }
         catch (nu.xom.ValidityException ex) {
             System.out.println("error app state constructor. invalid xml " + ex.getMessage());
-            FxMsgBox.show("The settings file has been corrupted.\nPlease reinstall the application.", 
-                    "Program error");
+            FxMsgBox.show(InputErrorMsg.ERR_INVALID_XML_MSG, InputErrorMsg.ERR_XML_TITLE);
             System.exit(1);
         }
         catch (Exception ex) {
             System.out.println("error app state constructor " + ex.getMessage());
             ex.printStackTrace();
-            FxMsgBox.show("Unknown problem with settings file\nPlease take a screen shot and notify author\n" 
-                    + ex.getMessage(), "Program error");
+            FxMsgBox.show(InputErrorMsg.ERR_XML_UNKNOWN_MSG + "\n" +
+                    ex.getMessage(), InputErrorMsg.ERR_XML_TITLE);
             System.exit(1);
         }        
     }
@@ -100,16 +108,7 @@ public AppState(String configName) {
         String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_R_W_MODE);
 //        System.out.println("r/w mode text: " + value);     
         return AppState.readWriteStringToEnum(value);
-//        switch (value) {
-//            case AppConstants.R_W_MODE_IDLE:
-//                return ReadWriteModeEnum.IDLE_MODE;
-//            case AppConstants.R_W_MODE_READ:
-//                return ReadWriteModeEnum.READ_MODE;
-//            case AppConstants.R_W_MODE_WRITE:
-//                return ReadWriteModeEnum.WRITE_MODE;
-//            default:
-//                return ReadWriteModeEnum.IDLE_MODE;
-//        }        
+        
     }
     public void setReadWriteMode(ReadWriteModeEnum readWriteMode) {
 //        System.out.println("app state setReadWriteMode");
@@ -124,7 +123,7 @@ public AppState(String configName) {
         //read file
         String value = getSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE__MULTI_READ);
 //        System.out.println("theft mode text: " + value);           
-            return (value.equalsIgnoreCase("true")) ;                    
+        return (value.equalsIgnoreCase("true")) ;                    
     }    
     public void setMultiRead(boolean multiRead) {
 //        System.out.println("app state setMultiRead");
@@ -142,6 +141,7 @@ public AppState(String configName) {
         }
         catch (NumberFormatException ex) {
             freq = 0;
+            //flag corrupt xml?
         }
         return freq;
     }
@@ -171,7 +171,7 @@ public AppState(String configName) {
         setSettingValue(configurationName, AppConstants.APP_STATE_XML_ELE_THEFT_OFF, theft_off_value);
     }
     /**
-     * 
+     * Retrieves values from the default configuration and loads them into the current state.
      */
     public void resetAppState() {
 //        System.out.println("app state resetAppState");   
@@ -193,11 +193,12 @@ public AppState(String configName) {
     }
     
     /**
-     * @param config_name the set that you wish to retrieve: current or default
-     * @param  setting_name the key that you wish to find: r/w, theft, single/multi
-     * @return a String of the text content of that xml element
+     * @param config_name the set that you wish to retrieve: current, default, custom
+     * @param  setting_name the key that you wish to find: r/w, theft, single/multi, etc. It is 
+     * recommended to use the xml field constants in AppConstants.java for consistency.
+     * @return a String of the text content of that xml element. If the element has no content,
+     * as for no extra keys, an empty string is returned, rather than null.
      */
-//    private String getSettingValue(AppSettingsEnum settings_category, String setting_name) {
     private String getSettingValue(String config_name, String setting_name) {  
         String result = "";
         try {
@@ -218,11 +219,11 @@ public AppState(String configName) {
         return result;
     }
     /**
-     * @param configName the group that you wish to change: current or default
-     * @param  setting_name the key that you wish to change: r/w, theft, single/multi
-     * @param new_value the new value for this key
+     * @param configName the group that you wish to change: current, default, custom
+     * @param  setting_name the key that you wish to change: r/w, theft, single/multi, etc.
+     * @param new_value the new value for this key. For keys that use enums, 
+     *    it is recommended to begin with the enum and take its name() for the parameter.
      */
-//    private void setSettingValue(AppSettingsEnum settings_category, String setting_name, String new_value) {
       private void setSettingValue(String configName, String setting_name, String new_value) {  
         //get the element that is to be changed
         try {
@@ -302,13 +303,14 @@ public AppState(String configName) {
         return success;
     }
     /**
-     * This function will verify the name parameter
+     * This function will verify the name parameter. It will not delete the default
+     * or the current configurations.
      * @param configuration_name
      * @return true if deleted successfully, false if failed
      */
     public Boolean deleteConfiguration(String configuration_name) {
         
-        Boolean success = false;
+        Boolean deleteSuccess = false;
         try {
             configurationSection = this.getConfig(configuration_name);
             //get config may return default config if name is invalid
@@ -317,8 +319,8 @@ public AppState(String configName) {
                     !returnedName.equals(AppConstants.SETTINGS_DEFAULT); 
             if (okToDelete) {
                 docRoot.removeChild(configurationSection);
-                success = this.saveXml();
-                System.out.println("app state removed the config with result " + success);
+                deleteSuccess = this.saveXml();
+                System.out.println("app state removed the config with result " + deleteSuccess);
                 
             }
             
@@ -327,10 +329,10 @@ public AppState(String configName) {
             
         }
         
-        return success;
+        return deleteSuccess;
     }
     private Boolean saveXml() {
-        Boolean success = false;
+        Boolean saveSuccess = false;
         try {
                 FileOutputStream fos = new FileOutputStream(settingsPath);
                 Serializer xmlWriter = new Serializer(fos, "ISO-8859-1");
@@ -339,17 +341,23 @@ public AppState(String configName) {
                 xmlWriter.flush();
                 xmlWriter.flush();
                 fos.close();     
-                success = true;
+                saveSuccess = true;
         }
         catch (Exception ex) {                             
             System.out.println("error create config " + ex.getMessage());
             ex.printStackTrace();
         }
-        return success;
+        return saveSuccess;
     }
-    private Element getConfig(String configName) {
+    /**
+     * 
+     * @param configuration_name
+     * @return the configuration element (parameter_set) matching the supplied name. 
+     * If no match, return default. Better to return error?
+     */
+    private Element getConfig(String configuration_name) {
         //cycle through config coll, look for match to id
-        //if none found, return default. better to return error?
+        //
         //
         Element testEle;
         String testId;
@@ -358,7 +366,7 @@ public AppState(String configName) {
         for (int i=0; i<configurationsCollection.size(); i++) {
             testEle = configurationsCollection.get(i);
             testId = testEle.getAttributeValue(AppConstants.APP_STATE_XML_ATTR_ID);
-            if (configName.equals(testId)) { desiredConfig = testEle; }
+            if (configuration_name.equals(testId)) { desiredConfig = testEle; }
         }
         
         return desiredConfig;
@@ -375,28 +383,39 @@ public AppState(String configName) {
         }
         return nameArray;
     }
+    /**
+     * Convenience method to convert from a string value to the enum. 
+     * @param theft_mode It is recommended to use the enum strings in AppConstants.
+     * @return the enum value corresponding to the supplied string value. If no match is found,
+     * a default value is returned. 
+     */
     public static AntiTheftEnum theftStringToEnum(String theft_mode) {
         switch (theft_mode) {
-            case AppConstants.THEFT_MODE_ON:
+            case AppConstants.ENUM_THEFT_MODE_ON:
                 return AntiTheftEnum.TURN_ON;                
-            case AppConstants.THEFT_MODE_OFF:
+            case AppConstants.ENUM_THEFT_MODE_OFF:
                 return AntiTheftEnum.TURN_OFF;                
-            case AppConstants.THEFT_MODE_NONE:
+            case AppConstants.ENUM_THEFT_MODE_NONE:
             default:
                 return AntiTheftEnum.NO_ACTION;
         }        
     }
+    /**
+     * Convenience method to convert from a string value to the enum. 
+     * @param read_write_mode It is recommended to use the enum strings in AppConstants.
+     * @return the enum value corresponding to the supplied string value. If no match is found,
+     * a default value is returned.
+     */
     public static ReadWriteModeEnum readWriteStringToEnum(String read_write_mode) {
         switch (read_write_mode) {
-            case AppConstants.R_W_MODE_READ:
+            case AppConstants.ENUM_R_W_MODE_READ:
                 return ReadWriteModeEnum.READ_MODE;
-            case AppConstants.R_W_MODE_WRITE:
+            case AppConstants.ENUM_R_W_MODE_WRITE:
                 return ReadWriteModeEnum.WRITE_MODE;
-            case AppConstants.R_W_MODE_IDLE:
+            case AppConstants.ENUM_R_W_MODE_IDLE:
             default:
                 return ReadWriteModeEnum.IDLE_MODE;                
         }
     }
-    
     
 }

@@ -9,12 +9,19 @@ Add Settings pane to change defaults and advanced properties.
     parameters.
     Move anti theft values to settings, rather than hard-coded
 
+App title:
+    Show name of current configuration
 AppState:
     Why do I use ISO-8859-1 encoding of xml instead of utf-8?
     Add functions for new state elements
     Is it good practice to exit application in case of error in constructor?
     getConfig what if input string is null?
     Constructor: move error messages to constants
+    Remove all getters and setters, make getSettingsValue and setSettingsValue public? 
+        The advantage of the individual accessors is that one knows when one has covered 
+        all of the parameters by cycling through all the functions. This makes writing code
+        more reliable. See for example SettingsPane btnSaveConfig_Click.
+    
     
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
@@ -27,20 +34,35 @@ Read pane:
     If detect multiple tags in single mode, throw error.
 TagActor:
     Move uid to parent?
+    Move theft bit worker to tag actor
+TheftBitWorker:
+    replace on/off enum with the new value
 
 Settings pane:
     comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first
         by pressing the same key again
+    Validation is not triggered by mouse click out of text field. Fix this.
     Compiler warning
         Note: C:\Users\MichalG\Documents\NetBeansProjects\SkyRfidJavaApp\src\skyrfidjavaapp\SettingsPane.java uses unchecked or unsafe operations.
         Note: Recompile with -Xlint:unchecked for details.
-        Fix txtResetForm unchecked call to set(T)
+        Fix error: resetForm unchecked call to set(T)
+    Show and hide buttons to guide user to proper operation. zB do not allow use config before saving. 
+        Or save automatically? Cancel instead of delete new config?
 AppConstants:
     
+AppSettingsEnum:
+    delete. string constants suffice.
 
 DataValidation:
-    Check length in the reg ex pattern.
-    Do not allow spaces in config name
+    Check length in the reg ex pattern.    
+
+Config names xml and dtd:
+    delete
+RoboTypist:
+    recognize escape chars like \n \l
+dll functions
+    does stay quiet state persist after tag leaves field?
+    how does multi read work? 
 =======
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
 	Catch errors related to existence of user32.dll.

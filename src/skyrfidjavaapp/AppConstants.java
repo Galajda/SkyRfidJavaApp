@@ -34,13 +34,15 @@ public class AppConstants
     public static final String SETTINGS_DEFAULT = "default";
     public static final String SETTINGS_CURRENT = "current";
     
-    public static final String R_W_MODE_IDLE = "IDLE_MODE";
-    public static final String R_W_MODE_READ = "READ_MODE";
-    public static final String R_W_MODE_WRITE = "WRITE_MODE";
+    //read write mode enum strings
+    public static final String ENUM_R_W_MODE_IDLE = "IDLE_MODE";
+    public static final String ENUM_R_W_MODE_READ = "READ_MODE";
+    public static final String ENUM_R_W_MODE_WRITE = "WRITE_MODE";
     
-    public static final String THEFT_MODE_ON = "TURN_ON";
-    public static final String THEFT_MODE_OFF = "TURN_OFF";
-    public static final String THEFT_MODE_NONE = "NO_ACTION";
+    //anti theft enum strings
+    public static final String ENUM_THEFT_MODE_ON = "TURN_ON";
+    public static final String ENUM_THEFT_MODE_OFF = "TURN_OFF";
+    public static final String ENUM_THEFT_MODE_NONE = "NO_ACTION";
     
     //xml fields
     public static final String APP_STATE_XML_ELE_ROOT = "settings";

@@ -21,6 +21,12 @@ package skyrfidjavaapp;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class InputErrorMsg {
+    public static final String ERR_XML_TITLE = "Program error";
+    public static final String ERR_INVALID_XML_MSG = "The settings file has been corrupted." +
+            "\nPlease reinstall the application.";
+    public static final String ERR_XML_UNKNOWN_MSG = "Unknown problem with settings file" +
+            "\nPlease take a screen shot and notify author.";
+    
     public static final String ERR_INPUT_TITLE = "Invalid input";
     public static final String ERR_CONFIG_NAME = "The configuration name must consist of" +
             "\nletters, numbers and punctuation." +
@@ -43,4 +49,6 @@ public class InputErrorMsg {
     public static final String ERR_CANNOT_DELETE_MSG = "Possibly no configuration was selected." +
             "\nAlso, the built-in configurations current" +
             "\nand default must remain.";
+    public static final String CANCEL_DELETE_MSG = "This config will be kept.";
+    public static final String CANCEL_DELETE_TITLE = "Delete was canceled";
 }
