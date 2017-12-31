@@ -25,7 +25,10 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 /**
- *
+ * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
+ * that users want fast reading in a production environment. Local variables provide faster 
+ * access to application data. The price for this is the need to update the local variables 
+ * when the stage is reset (e.g., after a change to the state).
  * @author MichalG
  */
 public class ReadPane 
@@ -45,12 +48,14 @@ public class ReadPane
     private final Button btnStartReading;
     private final Button btnStopReading;
     private TagReader reader;
-    private final int READ_FREQUENCY = 2012; //eventually get this from app state
+    private int readFrequency = 2000; //eventually get this from app state
+    
+    private String xtraKeys = "";
 //    private int portFailureCounter;
     private Timer tmr;
     private boolean runRabbitRun = true; //flag to stop the auto read timer
     
-    private RoboTypist roboWriter;
+    private final RoboTypist roboWriter;
     //constructor
     ReadPane() {
 //        System.out.println("read pane constructor running");        
@@ -93,6 +98,18 @@ public class ReadPane
     {
         return this.pane;
     }
+    public void setReadFreq(int read_frequency) {
+        readFrequency = read_frequency;
+    }
+    public void setXtraKeys(String keys) {
+        xtraKeys = keys;
+    }
+//    public void setTheftOnValue(String theft_on_value) {
+//        theftOn = theft_on_value;
+//    }        
+//    public void setTheftOffValue(String theft_off_value) {
+//        this.theftOff = theft_off_value;
+//    }    
     
     private void btnReadMulti_Click(ActionEvent e) {
         FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
@@ -137,7 +154,7 @@ public class ReadPane
         reader  = new TagReader();
         runRabbitRun = true;
         tmr = new Timer(); //instantiating tmr here rather than in constructor allows restarting
-        tmr.schedule(new AutoRead(), 0, this.READ_FREQUENCY);
+        tmr.schedule(new AutoRead(), 0, this.readFrequency);
         //Fixed-delay execution is deliberately chosen over fixed-rate execution
         //so that tasks do not overlap. If this works as I expect, no adjustment will be 
         //needed for multiple cards. A possible complication is the runLater method within
@@ -203,7 +220,7 @@ public class ReadPane
                 default:
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
-                    roboWriter.sendKeys(oneCard);
+                    roboWriter.sendKeys(oneCard + this.xtraKeys);
             }
             //display for 1 sec, then show next number.
         }
