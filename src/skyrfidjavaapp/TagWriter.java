@@ -83,8 +83,8 @@ public class TagWriter extends TagActor {
         boolean writeSuccess = (writeResponse==0);
         System.out.println("write status " + writeSuccess);
         if (writeSuccess && !(super.theftAction.equals(AntiTheftEnum.NO_ACTION))) {
-            
-            TagActor.changeTheftBit(rfidDll, deviceHdl, uidBuffer);
+            super.changeTheftBit(rfidDll, deviceHdl, uidBuffer);
+//            TagActor.changeTheftBit(rfidDll, deviceHdl, uidBuffer);
 //            TheftBitWorker.changeTheftBit(super.rfidDll, super.deviceHdl, uidBuffer, super.theftAction);
         }
         

@@ -28,7 +28,11 @@ import java.util.TimerTask;
  * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
  * that users want fast reading in a production environment. Local variables provide faster 
  * access to application data. The price for this is the need to update the local variables 
- * when the stage is reset (e.g., after a change to the state).
+ * when the stage is reset (e.g., after a change to the state). ReadPane tracks read frequency
+ * and extra keys. Updating these vars is a little messy. They cannot be assigned in the constructor,
+ * as one instance of the read pane lasts for the life of the application instance. A separate
+ * step must be taken when the app state is changed to update the read frequency and the extra keys.
+ * This class provides setters, which the main app class calls as part of the pane resetting process.
  * @author MichalG
  */
 public class ReadPane 

@@ -37,6 +37,7 @@ TagActor:
     Move theft bit worker to tag actor
 TheftBitWorker:
     replace on/off enum with the new value
+    delete the whole thing.
 
 Settings pane:
     comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first

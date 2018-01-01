@@ -16,10 +16,10 @@
  */
 package skyrfidjavaapp;
 /**
- * The TagActor class combines the USB device methods
- * that are common to reading and writing, such as opening and closing the port. 
- * The read and write classes are derived from TagActor. Methods specific
- * to reading and writing are contained in the child classes.
+ * The TagActor class combines the USB device methods that are common to reading
+ * and writing, such as opening and closing the port. The read and write classes
+ * are derived from TagActor. Methods specific to reading and writing are 
+ * contained in the child classes.
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class TagActor {    
@@ -29,13 +29,15 @@ public class TagActor {
     
     protected final AppState state;
     protected final AntiTheftEnum theftAction;
-    protected static char theftValue;
+    protected char theftValue;
     
     
     protected final ReadWriteModeEnum r_w_mode;
     
     protected final int deviceHdl;
-    
+    /**
+     * constructor
+     */
     public TagActor() {
         
         System.out.println("tag actor constructor begins");
@@ -43,10 +45,12 @@ public class TagActor {
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         theftAction = state.getAntiTheftAction();
         if (theftAction.equals(AntiTheftEnum.TURN_ON)) {
-            theftValue = (char)Integer.parseInt(state.getAntiTheftOn());
+//            theftValue = (char)Integer.parseInt(state.getAntiTheftOn(),16);
+            theftValue = (char)Integer.decode(state.getAntiTheftOn()).intValue();
         }
         else {
-            theftValue = (char)Integer.parseInt(state.getAntiTheftOff());
+//            theftValue = (char)Integer.parseInt(state.getAntiTheftOff(),16);
+            theftValue = (char)Integer.decode(state.getAntiTheftOff()).intValue();
         }
         
         r_w_mode = state.getReadWriteMode();
@@ -85,13 +89,13 @@ public class TagActor {
         }
     }
     
-    public static void changeTheftBit(RfidNativeInterface dll, int device_handle, 
+    public void changeTheftBit(RfidNativeInterface dll, int device_handle, 
             char[] card_id) {
         System.out.print("tag actor is changing the theft bit of card #");
         System.out.print(String.format("%04x", (int)card_id[0]));
-        System.out.println(" to value " + String.format("%04x", (int)TagActor.theftValue));
-        
-        dll.fw_write_afi(device_handle, (char)0x22, TagActor.theftValue , card_id);
+//        System.out.println(" to value " + String.format("%04x", (int)TagActor.theftValue));
+        System.out.println(" to value " + String.format("%04x", (int)this.theftValue));
+        dll.fw_write_afi(device_handle, (char)0x22, this.theftValue , card_id);
                 
                             
     }
