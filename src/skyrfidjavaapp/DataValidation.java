@@ -26,6 +26,9 @@ public class DataValidation {
     public static Boolean isValidConfigName(String testName) {
         //want word or number char, underscore, no space.
         //search for the unwanted, success if not found
+        //positive match proposal
+//        Pattern posMatch = Pattern.compile("\\w{" + testName.length() + "}");
+        
         Pattern p = Pattern.compile("\\W");
         Matcher m = p.matcher(testName);
         
