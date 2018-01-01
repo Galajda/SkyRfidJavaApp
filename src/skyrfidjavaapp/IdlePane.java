@@ -30,7 +30,7 @@ public class IdlePane
     private final VBox pane;
     private final Label lblWelcome;
     
-    private final Button btnShowConfirmation;
+//    private final Button btnShowConfirmation;
     
     
     IdlePane()
@@ -41,9 +41,9 @@ public class IdlePane
         pane.setMinWidth(300);
         pane.getChildren().add(lblWelcome);
         
-        btnShowConfirmation = new Button("Show confirmation box");
-        btnShowConfirmation.setOnAction(e -> btnShowConfirmation_Click(e));
-        pane.getChildren().add(btnShowConfirmation);
+//        btnShowConfirmation = new Button("Show confirmation box");
+//        btnShowConfirmation.setOnAction(e -> btnShowConfirmation_Click(e));
+//        pane.getChildren().add(btnShowConfirmation);
                
     }
     VBox getPane()
@@ -51,10 +51,10 @@ public class IdlePane
         return this.pane;
     }
     
-    private void btnShowConfirmation_Click(ActionEvent e) {
-        FxMsgBox confirmDialog = new FxMsgBox();
-        Boolean confirmationResponse = confirmDialog.confirm("click ok or cancel", "confirm the action");
-                //FxMsgBox.confirm("click ok or cancel", "confirm the action");
-        System.out.println("msg box response " + confirmationResponse);
-    }
+//    private void btnShowConfirmation_Click(ActionEvent e) {
+//        FxMsgBox confirmDialog = new FxMsgBox();
+//        Boolean confirmationResponse = confirmDialog.confirm("click ok or cancel", "confirm the action");
+//                //FxMsgBox.confirm("click ok or cancel", "confirm the action");
+//        System.out.println("msg box response " + confirmationResponse);
+//    }
 }
