@@ -161,6 +161,7 @@ public class SkyRfidJavaApp extends Application {
     public static void openSettingsPane() {
         rootPane.getChildren().clear();
         rootPane.setTop(pgmMenu.getPane());
+        settingsPane.resetForm();
         rootPane.setCenter(settingsPane.getPane());
     }
    

@@ -24,6 +24,13 @@ public class AppConstants
 {
     //title
     public static final String APP_TITLE = "RFID program";
+    
+    //messages
+    public static final String DELETE_CONFIG_SUCCESS_TITLE = "Delete configuration";
+    public static final String DELETE_CONFIG_SUCCESS_MSG = "Configuration deleted.";
+    public static final String SAVE_CONFIG_SUCCESS_TITLE = "Save configuration";
+    public static final String SAVE_CONFIG_SUCCESS_MSG = "Configuration saved.";
+    
     //RFID reader constants
     public static final char READ_SINGLE_CARD = 0x36;
     public static final char READ_MULTI_CARDS = 0x16;

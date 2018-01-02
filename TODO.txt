@@ -4,10 +4,10 @@ Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml. Send extra keystrokes with barcode. Allow
 	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
 	two KeyEvent.VK_ENTER when program y is the active window.
-    Add read frequency element. How often does reader check for tag in field?
-    Add more configurations. Allow user to choose a config, rather than individual 
-    parameters.
-    Move anti theft values to settings, rather than hard-coded
+    If prompt text is shown in config selector, do not show the rest of the pane. A user could 
+        fill out the whole form and lose their work when they try to save.
+
+
 
 App title:
     Show name of current configuration
@@ -34,7 +34,7 @@ Read pane:
     If detect multiple tags in single mode, throw error.
 TagActor:
     Move uid to parent?
-    Move theft bit worker to tag actor
+    
 TheftBitWorker:
     replace on/off enum with the new value
     delete the whole thing.
@@ -42,11 +42,7 @@ TheftBitWorker:
 Settings pane:
     comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first
         by pressing the same key again
-    Validation is not triggered by mouse click out of text field. Fix this.
-    Compiler warning
-        Note: C:\Users\MichalG\Documents\NetBeansProjects\SkyRfidJavaApp\src\skyrfidjavaapp\SettingsPane.java uses unchecked or unsafe operations.
-        Note: Recompile with -Xlint:unchecked for details.
-        Fix error: resetForm unchecked call to set(T)
+    
     Show and hide buttons to guide user to proper operation. zB do not allow use config before saving. 
         Or save automatically? Cancel instead of delete new config?
 AppConstants:
@@ -63,6 +59,8 @@ RoboTypist:
     recognize escape chars like \n \l
 dll functions
     does stay quiet state persist after tag leaves field?
+    rf.exe can call stay quiet and reset to ready. when stay quiet tag leaves field and is 
+        reintroduced, it is ready
     how does multi read work? 
 =======
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.

@@ -4,7 +4,8 @@ Features: Only single reading is implemented, despite the single/multi button. R
     Raw hex output to console plus decoded number in application window.
 
 Why use enums and constant strings for app state? Enums control value of fcn arguments. 
-    Constant strings reduce spelling errors in values that are used in multiple methods.
+    Constant strings reduce spelling errors in values that are used in multiple locations
+    and simplify multiple-language support. It is common practice in Android app development.
 
 Control of device port. I cannot find a good place to close the port. For now, I will open and 
     close it for each read operation. Rearrange reader functions for greater speed. One instance 
@@ -29,6 +30,16 @@ Unsatisfied Link Error. Cannot load umf.dll.
     when running a 32-bit JRE on a 64-bit computer. (I think this is the explanation.)
     Previous versions have used other workarounds, such as putting the dll in the root 
     directory, which did not work in this application for an unknown reason.
+
+Settings pane captures keypresses in combo boxes to guide the user to the desired choice. The compiler
+    objects to casting the event source as a combo box, despite attempts to check the type before casting.
+    Compiler warning
+        Note: C:\Users\MichalG\Documents\NetBeansProjects\SkyRfidJavaApp\src\skyrfidjavaapp\SettingsPane.java 
+        uses unchecked or unsafe operations.
+        Note: Recompile with -Xlint:unchecked for details.
+    My solution is to pass the combo box directly to the event handler, so that the compiler recognizes
+        its type.
+        
 
 AppState xml file path may not work when packaged as jar.
 

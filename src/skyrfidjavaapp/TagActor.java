@@ -91,7 +91,7 @@ public class TagActor {
     
     public void changeTheftBit(RfidNativeInterface dll, int device_handle, 
             char[] card_id) {
-        System.out.print("tag actor is changing the theft bit of card #");
+        System.out.print("tag actor is changing the AFI byte of card #");
         System.out.print(String.format("%04x", (int)card_id[0]));
 //        System.out.println(" to value " + String.format("%04x", (int)TagActor.theftValue));
         System.out.println(" to value " + String.format("%04x", (int)this.theftValue));

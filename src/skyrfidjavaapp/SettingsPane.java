@@ -17,6 +17,7 @@
 package skyrfidjavaapp;
 
 import javafx.scene.Node;
+import javafx.scene.layout.VBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
@@ -39,15 +40,16 @@ import javafx.scene.input.KeyCode;
  */
 public class SettingsPane {
     //use vbox for main pane, grid pane for name, grid pane for rest of controls
-    private final GridPane mainPane; //holds the config name cbo box and the sub pane
-    private final GridPane subPane; //holds the rest of the controls so they can be hidden as a group.
+    private final VBox mainPane;
+    private final GridPane configNamePane; //holds the config name cbo box and the sub pane
+    private final GridPane controlsPane; //holds the rest of the controls so they can be hidden as a group.
     private AppState state;
     //heading
     private final Label lblGreeting;
     private final Label lblConfigSelector;
     private static final String CONFIG_SELECTOR_PROMPT = "Choose a configuration";
     private final ComboBox<String> cboConfigName;
-    private static final String COMBO_BOX_CONFIG_NAME = "config name combo box";
+    private static final String COMBO_BOX_ID_CONFIG_NAME = "config name combo box";
     private final Label lblConfigName;
     private final TextField txtConfigName;
     private static final String TXT_FLD_ID_CONFIG_NAME = "config name text field";
@@ -57,7 +59,7 @@ public class SettingsPane {
     //read/write parameters
     private final Label lblReadWriteMode;    
     private final ComboBox<String> cboReadWriteMode;  
-    private static final String COMBO_BOX_READ_WRITE = "read write combo box";
+    private static final String COMBO_BOX_ID_READ_WRITE = "read write combo box";
     private final Label lblReadFreq;
     private final TextField txtReadFreq;    
     private static final String TXT_FLD_ID_READ_FREQ = "read freq";
@@ -68,7 +70,7 @@ public class SettingsPane {
     //anti-theft parameters
     private final Label lblTheftAction;
     private final ComboBox<String> cboTheftAction;
-    private static final String COMBO_BOX_THEFT_ACTION = "theft action combo box";
+    private static final String COMBO_BOX_ID_THEFT_ACTION = "theft action combo box";
     private final Label lblTheftOn;
     private final TextField txtTheftOn;
     private static final String TXT_FLD_ID_THEFT_ON = "theft on";
@@ -84,119 +86,127 @@ public class SettingsPane {
     
     //constructor
     public SettingsPane() {
-        mainPane = new GridPane();
-        //row 0 of main
+        this.mainPane = new VBox(5);
+        configNamePane = new GridPane();
+        configNamePane.setVgap(5);
+        //row 0 of name pane
         //heading         
         lblGreeting = new Label("the settings pane is under construction");
-        mainPane.add(lblGreeting, 0, 0, 2, 1);
+        configNamePane.add(lblGreeting, 0, 0, 2, 1);
         
-        subPane = new GridPane();
-        //add these controls to sub pane, add sub pane at end.
-        //row 1
+        //row 1 of name pane
         //config name
         lblConfigSelector = new Label(SettingsPane.CONFIG_SELECTOR_PROMPT);
-        mainPane.add(lblConfigSelector, 0, 1);        
+        configNamePane.add(lblConfigSelector, 0, 1);        
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         cboConfigName = new ComboBox<>();
-        cboConfigName.setId(SettingsPane.COMBO_BOX_CONFIG_NAME);
+        cboConfigName.setId(SettingsPane.COMBO_BOX_ID_CONFIG_NAME);
         cboConfigName.setPromptText("Choose a configuration");
         cboConfigName.getItems().addAll(state.getConfigNames());
         cboConfigName.getItems().add("new");
         cboConfigName.setOnAction(e -> configSelector_Selected(e));
-        mainPane.add(cboConfigName, 1, 1);        
+        configNamePane.add(cboConfigName, 1, 1);        
         lblConfigName = new Label("Name");
         lblConfigName.setVisible(false);
-        mainPane.add(lblConfigName, 2, 1);        
+        configNamePane.add(lblConfigName, 2, 1);        
         txtConfigName = new TextField();        
         txtConfigName.setId(SettingsPane.TXT_FLD_ID_CONFIG_NAME);
         txtConfigName.setMaxWidth(200);
         txtConfigName.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtConfigName.setOnMouseExited(e -> this.txtFldMouseExit(e));
         txtConfigName.setVisible(false);
-        mainPane.add(txtConfigName, 3, 1);        
+        configNamePane.add(txtConfigName, 3, 1);        
         
-        //row 2     
+        mainPane.getChildren().add(configNamePane);
+        
+        controlsPane = new GridPane();
+        controlsPane.setVgap(5);
+        //add these controls to sub pane, add sub pane at end.
+        //row 0 of controls pane 
         //single/multi        
         lblMultiRead = new Label("Multi read t/f");
-        mainPane.add(lblMultiRead, 0, 2);
+        controlsPane.add(lblMultiRead, 0, 0);
         chkMultiRead = new CheckBox();
-        mainPane.add(chkMultiRead, 1, 2);
+        controlsPane.add(chkMultiRead, 1, 0);
         
-        //row 3, 4, 5
+        //row 1, 2 of controls pane 
         //read/write
         lblReadWriteMode = new Label("read/write/idle");
-        mainPane.add(lblReadWriteMode, 0, 3);
+        controlsPane.add(lblReadWriteMode, 0, 1);
         cboReadWriteMode = new ComboBox<>();
-        cboReadWriteMode.setId(SettingsPane.COMBO_BOX_READ_WRITE);
+        cboReadWriteMode.setId(SettingsPane.COMBO_BOX_ID_READ_WRITE);
         cboReadWriteMode.getItems().addAll(ReadWriteModeEnum.IDLE_MODE.name(), 
                 ReadWriteModeEnum.READ_MODE.name(), ReadWriteModeEnum.WRITE_MODE.name());
         cboReadWriteMode.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboReadWriteMode));
-        mainPane.add(cboReadWriteMode, 1, 3);
+        controlsPane.add(cboReadWriteMode, 1, 1);
                 
         lblReadFreq = new Label("Msec between readings");
-        mainPane.add(lblReadFreq, 0, 4);
+        controlsPane.add(lblReadFreq, 0, 2);
         txtReadFreq = new TextField();
         txtReadFreq.setId(SettingsPane.TXT_FLD_ID_READ_FREQ);
         txtReadFreq.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtReadFreq.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        mainPane.add(txtReadFreq, 1, 4);
+        controlsPane.add(txtReadFreq, 1, 2);
         
         lblXtraKeys = new Label("Extra keystrokes");
-        mainPane.add(lblXtraKeys, 2, 4);
+        controlsPane.add(lblXtraKeys, 2, 2);
         txtXtraKeys = new TextField();
         txtXtraKeys.setId(SettingsPane.TXT_FLD_ID_XTRA_KEYS);
         txtXtraKeys.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtXtraKeys.setOnMouseExited(e -> txtFldMouseExit(e));
             //could send this directly to input validator
-        mainPane.add(txtXtraKeys, 3, 4);
+        controlsPane.add(txtXtraKeys, 3, 2);
         
-        //row 5, 6
+        //row 3, 4 of controls pane 
         //anti-theft
         lblTheftAction = new Label("Theft bit action");
-        mainPane.add(lblTheftAction, 0, 5);
+        controlsPane.add(lblTheftAction, 0, 3);
         cboTheftAction = new ComboBox<>();
-        cboTheftAction.setId(SettingsPane.COMBO_BOX_THEFT_ACTION);
+        cboTheftAction.setId(SettingsPane.COMBO_BOX_ID_THEFT_ACTION);
         cboTheftAction.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
                 AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
         cboTheftAction.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboTheftAction));
-        mainPane.add(cboTheftAction, 1, 5);
+        controlsPane.add(cboTheftAction, 1, 3);
         
         lblTheftOn = new Label("Value of theft on");
-        mainPane.add(lblTheftOn, 0, 6);
+        controlsPane.add(lblTheftOn, 0, 4);
         txtTheftOn = new TextField();
         txtTheftOn.setId(TXT_FLD_ID_THEFT_ON);
         txtTheftOn.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtTheftOn.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        mainPane.add(txtTheftOn, 1, 6);
+        controlsPane.add(txtTheftOn, 1, 4);
         
         lblTheftOff = new Label("Value of theft off");
-        mainPane.add(lblTheftOff, 2, 6);
+        controlsPane.add(lblTheftOff, 2, 4);
         txtTheftOff = new TextField();
         txtTheftOff.setId(SettingsPane.TXT_FLD_ID_THEFT_OFF);
         txtTheftOff.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtTheftOff.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        mainPane.add(txtTheftOff, 3, 6);
+        controlsPane.add(txtTheftOff, 3, 4);
         
-        //row 7
+        //row 5 of controls pane 
         //buttons
         btnSaveConfig = new Button("Save");
         btnSaveConfig.setOnAction(e -> btnSaveConfig_Click(e));
-        mainPane.add(btnSaveConfig, 0, 7);
+        controlsPane.add(btnSaveConfig, 0, 5);
         
         btnDeleteConfig = new Button("Delete this config");
         btnDeleteConfig.setOnAction(e -> btnDeleteConfig_Click(e));
-        mainPane.add(btnDeleteConfig, 1, 7);
+        controlsPane.add(btnDeleteConfig, 1, 5);
         
         btnUseConfig = new Button("Use this config");
         btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
-        mainPane.add(btnUseConfig, 2, 7);
+        controlsPane.add(btnUseConfig, 2, 5);
         
         btnCloseSettingsPane = new Button("Close");
         btnCloseSettingsPane.setOnAction(e -> btnCloseSettingsPane_Click(e));
-        mainPane.add(btnCloseSettingsPane, 3, 7);
+        controlsPane.add(btnCloseSettingsPane, 3, 5);
+        
+        controlsPane.setVisible(false);
+        this.mainPane.getChildren().add(this.controlsPane);
     }
 
-    public GridPane getPane() {
+    public VBox getPane() {
         return this.mainPane;
     }
     /**
@@ -216,6 +226,7 @@ public class SettingsPane {
         txtConfigName.setVisible(isNewConfig);        
         //if existing config, load these values
         if (!isNewConfig && !selectedConfig.equals("")) {
+            this.controlsPane.setVisible(true);
             state = new AppState(selectedConfig); 
         //AppState loads default config in case of empty string, which should not happen
 //            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
@@ -320,39 +331,39 @@ public class SettingsPane {
      * One routine checks all text fields. A unique error message is shown 
      * for each text field. The message explains causes and solutions. All text 
      * fields share a second error indication, the changing background color.
-     * @param tf The text field to be validated.
+     * @param text_field The text field to be validated.
      */
-    private void txtFldInputValidator(TextField tf) {
+    private void txtFldInputValidator(TextField text_field) {
         System.out.println("validating text field");
-        System.out.println("testing input:" + tf.getText() + ":");
+        System.out.println("testing input:" + text_field.getText() + ":");
         Boolean validInput;
-        switch (tf.getId()) {
+        switch (text_field.getId()) {
             case SettingsPane.TXT_FLD_ID_CONFIG_NAME:
-                validInput = DataValidation.isValidConfigName(tf.getText());
+                validInput = DataValidation.isValidConfigName(text_field.getText());
                 if (!validInput) {
                     FxMsgBox.show(InputErrorMsg.ERR_CONFIG_NAME, InputErrorMsg.ERR_INPUT_TITLE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_READ_FREQ:
-                validInput = DataValidation.isValidReadFreq(tf.getText());
+                validInput = DataValidation.isValidReadFreq(text_field.getText());
                 if (!validInput) {
                     FxMsgBox.show(InputErrorMsg.ERR_READ_FREQ, InputErrorMsg.ERR_INPUT_TITLE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_THEFT_OFF:
-                validInput = DataValidation.isValidTheftValue(tf.getText());
+                validInput = DataValidation.isValidTheftValue(text_field.getText());
                 if (!validInput) {
                     FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_THEFT_ON:
-                validInput = DataValidation.isValidTheftValue(tf.getText());
+                validInput = DataValidation.isValidTheftValue(text_field.getText());
                 if (!validInput) {
                     FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_XTRA_KEYS:
-                validInput = DataValidation.isValidXtraKeys(tf.getText());
+                validInput = DataValidation.isValidXtraKeys(text_field.getText());
                 if (!validInput) {
                     FxMsgBox.show(InputErrorMsg.ERR_XTRA_KEYS, InputErrorMsg.ERR_INPUT_TITLE);
                 }
@@ -362,10 +373,10 @@ public class SettingsPane {
         }
         System.out.println("data validator says " + validInput);
         if (validInput) {
-            tf.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
+            text_field.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
         }
         else {
-            tf.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);                
+            text_field.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);                
         }
     }
     /**
@@ -400,13 +411,13 @@ public class SettingsPane {
                 state.setReadFreq(Integer.parseInt(txtReadFreq.getText()));
                 state.setReadWriteMode(AppState.readWriteStringToEnum(cboReadWriteMode.getValue()));
             }
+            FxMsgBox.show(AppConstants.SAVE_CONFIG_SUCCESS_MSG, AppConstants.SAVE_CONFIG_SUCCESS_TITLE);
             this.resetForm();
             //reset form only if config was valid and was saved successfully
         }
         else {
             FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_SAVE_TITLE);
-        }
-        
+        }        
     }
     /**
      * 
@@ -423,6 +434,7 @@ public class SettingsPane {
             System.out.println("response to confirmation " + okDelete);
             if (okDelete) {
                 if (state.deleteConfiguration(selectedConfig)) {
+                    FxMsgBox.show(AppConstants.DELETE_CONFIG_SUCCESS_MSG, AppConstants.DELETE_CONFIG_SUCCESS_TITLE);
                     state = new AppState(AppConstants.SETTINGS_DEFAULT); //in case previous state was the deleted one?
                     this.resetForm();
                 }
@@ -465,35 +477,49 @@ public class SettingsPane {
         //show single/multi, r/w, theft panes with current values    
         SkyRfidJavaApp.resetWorkingPanes();
     }
-    private void resetForm() {
+    /**
+     * The controls are embedded in sub-panes of the main pane. Cycling through the 
+     * controls requires two layers of for loops.
+     */
+    public void resetForm() {
         //TODO: reload config names to add any new configs or remove deleted configs
+        
         for (Node n : mainPane.getChildren()) {
-            //cannot use switch case because TextField.class is not considered a constant            
-            if (n.getClass() == TextField.class) {
-//                System.out.println("found a text field node " + n.getId());
-                TextField tf = (TextField)n;
-//                n.setStyle("");
-                tf.setStyle("");
-                tf.clear();
+            if (n.getClass().equals(GridPane.class)) {
+                GridPane subPane = (GridPane)n;
+                for (Node ctl : subPane.getChildren()) {
+                //cannot use switch case because TextField.class is not considered a constant            
+                    if (ctl.getClass() == TextField.class) {
+//                        System.out.println("found a text field node " + ctl.getId());
+                        TextField tf = (TextField)ctl;
+//                        n.setStyle("");
+                        tf.setStyle("");
+                        tf.clear();
+                    }
+                    if (ctl.getClass().equals(ComboBox.class)) {
+                        ComboBox cbo = (ComboBox)ctl;                
+//                        System.out.println("found combo box " + cbo.getId());
+//                        System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
+                        //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.
+                        cbo.getSelectionModel().clearSelection();
+//                        System.out.println("after clear selection value is " + cbo.getValue()); //null
+                    }
+                    if (ctl.getClass().equals(CheckBox.class)) {
+                        CheckBox chk = (CheckBox)ctl;
+//                        System.out.println("found check box " + chk.getId());
+                        chk.setSelected(false);
+                    }
+                    //ignore labels and buttons
+                }
             }
-            if (n.getClass().equals(ComboBox.class)) {
-                ComboBox cbo = (ComboBox)n;                
-//                System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
-                //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.
-                cbo.getSelectionModel().clearSelection();
-//                System.out.println("after clear selection value is " + cbo.getValue()); //null
-            }
-            if (n.getClass().equals(CheckBox.class)) {
-                CheckBox chk = (CheckBox)n;
-                chk.setSelected(false);
-            }
-            //ignore labels and buttons
         }
+        
         state = new AppState(AppConstants.SETTINGS_DEFAULT);
         //must reinstantiate app state so the changed xml doc is loaded
         cboConfigName.getItems().clear();
         cboConfigName.getItems().addAll(state.getConfigNames());
         cboConfigName.getItems().add("new");
+        this.controlsPane.setVisible(false);
     }
     
     private Boolean isValidConfig() {
