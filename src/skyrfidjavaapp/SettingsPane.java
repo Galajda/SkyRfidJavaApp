@@ -38,8 +38,9 @@ import javafx.scene.input.KeyCode;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SettingsPane {
-    
-    private final GridPane pane;    
+    //use vbox for main pane, grid pane for name, grid pane for rest of controls
+    private final GridPane mainPane; //holds the config name cbo box and the sub pane
+    private final GridPane subPane; //holds the rest of the controls so they can be hidden as a group.
     private AppState state;
     //heading
     private final Label lblGreeting;
@@ -83,16 +84,18 @@ public class SettingsPane {
     
     //constructor
     public SettingsPane() {
-        pane = new GridPane();
-        //row 0
+        mainPane = new GridPane();
+        //row 0 of main
         //heading         
         lblGreeting = new Label("the settings pane is under construction");
-        pane.add(lblGreeting, 0, 0, 2, 1);
+        mainPane.add(lblGreeting, 0, 0, 2, 1);
         
+        subPane = new GridPane();
+        //add these controls to sub pane, add sub pane at end.
         //row 1
         //config name
         lblConfigSelector = new Label(SettingsPane.CONFIG_SELECTOR_PROMPT);
-        pane.add(lblConfigSelector, 0, 1);        
+        mainPane.add(lblConfigSelector, 0, 1);        
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         cboConfigName = new ComboBox<>();
         cboConfigName.setId(SettingsPane.COMBO_BOX_CONFIG_NAME);
@@ -100,101 +103,101 @@ public class SettingsPane {
         cboConfigName.getItems().addAll(state.getConfigNames());
         cboConfigName.getItems().add("new");
         cboConfigName.setOnAction(e -> configSelector_Selected(e));
-        pane.add(cboConfigName, 1, 1);        
+        mainPane.add(cboConfigName, 1, 1);        
         lblConfigName = new Label("Name");
         lblConfigName.setVisible(false);
-        pane.add(lblConfigName, 2, 1);        
+        mainPane.add(lblConfigName, 2, 1);        
         txtConfigName = new TextField();        
         txtConfigName.setId(SettingsPane.TXT_FLD_ID_CONFIG_NAME);
         txtConfigName.setMaxWidth(200);
         txtConfigName.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtConfigName.setOnMouseExited(e -> this.txtFldMouseExit(e));
         txtConfigName.setVisible(false);
-        pane.add(txtConfigName, 3, 1);        
+        mainPane.add(txtConfigName, 3, 1);        
         
         //row 2     
         //single/multi        
         lblMultiRead = new Label("Multi read t/f");
-        pane.add(lblMultiRead, 0, 2);
+        mainPane.add(lblMultiRead, 0, 2);
         chkMultiRead = new CheckBox();
-        pane.add(chkMultiRead, 1, 2);
+        mainPane.add(chkMultiRead, 1, 2);
         
         //row 3, 4, 5
         //read/write
         lblReadWriteMode = new Label("read/write/idle");
-        pane.add(lblReadWriteMode, 0, 3);
+        mainPane.add(lblReadWriteMode, 0, 3);
         cboReadWriteMode = new ComboBox<>();
         cboReadWriteMode.setId(SettingsPane.COMBO_BOX_READ_WRITE);
         cboReadWriteMode.getItems().addAll(ReadWriteModeEnum.IDLE_MODE.name(), 
                 ReadWriteModeEnum.READ_MODE.name(), ReadWriteModeEnum.WRITE_MODE.name());
         cboReadWriteMode.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboReadWriteMode));
-        pane.add(cboReadWriteMode, 1, 3);
+        mainPane.add(cboReadWriteMode, 1, 3);
                 
         lblReadFreq = new Label("Msec between readings");
-        pane.add(lblReadFreq, 0, 4);
+        mainPane.add(lblReadFreq, 0, 4);
         txtReadFreq = new TextField();
         txtReadFreq.setId(SettingsPane.TXT_FLD_ID_READ_FREQ);
         txtReadFreq.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtReadFreq.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        pane.add(txtReadFreq, 1, 4);
+        mainPane.add(txtReadFreq, 1, 4);
         
         lblXtraKeys = new Label("Extra keystrokes");
-        pane.add(lblXtraKeys, 2, 4);
+        mainPane.add(lblXtraKeys, 2, 4);
         txtXtraKeys = new TextField();
         txtXtraKeys.setId(SettingsPane.TXT_FLD_ID_XTRA_KEYS);
         txtXtraKeys.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtXtraKeys.setOnMouseExited(e -> txtFldMouseExit(e));
             //could send this directly to input validator
-        pane.add(txtXtraKeys, 3, 4);
+        mainPane.add(txtXtraKeys, 3, 4);
         
         //row 5, 6
         //anti-theft
         lblTheftAction = new Label("Theft bit action");
-        pane.add(lblTheftAction, 0, 5);
+        mainPane.add(lblTheftAction, 0, 5);
         cboTheftAction = new ComboBox<>();
         cboTheftAction.setId(SettingsPane.COMBO_BOX_THEFT_ACTION);
         cboTheftAction.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
                 AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
         cboTheftAction.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboTheftAction));
-        pane.add(cboTheftAction, 1, 5);
+        mainPane.add(cboTheftAction, 1, 5);
         
         lblTheftOn = new Label("Value of theft on");
-        pane.add(lblTheftOn, 0, 6);
+        mainPane.add(lblTheftOn, 0, 6);
         txtTheftOn = new TextField();
         txtTheftOn.setId(TXT_FLD_ID_THEFT_ON);
         txtTheftOn.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtTheftOn.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        pane.add(txtTheftOn, 1, 6);
+        mainPane.add(txtTheftOn, 1, 6);
         
         lblTheftOff = new Label("Value of theft off");
-        pane.add(lblTheftOff, 2, 6);
+        mainPane.add(lblTheftOff, 2, 6);
         txtTheftOff = new TextField();
         txtTheftOff.setId(SettingsPane.TXT_FLD_ID_THEFT_OFF);
         txtTheftOff.setOnKeyPressed(e -> this.txtFldKeyPress(e));
         txtTheftOff.setOnMouseExited(e -> this.txtFldMouseExit(e));
-        pane.add(txtTheftOff, 3, 6);
+        mainPane.add(txtTheftOff, 3, 6);
         
         //row 7
         //buttons
         btnSaveConfig = new Button("Save");
         btnSaveConfig.setOnAction(e -> btnSaveConfig_Click(e));
-        pane.add(btnSaveConfig, 0, 7);
+        mainPane.add(btnSaveConfig, 0, 7);
         
         btnDeleteConfig = new Button("Delete this config");
         btnDeleteConfig.setOnAction(e -> btnDeleteConfig_Click(e));
-        pane.add(btnDeleteConfig, 1, 7);
+        mainPane.add(btnDeleteConfig, 1, 7);
         
         btnUseConfig = new Button("Use this config");
         btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
-        pane.add(btnUseConfig, 2, 7);
+        mainPane.add(btnUseConfig, 2, 7);
         
         btnCloseSettingsPane = new Button("Close");
         btnCloseSettingsPane.setOnAction(e -> btnCloseSettingsPane_Click(e));
-        pane.add(btnCloseSettingsPane, 3, 7);
+        mainPane.add(btnCloseSettingsPane, 3, 7);
     }
 
     public GridPane getPane() {
-        return this.pane;
+        return this.mainPane;
     }
     /**
      * Called when a change is made to the config name combo box.
@@ -205,16 +208,18 @@ public class SettingsPane {
      */
     private void configSelector_Selected(ActionEvent e) {
         String selectedConfig = (cboConfigName.getValue() == null)? "" : cboConfigName.getValue();   
-        //after reset, selector value is null, which complicates following steps
+        //after reset, selector value is null, which complicates following steps.
+        //use empty string instead.
         System.out.println("you selected config " + selectedConfig);
         Boolean isNewConfig = selectedConfig.equals("new");        
         lblConfigName.setVisible(isNewConfig);
         txtConfigName.setVisible(isNewConfig);        
         //if existing config, load these values
         if (!isNewConfig && !selectedConfig.equals("")) {
-            state = new AppState(selectedConfig); //AppState returns default config in case of empty string
-            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
-            System.out.println("its r/w value is " + state.getReadWriteMode().name());
+            state = new AppState(selectedConfig); 
+        //AppState loads default config in case of empty string, which should not happen
+//            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
+//            System.out.println("its r/w value is " + state.getReadWriteMode().name());
             this.cboConfigName.getSelectionModel().select(selectedConfig);
             this.chkMultiRead.setSelected(state.isMultiRead());
             this.cboReadWriteMode.getSelectionModel().select(state.getReadWriteMode().name());
@@ -227,27 +232,50 @@ public class SettingsPane {
     }
     /**
      * Matches key press with a value from the combo box. Java FX does not do this
-     * automatically. Unlike text field events, combo box events raise compiler warnings
-     * due to possible type mismatch when retrieving the source from the event. In order
+     * automatically. The algorithm tries to match the key pressed with the first letter
+     * of one of the choices. In order to handle repeated first letters among the 
+     * choices, the algorithm first searches for one match, then searches for a second match
+     * further down the list. If a second match is found, this is selected. If none
+     * is found, the search resumes at the top of the list. If the depressed key
+     * does not match any of the choices, nothing happens. This routine does not
+     * interrupt the action of the arrow keys.
+     * Unlike text field events, combo box events raise compiler warnings
+     * due to possible type mismatch when deriving the source from the event. In order
      * to prevent these warnings, the combo box is passed directly to the handler, so that
-     * the compiler recognizes its type.
-     * This routine is not refined. See TODO below.
-     * @param e
-     * @param cbo the variable representing the combo box
+     * the compiler recognizes its type.    
+     * @param e the key press event
+     * @param combo_box the variable representing the combo box
      */
-    private void comboBoxKeyboardShortcut(KeyEvent e, ComboBox<String> cbo) {
+    private void comboBoxKeyboardShortcut(KeyEvent e, ComboBox<String> combo_box) {
         //idea from SO 13362607 is to check the type of each element.
         //since I have the calling object, I think it is easier to pass this
         //to the handler        
-        //TODO: search for next match after current item index. if none, start at 0
-        System.out.println("keyboard shortcut on combo box " + cbo.getId());        
+        
+        System.out.println("keyboard shortcut on combo box " + combo_box.getId());        
         System.out.println("key press in r/w selector " + e.getCode());
-        System.out.println("item text " + e.getText());
-        for (String item : cbo.getItems() ) {
-            System.out.println("option item " + item);            
-            if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
-                cbo.getSelectionModel().select(item);
+//        System.out.println("event get text " + e.getText());
+        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
+        //index = 0 is first item in list. if none selected, index = -1
+        int firstMatchLocation = (combo_box.getSelectionModel().getSelectedIndex() < 0) ? 0 : combo_box.getSelectionModel().getSelectedIndex();
+        Boolean foundSecondMatch = false;
+        //start searching for a new match after the first match
+        //if no first match is found, this loop is skipped, foundSecondMatch remains false
+        for (int i=firstMatchLocation+1; i<combo_box.getItems().size(); i++) {
+            if (e.getText().equalsIgnoreCase(combo_box.getItems().get(i).substring(0,1))) {
+                combo_box.getSelectionModel().select(i);
+                foundSecondMatch = true;
+                System.out.println("matched " + e.getText() + " with " + combo_box.getItems().get(i));
                 break;
+            }
+        }
+        //if no second match is found, start from the 0 index
+        if (!foundSecondMatch) {
+            for (String item : combo_box.getItems() ) {
+                System.out.println("\tcycling through options. item " + item);            
+                if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
+                    combo_box.getSelectionModel().select(item);
+                    break;
+                }
             }
         }        
     }
@@ -439,7 +467,7 @@ public class SettingsPane {
     }
     private void resetForm() {
         //TODO: reload config names to add any new configs or remove deleted configs
-        for (Node n : pane.getChildren()) {
+        for (Node n : mainPane.getChildren()) {
             //cannot use switch case because TextField.class is not considered a constant            
             if (n.getClass() == TextField.class) {
 //                System.out.println("found a text field node " + n.getId());
