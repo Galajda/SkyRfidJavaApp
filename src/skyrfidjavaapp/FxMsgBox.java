@@ -21,13 +21,16 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.event.ActionEvent;
 //import javafx.event.Event;
-//import javafx.event.EventHandler;
+import javafx.event.EventHandler;
+
+
 
 /**
  *
@@ -37,8 +40,15 @@ public class FxMsgBox {
     private static final String BTN_OK_TXT = "OK";
     private static final String BTN_CANCEL_TXT = "Cancel";
     private Boolean confirmDialogResult;
+    private Boolean loginSuccess;
     
-    public FxMsgBox() { confirmDialogResult = false; }
+    private static final String LOGIN_TITLE = "Login";
+    private static final String LOGIN_LABEL = "Enter the password";
+    
+    public FxMsgBox() { 
+        confirmDialogResult = false;
+        loginSuccess = false;
+    }
     
     /**
      * Displays a message box using FX tools
@@ -133,4 +143,63 @@ public class FxMsgBox {
 //            System.out.println("handling the click in inner class");
 //        }        
 //    }
+    /**
+     * experimental. use the style of the pwd field to indicate success
+     * @param realPassword where should the app store this? hash in xml?
+     * @return 
+     */
+    public Boolean login(String realPassword) {
+        
+        final Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle(FxMsgBox.LOGIN_TITLE);
+        stage.setMinWidth(300);
+        stage.setMaxWidth(600);
+        //set width according to content. 
+        stage.getIcons().add(new Image("skyrfidjavaapp/images/attention.jpg"));
+//        Boolean loginSuccess2 = false;
+        final Label lblPassword = new Label(FxMsgBox.LOGIN_LABEL); //how to wrap message?
+        final PasswordField pwdField = new PasswordField();
+        Button btnOk = new Button(FxMsgBox.BTN_OK_TXT);
+//        btnOk.setOnAction(e->validatePassword(e, pwdField.getText(), realPassword, stage));
+        btnOk.setOnAction(
+            new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Boolean valid = (pwdField.getText() != null && 
+                            realPassword != null  && pwdField.getText().equals(realPassword));
+                    if (valid) {
+                        pwdField.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
+                        //let user x out?
+//                            stage.close();
+                    }
+                    else {
+                        pwdField.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);
+                    }
+                }
+            }
+        );
+        VBox pane = new VBox(30);
+        pane.getChildren().addAll(lblPassword, pwdField, btnOk);
+        pane.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(pane);
+        stage.setScene(scene);
+        stage.showAndWait();
+        
+        return pwdField.getStyle().equals(AppConstants.STYLE_TEXT_FLD_OK);
+        //flip because app constant style is guaranteed to be non-null?
+    }
+    private void validatePassword(ActionEvent e, String testPwd, String realPwd, Stage s) {
+        System.out.print("validating password " + testPwd + " against " + realPwd);
+        loginSuccess = (testPwd != null && realPwd != null  && testPwd.equals(realPwd));
+        System.out.println(" result " + loginSuccess);
+        if (loginSuccess) {
+            s.close();
+        }
+        else {
+            
+        }
+        
+        
+    }
 }

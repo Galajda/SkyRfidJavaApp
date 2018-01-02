@@ -31,6 +31,7 @@ public class IdlePane
     private final Label lblWelcome;
     
 //    private final Button btnShowConfirmation;
+    private final Button btnShowLogin;
     
     
     IdlePane()
@@ -44,6 +45,9 @@ public class IdlePane
 //        btnShowConfirmation = new Button("Show confirmation box");
 //        btnShowConfirmation.setOnAction(e -> btnShowConfirmation_Click(e));
 //        pane.getChildren().add(btnShowConfirmation);
+        btnShowLogin = new Button("Show login box");
+        btnShowLogin.setOnAction(e -> btnShowLogin_Click(e));
+        pane.getChildren().add(btnShowLogin);
                
     }
     VBox getPane()
@@ -57,4 +61,9 @@ public class IdlePane
 //                //FxMsgBox.confirm("click ok or cancel", "confirm the action");
 //        System.out.println("msg box response " + confirmationResponse);
 //    }
+    private void btnShowLogin_Click(ActionEvent e) {
+        FxMsgBox loginDialog = new FxMsgBox();
+        Boolean loginSuccess = loginDialog.login("pass");
+        System.out.println("login success " + loginSuccess);
+    }
 }
