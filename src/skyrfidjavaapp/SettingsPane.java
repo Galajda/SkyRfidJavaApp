@@ -32,8 +32,6 @@ import javafx.scene.input.KeyCode;
 
 /**
  *
- * The key pressed event triggers validation for Enter as well as Tab. When the user presses Tab,
- * the source of key released is the next control in the tab order, too late to validate the previous control.
  * 
  * 
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
@@ -292,7 +290,9 @@ public class SettingsPane {
     }
     /**
      * Triggers validation for text field entries. This event covers the case where
-     * the user exits the text field by Enter or Tab keys. 
+     * the user exits the text field by Enter or Tab keys.      
+     * The key pressed event is preferred to the key released event. When the user presses Tab,
+     * the source of key released is the next control in the tab order, too late to validate the previous control.
      * @param e 
      */
     private void txtFldKeyPress(KeyEvent e) {        
