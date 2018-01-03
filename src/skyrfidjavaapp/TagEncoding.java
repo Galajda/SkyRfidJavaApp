@@ -25,6 +25,7 @@ public class TagEncoding {
     /**
      * 
      * @param encodedArray the array of char bytes as read by the USB device
+<<<<<<< HEAD
      * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
      * @return a human-readable sequence of numbers representing a barcode
      */
@@ -57,17 +58,30 @@ public class TagEncoding {
      * @return a human-readable sequence of numbers representing a barcode
      */
     public static String decode_old(char[] inputStream, int arrayLength) {
+=======
+     * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
+     * @return a human-readable sequence of numbers representing a barcode
+     */
+    public static String decode(char[] encodedArray, int arrayLength) {
+>>>>>>> b5952a0c4fd2462e610c422be536cea58c2b18a9
         System.out.println("decoding char array");
 //        System.out.println("char array length " + inputStream.length);
-        for (int i = 0; i <arrayLength; i++) {
-            System.out.print("element" + i + ": " + String.format("%04x", (int)inputStream[i]) + ", ");
-        }
-        System.out.println();
+//        for (int i = 0; i <arrayLength; i++) {
+//            System.out.print("element" + i + ": " + String.format("%04x", (int)encodedArray[i]));
+//            System.out.print(" break up into ");
+//            System.out.print("1st: " + (char)(encodedArray[i] - (encodedArray[i]/0x100)*0x100)
+//                    + ", 2nd: " + (char)(encodedArray[i]/0x100) + ", ");
+//            System.out.println();
+//        }
+//        System.out.println();
+        
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i <arrayLength; i++) {
-            int chunk = (int)inputStream[i];
-            builder.append((chunk - (chunk/0x100)*0x100)-0x30);
-            builder.append((chunk/0x100)-0x30);
+//            int chunk = (int)encodedArray[i];
+            builder.append((char)(encodedArray[i] - (encodedArray[i]/0x100)*0x100));
+            builder.append((char)(encodedArray[i]/0x100));
+//            builder.append((chunk - (chunk/0x100)*0x100)-0x30);
+//            builder.append((chunk/0x100)-0x30);
         }
         return builder.toString();
     }
@@ -82,12 +96,13 @@ public class TagEncoding {
         
         
 //        char[] bcArray = new char[barcode.length()];
-//        char[] bcArray = barcode.toCharArray();
+        char[] bcArray = barcode.toCharArray();
 //        System.out.println("the barcode char array is");
 //        System.out.print("\t");
 //        for (int i=0;i<bcArray.length;i++) {
-//            System.out.print("element " + i + ": " + bcArray[i] + ", ");
+//            System.out.println("\telement " + i + ": " + bcArray[i] + ", ");
 //        }
+//        System.out.println("finish char array");
 //        System.out.println();
 //        System.out.println("the buffer array is");
 //        System.out.print("\t");
