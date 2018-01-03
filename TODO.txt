@@ -4,13 +4,12 @@ Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml. Send extra keystrokes with barcode. Allow
 	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
 	two KeyEvent.VK_ENTER when program y is the active window.
-    If prompt text is shown in config selector, do not show the rest of the pane. A user could 
-        fill out the whole form and lose their work when they try to save.
+    Adjust padding of panes for better fit
 
 
 
 App title:
-    Show name of current configuration
+    Concatenate app title with name of current configuration 
 AppState:
     Why do I use ISO-8859-1 encoding of xml instead of utf-8?
     Add functions for new state elements
