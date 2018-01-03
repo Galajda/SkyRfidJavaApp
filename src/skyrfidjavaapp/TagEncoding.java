@@ -25,7 +25,6 @@ public class TagEncoding {
     /**
      * 
      * @param encodedArray the array of char bytes as read by the USB device
-<<<<<<< HEAD
      * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
      * @return a human-readable sequence of numbers representing a barcode
      */
@@ -57,13 +56,7 @@ public class TagEncoding {
      * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
      * @return a human-readable sequence of numbers representing a barcode
      */
-    public static String decode_old(char[] inputStream, int arrayLength) {
-=======
-     * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
-     * @return a human-readable sequence of numbers representing a barcode
-     */
-    public static String decode(char[] encodedArray, int arrayLength) {
->>>>>>> b5952a0c4fd2462e610c422be536cea58c2b18a9
+    public static String decode_old(char[] inputStream, int arrayLength) {   
         System.out.println("decoding char array");
 //        System.out.println("char array length " + inputStream.length);
 //        for (int i = 0; i <arrayLength; i++) {
@@ -78,8 +71,6 @@ public class TagEncoding {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i <arrayLength; i++) {
 //            int chunk = (int)encodedArray[i];
-            builder.append((char)(encodedArray[i] - (encodedArray[i]/0x100)*0x100));
-            builder.append((char)(encodedArray[i]/0x100));
 //            builder.append((chunk - (chunk/0x100)*0x100)-0x30);
 //            builder.append((chunk/0x100)-0x30);
         }
