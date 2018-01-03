@@ -24,6 +24,13 @@ public class AppConstants
 {
     //title
     public static final String APP_TITLE = "RFID program";
+    
+    //messages
+    public static final String DELETE_CONFIG_SUCCESS_TITLE = "Delete configuration";
+    public static final String DELETE_CONFIG_SUCCESS_MSG = "Configuration deleted.";
+    public static final String SAVE_CONFIG_SUCCESS_TITLE = "Save configuration";
+    public static final String SAVE_CONFIG_SUCCESS_MSG = "Configuration saved.";
+    
     //RFID reader constants
     public static final char READ_SINGLE_CARD = 0x36;
     public static final char READ_MULTI_CARDS = 0x16;
@@ -34,20 +41,38 @@ public class AppConstants
     public static final String SETTINGS_DEFAULT = "default";
     public static final String SETTINGS_CURRENT = "current";
     
-    public static final String R_W_MODE_IDLE = "IDLE_MODE";
-    public static final String R_W_MODE_READ = "READ_MODE";
-    public static final String R_W_MODE_WRITE = "WRITE_MODE";
+    //read write mode enum strings
+    public static final String ENUM_R_W_MODE_IDLE = "IDLE_MODE";
+    public static final String ENUM_R_W_MODE_READ = "READ_MODE";
+    public static final String ENUM_R_W_MODE_WRITE = "WRITE_MODE";
     
-    public static final String THEFT_MODE_ON = "TURN_ON";
-    public static final String THEFT_MODE_OFF = "TURN_OFF";
-    public static final String THEFT_MODE_NONE = "NO_ACTION";
+    //anti theft enum strings
+    public static final String ENUM_THEFT_MODE_ON = "TURN_ON";
+    public static final String ENUM_THEFT_MODE_OFF = "TURN_OFF";
+    public static final String ENUM_THEFT_MODE_NONE = "NO_ACTION";
     
     //xml fields
-    public static final String XML_ELE_ROOT = "settings";
-    public static final String XML_ELE_PARM_SET = "parameter_set";            
-    public static final String XML_ELE_TYPE = "type";   
-    public static final String XML_ELE_THEFT_BIT = "theft_bit_action";
-    public static final String XML_ELE_R_W_MODE = "read_write_mode";
-    public static final String XML_ELE_TYPE_MULTI_READ = "multi_read";
+    public static final String APP_STATE_XML_ELE_ROOT = "settings";
+    public static final String APP_STATE_XML_ELE_PARM_SET = "parameter_set";            
+    public static final String APP_STATE_XML_ATTR_ID = "id";
+    public static final String APP_STATE_XML_ELE_THEFT_ACTION = "theft_bit_action";
+    public static final String APP_STATE_XML_ELE_R_W_MODE = "read_write_mode";
+    public static final String APP_STATE_XML_ELE__MULTI_READ = "multi_read";
+    public static final String APP_STATE_XML_ELE_READ_FREQ = "read_frequency";
+    public static final String APP_STATE_XML_ELE_EXTRA_KEYS = "extra_keystrokes";
+    public static final String APP_STATE_XML_ELE_THEFT_ON = "anti_theft_on";
+    public static final String APP_STATE_XML_ELE_THEFT_OFF ="anti_theft_off";
     
+    public static final String CONFIG_XML_ELE_ROOT = "config_names";
+    public static final String CONFIG_XML_ELE_NAME = "config_name";
+                                    
+    //styles    
+    public static final String STYLE_TEXT_FLD_OK = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #adff2f;"; //green
+    public static final String STYLE_TEXT_FLD_FAIL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ff1493;"; //red
+    public static final String STYLE_TEXT_FLD_NEUTRAL = "-fx-border-color: black; -fx-border-width: 2;"
+            + "-fx-border-radius:5; -fx-background-color: #ffffff;"; //white
+    
+
 }

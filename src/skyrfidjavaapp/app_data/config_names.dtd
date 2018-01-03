@@ -23,20 +23,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 
-<!ELEMENT settings (parameter_set+)>
-<!ELEMENT parameter_set (theft_bit_action,read_write_mode,multi_read, 
-    read_frequency, extra_keystrokes, anti_theft_on, anti_theft_off)>
-<!ATTLIST parameter_set id ID #REQUIRED>
-<!--
-<!ELEMENT type (#PCDATA)>-->
-<!ELEMENT theft_bit_action (#PCDATA)>
-<!ELEMENT read_write_mode (#PCDATA)>
-<!ELEMENT multi_read (#PCDATA)>
-<!ELEMENT read_frequency (#PCDATA)>
-<!ELEMENT extra_keystrokes (#PCDATA)>
-<!ELEMENT anti_theft_on (#PCDATA)>
-<!ELEMENT anti_theft_off (#PCDATA)>
+<!ELEMENT config_names (config_name+)>
+<!ELEMENT config_name (#PCDATA)>
 
-<!--
-    remove type element. add id attribute to parameter_set
--->

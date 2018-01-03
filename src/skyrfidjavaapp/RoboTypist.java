@@ -19,10 +19,10 @@ package skyrfidjavaapp;
 import com.sun.jna.Native;
 import java.awt.Robot;
 import java.awt.AWTException;
-import java.lang.SecurityException;
+//import java.lang.SecurityException;
 import java.awt.event.KeyEvent;
 import static java.lang.System.out;
-import javafx.scene.input.KeyCode;
+//import javafx.scene.input.KeyCode;
 /**
  *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
@@ -46,8 +46,8 @@ public class RoboTypist {
     /**
      * This function shall decide whether to send keys or not, depending
      * upon the active window on the screen. If the RFID program (or IDE) is active,
-     * keys will not be sent
-     * @param card the string to be sent to the current input focus
+     * keys will not be sent.
+     * @param card the string to be sent to the current input focus, plus any extra characters
      */
     public void sendKeys(String card)
     {
@@ -65,14 +65,16 @@ public class RoboTypist {
             for (char c : charArray) //does this ensure same order?
             {
                 //keycode = c-32; //works for lower case letters, not for upper case or numerals. make array?
+                //how to recognize escape chars?
                 r.keyPress(getKeycode(c));
                 r.keyRelease(getKeycode(c));
                 //out.println("the char array ele c is " + c );
                 r.delay(100);
             }
 //            out.println("for loop finished");
-            r.keyPress(KeyEvent.VK_ENTER);
-            r.keyRelease(KeyEvent.VK_ENTER);            
+            //let the caller decide what else to send
+//            r.keyPress(KeyEvent.VK_ENTER);
+//            r.keyRelease(KeyEvent.VK_ENTER);            
         }        
     }
     

@@ -4,26 +4,68 @@ Add Settings pane to change defaults and advanced properties.
     Add extra keystrokes element to xml. Send extra keystrokes with barcode. Allow
 	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
 	two KeyEvent.VK_ENTER when program y is the active window.
-    Add read frequency element. How often does reader check for tag in field?
-    Add more configurations. Allow user to choose a config, rather than individual 
-    parameters.
-    Move anti theft values to settings, rather than hard-coded
+    Adjust padding of panes for better fit
 
+
+
+App title:
+    Concatenate app title with name of current configuration 
+AppState:
+    Why do I use ISO-8859-1 encoding of xml instead of utf-8?
+    Add functions for new state elements
+    Is it good practice to exit application in case of error in constructor?
+    getConfig what if input string is null?
+    Constructor: move error messages to constants
+    Remove all getters and setters, make getSettingsValue and setSettingsValue public? 
+        The advantage of the individual accessors is that one knows when one has covered 
+        all of the parameters by cycling through all the functions. This makes writing code
+        more reliable. See for example SettingsPane btnSaveConfig_Click.
+    
+    
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
 Write pane:
     Communicate errors to user: no device, no tag, bad input
+    Validate input before writing
     
 Read pane:    
     If detect multiple tags in single mode, throw error.
 TagActor:
     Move uid to parent?
+    
+TheftBitWorker:
+    replace on/off enum with the new value
+    delete the whole thing.
+
+Settings pane:
+    comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first
+        by pressing the same key again
+    
+    Show and hide buttons to guide user to proper operation. zB do not allow use config before saving. 
+        Or save automatically? Cancel instead of delete new config?
+AppConstants:
+    
+AppSettingsEnum:
+    delete. string constants suffice.
+
+DataValidation:
+    Check length in the reg ex pattern.    
+
+Config names xml and dtd:
+    delete
+RoboTypist:
+    recognize escape chars like \n \l
+dll functions
+    does stay quiet state persist after tag leaves field?
+    rf.exe can call stay quiet and reset to ready. when stay quiet tag leaves field and is 
+        reintroduced, it is ready
+    how does multi read work? 
+=======
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
 	Catch errors related to existence of user32.dll.
 	Customize extra keystrokes according to the active window.
-=======
-    
+Make jQuery for XML.    
 
 Test barcodes that contain letters
 
