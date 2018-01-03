@@ -1,26 +1,19 @@
 ***Description***
 Features: Only single reading is implemented, despite the single/multi button. Read command
-    is executed on a timer. Button commands exist for debugging. Raw hex output to console 
-    plus decoded number in application window.
+    is executed on a timer. Button commands to start and stop reading exist for debugging. 
+    Raw hex output to console plus decoded number in application window.
 
 Why use enums and constant strings for app state? Enums control value of fcn arguments. 
-    Constant strings reduce spelling errors in values that are used in multiple methods.
-
-The logic of the AppState. The default state is managed through a settings screen that has not been
-    implemented yet. When the program launches, or when reset is chosen from the file menu, the 
-    default values are copied to the current values. The current values are always used to load panes.
-    Each pane is responsible for retrieving app state and configuring accordingly. When a pane
-    changes the state, it must notify the application by calling loadRootPane(), which will reset
-    the panes with the new values.
+    Constant strings reduce spelling errors in values that are used in multiple locations
+    and simplify multiple-language support. It is common practice in Android app development.
 
 Control of device port. I cannot find a good place to close the port. For now, I will open and 
-    close it for each read operation.
-    Rearrange reader functions for greater speed. One instance of reader for the read pane.
-    Open the port when the timer starts. Close the port when the timer stops.
+    close it for each read operation. Rearrange reader functions for greater speed. One instance 
+    of reader for the read pane. Open the port when the timer starts. Close the port when the timer stops.
 How to coordinate change of app state with change of panes?
     1) When the user clicks a radio button, the state and the panes must change. Let the AppState
         setSettings... fcns change the panes to ensure that it is done.
-    2) When the user changes the default settings (not yet implemented), the panes do not 
+    2) When the user changes the default settings, the panes do not 
         need to be changed. Let the button event handlers change app state and panes as separate commands.
     3) Let the app state decide if the panes need to be reloaded by checking the settings category 
         that is being changed.
@@ -38,7 +31,17 @@ Unsatisfied Link Error. Cannot load umf.dll.
     Previous versions have used other workarounds, such as putting the dll in the root 
     directory, which did not work in this application for an unknown reason.
 
-AppState file path may not work when packaged as jar.
+Settings pane captures keypresses in combo boxes to guide the user to the desired choice. The compiler
+    objects to casting the event source as a combo box, despite attempts to check the type before casting.
+    Compiler warning
+        Note: C:\Users\MichalG\Documents\NetBeansProjects\SkyRfidJavaApp\src\skyrfidjavaapp\SettingsPane.java 
+        uses unchecked or unsafe operations.
+        Note: Recompile with -Xlint:unchecked for details.
+    My solution is to pass the combo box directly to the event handler, so that the compiler recognizes
+        its type.
+        
+
+AppState xml file path may not work when packaged as jar.
 
 Auto-read timer runs after the read pane is changed.
     Solution: Keep one instance of each pane in the SkyRfidJavaApp class. Create a flag 
@@ -52,12 +55,11 @@ Multiple handles
     Is there a conflict if reader and writer have handles on the RFID device? I will avoid the
     question by closing the port when the pane switches from read to write.
 
+Use of "this." I use it often to activate NetBeans auto-complete. It makes typing easier. Is there a risk?
+
 Multiple tags
     Timer must adjust to number of cards read so that all can be shown before next read.
 
-dll functions
-    does stay quiet state persist after tag leaves field?
-    how does multi read work? 
 
 
     

@@ -23,3 +23,4 @@ package skyrfidjavaapp;
 public enum AppSettingsEnum {
     SETTINGS_DEFAULT, SETTINGS_CURRENT
 }
+

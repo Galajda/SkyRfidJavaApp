@@ -44,7 +44,7 @@ public class SkyRfidJavaApp extends Application {
     private static WritePane writePane;
     private static IdlePane idlePane;
     private static AntiTheftPane antiTheftPane;
-    
+    private static SettingsPane settingsPane;
     
     /**
      * @param args the command line arguments
@@ -54,15 +54,17 @@ public class SkyRfidJavaApp extends Application {
         launch(args);
     }
     
-    @Override public void start(Stage primaryStage) 
+    @Override 
+    public void start(Stage primaryStage) 
     {                        
         //return app state to default before loading panes        
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         state.resetAppState(); 
-        
+        SkyRfidJavaApp.initializePanes();
         SkyRfidJavaApp.initializeRootPane();
         System.out.println("app start asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
                 
         Scene scene = new Scene(rootPane, 700, 250);
         
@@ -84,9 +86,10 @@ public class SkyRfidJavaApp extends Application {
         //Platform.exit() does not stop timer
     }
     /**
-     * Used when application launches.
+     * Creates instances for all of the panes used in the application. One instance of each
+     * is used throughout operation.
      */
-    private static void initializeRootPane() {
+    private static void initializePanes() {
         rootPane = new BorderPane();
         pgmMenu = new MenuBarPane();
         singleMultiPane = new ToggleSingleMultiPane();
@@ -94,28 +97,52 @@ public class SkyRfidJavaApp extends Application {
         writePane = new WritePane();
         idlePane = new IdlePane();
         antiTheftPane = new AntiTheftPane();
-        rootPane.setTop(pgmMenu.getPane());
-        rootPane.setLeft(singleMultiPane.getPane());
-        rootPane.setRight(antiTheftPane.getPane());
-        //center pane is set in resetPanes, as it varies with app state.
+        settingsPane = new SettingsPane();
     }
     /**
-     * Used when application launches and when state changes
+     * Used when application launches. Marked for removal. Superseded by resetWorkingPanes().
      */
-    public static void resetPanes() {    
+    private static void initializeRootPane() {
+        
+//        rootPane.setTop(pgmMenu.getPane());
+//        rootPane.setLeft(singleMultiPane.getPane());
+//        rootPane.setRight(antiTheftPane.getPane());
+        //center pane is set in resetWorkingPanes, as it varies with app state.
+        
+        
+    }
+    /**
+     * Used when application launches and when state changes. Also used to return to normal operation after
+     * viewing the settings pane. The working panes are the panes that display operational features, 
+     * such as displaying the data from a tag and providing quick access to common parameters. The 
+     * working panes are contrasted with the settings pane, where more advanced changes may 
+     * be made to the configuration.
+     */
+    public static void resetWorkingPanes() {    
 //        ObservableList<Node> currentNodes = rootPane.getChildren();
 //        System.out.println("there are " + currentNodes.size() + " nodes in the root pane");
 //        rootPane.getChildren().clear();
         System.out.println("app class reset panes start");
+        
+        rootPane.setTop(pgmMenu.getPane());
+        rootPane.setLeft(singleMultiPane.getPane());
+        rootPane.setRight(antiTheftPane.getPane());
+        
         readPane.stopTimer();
         singleMultiPane.setLblAndButtonTxt();
         antiTheftPane.setButtons();
         //need app state to choose center pane
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         ReadWriteModeEnum rw_state = state.getReadWriteMode();        
         switch (rw_state) {            
             case READ_MODE:                     
                 rootPane.setCenter(readPane.getPane());
+                //adjust read params
+                readPane.setReadFreq(state.getReadFreq());
+//                readPane.setTheftOffValue(state.getAntiTheftOff());
+//                readPane.setTheftOnValue(state.getAntiTheftOn());
+                readPane.setXtraKeys(state.getExtraKeys());
                 readPane.startTimer();
                 break;
             case WRITE_MODE:                 
@@ -127,6 +154,15 @@ public class SkyRfidJavaApp extends Application {
                 rootPane.setCenter(idlePane.getPane());                        
         }
         
+    }
+    /**
+     * Replaces the working panes with a settings pane
+     */
+    public static void openSettingsPane() {
+        rootPane.getChildren().clear();
+        rootPane.setTop(pgmMenu.getPane());
+        settingsPane.resetForm();
+        rootPane.setCenter(settingsPane.getPane());
     }
    
 }

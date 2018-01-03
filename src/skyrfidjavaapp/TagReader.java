@@ -17,18 +17,21 @@
 package skyrfidjavaapp;
 
 /**
- *
+ * 
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  * 
  */
 public class TagReader extends TagActor{
     
+//    protected static String xtraKeys;
+//    xtraKeys = state.getExtraKeys();
     
     /**
      * Use local variables for application state to save processor time.
      * Since the reader is initialized in the timer start, and the timer
      * is restarted when the state changes, the local variables always
-     * have the current values.
+     * have the current values, but do not need to reconstruct them for
+     * each read operation.
      */
     TagReader() {
         super();
@@ -40,7 +43,7 @@ public class TagReader extends TagActor{
     
     /**
      * Use same method for single and multi?
-     * @return String array of decoded numbers from all tags in RF field.
+     * @return 
      */
     public String[] readOneCard() {
         System.out.println("*****************************************");        
@@ -117,8 +120,11 @@ public class TagReader extends TagActor{
         String decodedData = TagEncoding.decode(readDataBuffer, TAG_BLOCK_LEN + 2);
         System.out.println("tag reader got decoded data " + decodedData);
         
-        if (!(this.theftAction.equals(AntiTheftEnum.NO_ACTION))) {
-            TheftBitWorker.changeTheftBit(super.rfidDll, super.deviceHdl, uidBuffer, super.theftAction);
+        if (!(super.theftAction.equals(AntiTheftEnum.NO_ACTION))) {
+            System.out.println();
+            super.changeTheftBit(rfidDll, deviceHdl, uidBuffer);
+//            TagActor.changeTheftBit(rfidDll, deviceHdl, uidBuffer);
+//            TheftBitWorker.changeTheftBit(super.rfidDll, super.deviceHdl, uidBuffer, super.theftAction);
         }
         //halt the tag
         int haltStatus = super.rfidDll.fw_halt(super.deviceHdl);
@@ -126,7 +132,10 @@ public class TagReader extends TagActor{
         
         return new String[] {decodedData};
     }
-    
+    /**
+     * under construction
+     * @return String array of decoded numbers from all tags in RF field.
+     */
     public String[] readDeck() {
         System.out.println("*****************************************");        
         System.out.println("read deck fcn begins");       

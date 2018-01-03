@@ -57,17 +57,19 @@ public class ToggleSingleMultiPane
         FxMsgBox.show("Multiple card reading\nis under construction.\nThe button changes,\nbut the action is always single.", 
                 "Change single/multi read");
         AppState state;
-        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        state = new AppState(AppConstants.SETTINGS_CURRENT);
         state.setMultiRead(!state.isMultiRead());
         setLblAndButtonTxt();
         System.out.println("single/multi toggle event asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
     }
     
     public final void setLblAndButtonTxt()
     {
         AppState state;
-        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        state = new AppState(AppConstants.SETTINGS_CURRENT);
         if (state.isMultiRead())
         {
             lblCurrentSingleMulti.setText("Reading multiple tags");

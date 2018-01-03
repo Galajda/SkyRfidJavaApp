@@ -22,7 +22,7 @@ package skyrfidjavaapp;
  */
 public class TheftBitWorker {
     /**
-     * Theft bit uses AFI. On = 0x01. Off = 0x00.
+     * The "theft bit" uses the AFI byte. 
      * @param dll copy of JNA instance, avoiding creation of a new instance
      * @param device_handle handle to the RFID device
      * @param card_id ID of the card to be changed
@@ -44,9 +44,6 @@ public class TheftBitWorker {
             case NO_ACTION:
             default:
                     
-        }
-        
-        
-        
+        }        
     }
 }

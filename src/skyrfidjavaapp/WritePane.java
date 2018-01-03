@@ -34,14 +34,7 @@ public class WritePane
 {
     private final VBox pane;
     private final Label lblWelcome; 
-    private final TextField txtBarcodeInput;
-    private final String STYLE_WRITE_SUCCESS = "-fx-border-color: black; -fx-border-width: 2;"
-            + "-fx-border-radius:5; -fx-background-color: #adff2f;"; //green
-    private final String STYLE_WRITE_FAIL = "-fx-border-color: black; -fx-border-width: 2;"
-            + "-fx-border-radius:5; -fx-background-color: #ff1493;"; //red
-    private final String STYLE_WRITE_NEUTRAL = "-fx-border-color: black; -fx-border-width: 2;"
-            + "-fx-border-radius:5; -fx-background-color: #ffffff;"; //white
-    
+    private final TextField txtBarcodeInput;    
     private final Label lblInputInstructions;
     private static TagWriter writer;
     
@@ -80,11 +73,11 @@ public class WritePane
             writer.closePort();
             System.out.println("write result " + writeSuccess);
             if (writeSuccess) {
-                txtBarcodeInput.setStyle(this.STYLE_WRITE_SUCCESS);
+                txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
                 //change theft bit
             }
             else {
-                txtBarcodeInput.setStyle(this.STYLE_WRITE_FAIL);
+                txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);
             }
             //wait, reset text field 
             Timer tmr = new Timer();
@@ -110,7 +103,7 @@ public class WritePane
         }        
     }
     private void resetTextField() {
-        txtBarcodeInput.setStyle(this.STYLE_WRITE_NEUTRAL);        
+        txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_NEUTRAL);        
         txtBarcodeInput.clear();
         txtBarcodeInput.setPromptText("enter barcode");
         //prompt text is erased when cursor enters field

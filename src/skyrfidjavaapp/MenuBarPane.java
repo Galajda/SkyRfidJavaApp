@@ -109,11 +109,12 @@ public class MenuBarPane
             case MenuBarPane.FILE_MENU_RESET:                
 //                FxMsgBox.show("pretend to reset", "Menu action");
                 //reset the current parameters to the defaults
-                AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//                AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+                AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
                 state.resetAppState(); 
                  //reload stage
                 System.out.println("menu bar pane file menu asks to reset panes");
-                SkyRfidJavaApp.resetPanes();
+                SkyRfidJavaApp.resetWorkingPanes();
                 
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
@@ -123,7 +124,8 @@ public class MenuBarPane
                 FxMsgBox.show("pretend you see a large window", "Menu action");
                 break;
             case MenuBarPane.FILE_MENU_CONFIG:                
-                FxMsgBox.show("config is not yet configged", "Menu action");
+//                FxMsgBox.show("config is not yet configged", "Menu action");
+                SkyRfidJavaApp.openSettingsPane();
                 break;
             case MenuBarPane.FILE_MENU_EXIT:                
 //                FxMsgBox.show("exit", "Menu action");
@@ -138,7 +140,8 @@ public class MenuBarPane
     {
         Pane p;
         MenuItem eventSource = (MenuItem)e.getSource();
-        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+//        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
+        AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         switch (eventSource.getText()) {
             case MenuBarPane.R_W_MENU_READ:                
                 state.setReadWriteMode(ReadWriteModeEnum.READ_MODE);
@@ -161,7 +164,7 @@ public class MenuBarPane
 //                p = idlePane.getPane();
         }
         System.out.println("menu bar pane mode menu asks to reset panes");
-        SkyRfidJavaApp.resetPanes();
+        SkyRfidJavaApp.resetWorkingPanes();
         
         
     }
