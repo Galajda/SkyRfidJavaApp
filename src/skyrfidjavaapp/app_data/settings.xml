@@ -39,7 +39,7 @@
         <extra_keystrokes/>
         <anti_theft_on>0x12</anti_theft_on>
         <anti_theft_off>0xdf</anti_theft_off>
-    </parameter_set>
+</parameter_set>
     <parameter_set id="revived">
         <theft_bit_action>TURN_OFF</theft_bit_action>
         <read_write_mode>WRITE_MODE</read_write_mode>
