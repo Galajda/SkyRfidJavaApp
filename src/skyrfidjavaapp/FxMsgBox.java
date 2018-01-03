@@ -144,7 +144,9 @@ public class FxMsgBox {
 //        }        
 //    }
     /**
-     * experimental. use the style of the pwd field to indicate success
+     * EXPERIMENTAL. passing vars from event handler to the dialog box is difficult.
+     * the handler can, however change the style of the text field. 
+     * use the style of the pwd field to indicate success
      * @param realPassword where should the app store this? hash in xml?
      * @return 
      */
@@ -166,16 +168,18 @@ public class FxMsgBox {
             new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
+                    System.out.print("validating password " + pwdField.getText() + " against " + realPassword);
                     Boolean valid = (pwdField.getText() != null && 
                             realPassword != null  && pwdField.getText().equals(realPassword));
                     if (valid) {
                         pwdField.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
                         //let user x out?
-//                            stage.close();
+                            stage.close();
                     }
                     else {
                         pwdField.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);
                     }
+                    System.out.println(" result " + valid);
                 }
             }
         );
@@ -188,6 +192,7 @@ public class FxMsgBox {
         
         return pwdField.getStyle().equals(AppConstants.STYLE_TEXT_FLD_OK);
         //flip because app constant style is guaranteed to be non-null?
+        //if stage is already closed, what is the style?
     }
     private void validatePassword(ActionEvent e, String testPwd, String realPwd, Stage s) {
         System.out.print("validating password " + testPwd + " against " + realPwd);
