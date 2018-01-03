@@ -16,11 +16,11 @@
         <!--<type>current</type>-->
         <theft_bit_action>TURN_ON</theft_bit_action>
         <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>true</multi_read>
-        <read_frequency>5678</read_frequency>
-        <extra_keystrokes>vierfunf</extra_keystrokes>
-        <anti_theft_on>0x25</anti_theft_on>
-        <anti_theft_off>0xdf</anti_theft_off>
+        <multi_read>false</multi_read>
+        <read_frequency>1200</read_frequency>
+        <extra_keystrokes>single write</extra_keystrokes>
+        <anti_theft_on>0xff</anti_theft_on>
+        <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
     <parameter_set id="figged">
         <theft_bit_action>NO_ACTION</theft_bit_action>
