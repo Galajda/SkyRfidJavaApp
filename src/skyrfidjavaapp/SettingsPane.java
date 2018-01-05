@@ -18,30 +18,38 @@ package skyrfidjavaapp;
 
 import javafx.scene.Node;
 import javafx.scene.layout.VBox;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
+import javafx.scene.layout.Region;
 import javafx.scene.input.KeyEvent;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Priority;
 
 
 /**
- *
+ *Configurations can be defined and modified through the settings pane. While certain
+ * parameters--single/multi, read/write, theft bit--may be changed during normal operation, 
+ * this pane provides more options.
  * 
  * 
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
-public class SettingsPane {
-    //use vbox for main pane, grid pane for name, grid pane for rest of controls
-    private final VBox mainPane;
-    private final GridPane configNamePane; //holds the config name cbo box and the sub pane
-    private final GridPane controlsPane; //holds the rest of the controls so they can be hidden as a group.
+public class SettingsPane {        
+    private final VBox mainPane; //main container
+    private final GridPane configNamePane; //holds the config name cbo box
+    private final GridPane controlsPane; //holds the rest of the controls so they can be hidden as a group
+    private final HBox closeBtnPane;
     private AppState state;
+    
     //heading
     private final Label lblGreeting;
     private final Label lblConfigSelector;
@@ -51,9 +59,11 @@ public class SettingsPane {
     private final Label lblConfigName;
     private final TextField txtConfigName;
     private static final String TXT_FLD_ID_CONFIG_NAME = "config name text field";
+    
     //single/multi
     private final Label lblMultiRead;
     private final CheckBox chkMultiRead;
+    
     //read/write parameters
     private final Label lblReadWriteMode;    
     private final ComboBox<String> cboReadWriteMode;  
@@ -81,15 +91,17 @@ public class SettingsPane {
     private final Button btnDeleteConfig;
     private final Button btnUseConfig;
     private final Button btnCloseSettingsPane;
+    private final Region spacerCloseBtn;
     
     //constructor
     public SettingsPane() {
         this.mainPane = new VBox(5);
+//        mainPane.setMinHeight(300);
         configNamePane = new GridPane();
         configNamePane.setVgap(5);
         //row 0 of name pane
         //heading         
-        lblGreeting = new Label("the settings pane is under construction");
+        lblGreeting = new Label("the settings pane has been released from the intensive care unit and moved to recovery");
         configNamePane.add(lblGreeting, 0, 0, 2, 1);
         
         //row 1 of name pane
@@ -102,6 +114,7 @@ public class SettingsPane {
         cboConfigName.setPromptText("Choose a configuration");
         cboConfigName.getItems().addAll(state.getConfigNames());
         cboConfigName.getItems().add("new");
+        cboConfigName.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboConfigName));
         cboConfigName.setOnAction(e -> configSelector_Selected(e));
         configNamePane.add(cboConfigName, 1, 1);        
         lblConfigName = new Label("Name");
@@ -196,12 +209,29 @@ public class SettingsPane {
         btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
         controlsPane.add(btnUseConfig, 2, 5);
         
+        
         btnCloseSettingsPane = new Button("Close");
+        
+//        btnCloseSettingsPane.setAlignment(Pos.BOTTOM_RIGHT);
+//        btnCloseSettingsPane.setPadding(new Insets(0,10,0,0));
+        HBox.setMargin(this.btnCloseSettingsPane, new Insets(0,20,0,0));
+        //changes alignment of text within the button
         btnCloseSettingsPane.setOnAction(e -> btnCloseSettingsPane_Click(e));
-        controlsPane.add(btnCloseSettingsPane, 3, 5);
+//        controlsPane.add(btnCloseSettingsPane, 3, 5);
+        spacerCloseBtn = new Region();
+        HBox.setHgrow(this.spacerCloseBtn, Priority.ALWAYS);
+        closeBtnPane = new HBox(this.spacerCloseBtn,this.btnCloseSettingsPane);
+        
         
         controlsPane.setVisible(false);
         this.mainPane.getChildren().add(this.controlsPane);
+//        this.mainPane.getChildren().add(this.btnCloseSettingsPane);
+        this.mainPane.getChildren().add(this.closeBtnPane);
+//        System.out.println("setting left margin to main pane width " + mainPane.getWidth() +
+//                " minus button width " + btnCloseSettingsPane.getWidth());
+        //both zero
+        VBox.setMargin(this.btnCloseSettingsPane, new Insets(0,0,0,500));
+        
     }
 
     public VBox getPane() {
@@ -223,8 +253,8 @@ public class SettingsPane {
         lblConfigName.setVisible(isNewConfig);
         txtConfigName.setVisible(isNewConfig);        
         //if existing config, load these values
-        if (!isNewConfig && !selectedConfig.equals("")) {
-            this.controlsPane.setVisible(true);
+        if (!selectedConfig.equals("")) {this.controlsPane.setVisible(true);}
+        if (!isNewConfig && !selectedConfig.equals("")) {            
             state = new AppState(selectedConfig); 
         //AppState loads default config in case of empty string, which should not happen
 //            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
@@ -261,7 +291,7 @@ public class SettingsPane {
         //to the handler        
         
         System.out.println("keyboard shortcut on combo box " + combo_box.getId());        
-        System.out.println("key press in r/w selector " + e.getCode());
+        System.out.println("key pressed " + e.getCode());
 //        System.out.println("event get text " + e.getText());
         System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
         //index = 0 is first item in list. if none selected, index = -1
