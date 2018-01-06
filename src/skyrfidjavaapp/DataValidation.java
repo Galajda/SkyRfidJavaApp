@@ -16,18 +16,21 @@
  */
 package skyrfidjavaapp;
 
-import java.util.regex.*;
+import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 
 /**
- *
+ * Class of static methods to test user input.
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class DataValidation {
     public static Boolean isValidConfigName(String testName) {
         //want word or number char, underscore, no space.
         //search for the unwanted, success if not found
+        
         //positive match proposal
-//        Pattern posMatch = Pattern.compile("\\w{" + testName.length() + "}");
+        Pattern posMatch = Pattern.compile("\\w{" + testName.length() + "}");
+        System.out.println("proposed name tester says " + posMatch.matcher(testName).find());
         
         Pattern p = Pattern.compile("\\W");
         Matcher m = p.matcher(testName);
