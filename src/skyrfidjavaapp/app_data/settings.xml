@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <!-- Copyright (C) 2017 Michal G. <Michal.G at cogitatummagnumtelae.com> This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>. -->
 <!DOCTYPE settings SYSTEM "appstate.dtd">
@@ -9,17 +8,17 @@
         <read_write_mode>IDLE_MODE</read_write_mode>
         <multi_read>false</multi_read>
         <read_frequency>1200</read_frequency>
-        <extra_keystrokes>single write</extra_keystrokes>
+        <extra_keystrokes>fawlty</extra_keystrokes>
         <anti_theft_on>0xff</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
     <parameter_set id="current">
         <!--<type>current</type>-->
         <theft_bit_action>TURN_ON</theft_bit_action>
-        <read_write_mode>READ_MODE</read_write_mode>
+        <read_write_mode>WRITE_MODE</read_write_mode>
         <multi_read>false</multi_read>
         <read_frequency>1200</read_frequency>
-        <extra_keystrokes>single write</extra_keystrokes>
+        <extra_keystrokes>fawlty</extra_keystrokes>
         <anti_theft_on>0xff</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
@@ -51,13 +50,13 @@
         <anti_theft_off>0xa1</anti_theft_off>
     </parameter_set>
     <parameter_set id="diehard4">
-        <theft_bit_action>TURN_ON</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>true</multi_read>
+        <theft_bit_action>NO_ACTION</theft_bit_action>
+        <read_write_mode>READ_MODE</read_write_mode>
+        <multi_read>false</multi_read>
         <read_frequency>5678</read_frequency>
-        <extra_keystrokes>vierfunf</extra_keystrokes>
-        <anti_theft_on>0x25</anti_theft_on>
-        <anti_theft_off>0xdf</anti_theft_off>
+        <extra_keystrokes>willis</extra_keystrokes>
+        <anti_theft_on>0x2b</anti_theft_on>
+        <anti_theft_off>0x2b</anti_theft_off>
     </parameter_set>
     <parameter_set id="carriage_return">
         <theft_bit_action>NO_ACTION</theft_bit_action>
@@ -77,85 +76,22 @@
         <anti_theft_on>0x01</anti_theft_on>
         <anti_theft_off>0x10</anti_theft_off>
     </parameter_set>
-</settings>
-=======
-<?xml version="1.0" encoding="ISO-8859-1"?>
-<!-- Copyright (C) 2017 Michal G. <Michal.G at cogitatummagnumtelae.com> This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details. You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>. -->
-<!DOCTYPE settings SYSTEM "appstate.dtd">
-<settings>
-    <parameter_set id="default">
-        <!--<type>default</type>-->
+    <parameter_set id="whirlwind">
         <theft_bit_action>TURN_ON</theft_bit_action>
         <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>false</multi_read>
-        <read_frequency>1200</read_frequency>
-        <extra_keystrokes>single write</extra_keystrokes>
-        <anti_theft_on>0xff</anti_theft_on>
-        <anti_theft_off>0x00</anti_theft_off>
-    </parameter_set>
-    <parameter_set id="current">
-        <!--<type>current</type>-->
-        <theft_bit_action>TURN_ON</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>false</multi_read>
-        <read_frequency>1200</read_frequency>
-        <extra_keystrokes>single write</extra_keystrokes>
-        <anti_theft_on>0xff</anti_theft_on>
-        <anti_theft_off>0x00</anti_theft_off>
-    </parameter_set>
-    <parameter_set id="figged">
-        <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
-        <multi_read>true</multi_read>
-        <read_frequency>1046</read_frequency>
-        <extra_keystrokes>chewy fruit newton!</extra_keystrokes>
-        <anti_theft_on>0xff</anti_theft_on>
-        <anti_theft_off>0x00</anti_theft_off>
-    </parameter_set>
-    <parameter_set id="thrice">
-        <theft_bit_action>TURN_OFF</theft_bit_action>
-        <read_write_mode>WRITE_MODE</read_write_mode>
         <multi_read>false</multi_read>
         <read_frequency>45</read_frequency>
         <extra_keystrokes/>
-        <anti_theft_on>0x12</anti_theft_on>
-        <anti_theft_off>0xdf</anti_theft_off>
-</parameter_set>
-    <parameter_set id="revived">
-        <theft_bit_action>TURN_OFF</theft_bit_action>
-        <read_write_mode>WRITE_MODE</read_write_mode>
-        <multi_read>false</multi_read>
-        <read_frequency>124</read_frequency>
-        <extra_keystrokes>hello</extra_keystrokes>
-        <anti_theft_on>0x1a</anti_theft_on>
-        <anti_theft_off>0xa1</anti_theft_off>
+        <anti_theft_on>0x0c</anti_theft_on>
+        <anti_theft_off>0x01</anti_theft_off>
     </parameter_set>
-    <parameter_set id="diehard4">
-        <theft_bit_action>TURN_ON</theft_bit_action>
+    <parameter_set id="go_fig">
+        <theft_bit_action>TURN_OFF</theft_bit_action>
         <read_write_mode>IDLE_MODE</read_write_mode>
         <multi_read>true</multi_read>
-        <read_frequency>5678</read_frequency>
-        <extra_keystrokes>vierfunf</extra_keystrokes>
-        <anti_theft_on>0x25</anti_theft_on>
-        <anti_theft_off>0xdf</anti_theft_off>
-    </parameter_set>
-    <parameter_set id="carriage_return">
-        <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>READ_MODE</read_write_mode>
-        <multi_read>false</multi_read>
-        <read_frequency>2000</read_frequency>
-        <extra_keystrokes>\n</extra_keystrokes>
-        <anti_theft_on>0x00</anti_theft_on>
-        <anti_theft_off>0x00</anti_theft_off>
-    </parameter_set>
-    <parameter_set id="sevenoclock">
-        <theft_bit_action>TURN_OFF</theft_bit_action>
-        <read_write_mode>WRITE_MODE</read_write_mode>
-        <multi_read>false</multi_read>
-        <read_frequency>124</read_frequency>
-        <extra_keystrokes>hello</extra_keystrokes>
-        <anti_theft_on>0x01</anti_theft_on>
-        <anti_theft_off>0x10</anti_theft_off>
+        <read_frequency>1345</read_frequency>
+        <extra_keystrokes>flying fig</extra_keystrokes>
+        <anti_theft_on>0x87</anti_theft_on>
+        <anti_theft_off>0xaa</anti_theft_off>
     </parameter_set>
 </settings>
->>>>>>> b5952a0c4fd2462e610c422be536cea58c2b18a9
