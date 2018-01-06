@@ -41,7 +41,7 @@ public class WritePane
     WritePane()
     {        
         pane = new VBox();
-        pane.setMinWidth(300);
+        pane.setMinWidth(250);
         
         lblWelcome = new Label("Welcome to the RFID reader.\nThe write mode is under construction.");
         pane.getChildren().add(lblWelcome);

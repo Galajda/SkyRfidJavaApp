@@ -57,7 +57,7 @@ public class AntiTheftPane {
         
         this.setButtons();
         pane = new VBox();
-        pane.setMinWidth(200);
+        pane.setMinWidth(150);
         pane.getChildren().addAll(lblTheftState, rdoTurnOn, rdoTurnOff, rdoNoAction);
         
         

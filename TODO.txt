@@ -1,13 +1,3 @@
-<<<<<<< HEAD
-
-Add Settings pane to change defaults and advanced properties.
-    Add extra keystrokes element to xml. Send extra keystrokes with barcode. Allow
-	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
-	two KeyEvent.VK_ENTER when program y is the active window.
-    Adjust padding of panes for better fit
-
-
-
 App title:
     Concatenate app title with name of current configuration 
 AppState:
@@ -20,8 +10,7 @@ AppState:
         The advantage of the individual accessors is that one knows when one has covered 
         all of the parameters by cycling through all the functions. This makes writing code
         more reliable. See for example SettingsPane btnSaveConfig_Click.
-    
-    
+        
 Toggle single multi pane:
     If app state is write, do not allow multiple mode.
 
@@ -38,12 +27,15 @@ TheftBitWorker:
     replace on/off enum with the new value
     delete the whole thing.
 
-Settings pane:
-    comboBoxKeyboardShortcut chooses the first match. you cannot progress past the first
-        by pressing the same key again
-    
+Settings pane:    
     Show and hide buttons to guide user to proper operation. zB do not allow use config before saving. 
         Or save automatically? Cancel instead of delete new config?
+    Use extra keystrokes element. Send extra keystrokes with barcode. Allow
+	multiple entries, such as one KeyEvent.VK_ENTER when program x is the active window,
+	two KeyEvent.VK_ENTER when program y is the active window.
+    Adjust padding of panes for better fit
+    Always show close button
+
 AppConstants:
     
 AppSettingsEnum:
@@ -54,20 +46,23 @@ DataValidation:
 
 Config names xml and dtd:
     delete
+
 RoboTypist:
-    recognize escape chars like \n \l
+    recognize escape chars like \n \l from extra keys
+
 dll functions
-    does stay quiet state persist after tag leaves field?
-    rf.exe can call stay quiet and reset to ready. when stay quiet tag leaves field and is 
+    does stay quiet state persist after tag leaves field? rf.exe can call stay quiet 
+        and reset to ready. when stay quiet tag leaves field and is 
         reintroduced, it is ready
     how does multi read work? 
-=======
+
 Sending keystrokes via Robot. Notify user if platform does not allow robot constructor or input control.
 	Catch errors related to existence of user32.dll.
 	Customize extra keystrokes according to the active window.
-Make jQuery for XML.    
+Make jQuery for XML.
+Move FxMsgBox to MyJavaUtils package
+
+Harmonize names app state, configuration, settings among file name, constant name, variable name
 
 Test barcodes that contain letters
 
-
->>>>>>> master

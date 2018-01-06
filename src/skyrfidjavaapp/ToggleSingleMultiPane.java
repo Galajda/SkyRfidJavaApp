@@ -39,7 +39,7 @@ public class ToggleSingleMultiPane
     {
         
         pane = new VBox();
-        pane.setMinWidth(200);
+        pane.setMinWidth(150);
         lblCurrentSingleMulti = new Label();
         btnToggleSingleMulti = new Button();
         btnToggleSingleMulti.setOnAction(e-> btnChooseSingleMulti_Click());

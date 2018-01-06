@@ -19,16 +19,9 @@ package skyrfidjavaapp;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 //import javafx.application.Platform;
-//import javafx.collections.ObservableList;
-//import javafx.event.ActionEvent;
-//import javafx.event.EventHandler;
 import javafx.scene.Scene;
-//import javafx.scene.Node;
-//import javafx.scene.layout.Pane;
-//import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
-//import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 /**
@@ -36,8 +29,10 @@ import javafx.stage.Stage;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class SkyRfidJavaApp extends Application {
-    
+//    private Scene scene;
+    private static Stage appStage;
     private static BorderPane rootPane;   
+//    private BorderPane rootPane;   
     private static MenuBarPane pgmMenu;
     private static ToggleSingleMultiPane singleMultiPane;
     private static ReadPane readPane;
@@ -62,19 +57,34 @@ public class SkyRfidJavaApp extends Application {
         AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
         state.resetAppState(); 
         SkyRfidJavaApp.initializePanes();
-        SkyRfidJavaApp.initializeRootPane();
+//        SkyRfidJavaApp.initializeRootPane();
         System.out.println("app start asks to reset panes");
         SkyRfidJavaApp.resetWorkingPanes();
                 
         Scene scene = new Scene(rootPane, 700, 250);
+//        primaryStage.setHeight(600);
+//        scene = new Scene(rootPane, 700, 250);
         
 //        primaryStage.setTitle(state.getReadWriteMode().toString());    //does not change with center pane
-        primaryStage.setTitle(AppConstants.APP_TITLE);        
-        primaryStage.getIcons().add(new Image("skyrfidjavaapp/images/javarhino.jpg"));  
-        primaryStage.setMinWidth(700);
-        primaryStage.setMinHeight(250);
-        primaryStage.setScene(scene);
-        primaryStage.show();
+//        primaryStage.setTitle(AppConstants.APP_TITLE);        
+//        primaryStage.getIcons().add(new Image("skyrfidjavaapp/images/javarhino.jpg"));  
+//        primaryStage.setMinWidth(700);
+//        primaryStage.setMinHeight(250);
+//        primaryStage.setMaxWidth(900);
+//        primaryStage.setMaxHeight(600);
+//        primaryStage.setScene(scene);
+//        primaryStage.show();
+        
+        appStage = primaryStage;
+        appStage.setTitle(AppConstants.APP_TITLE);        
+        appStage.getIcons().add(new Image("skyrfidjavaapp/images/javarhino.jpg"));  
+//        appStage.setMinWidth(700);
+//        appStage.setMinHeight(250);
+//        appStage.setMaxWidth(900);
+//        appStage.setMaxHeight(600);
+        appStage.setScene(scene);
+        appStage.show();
+        
         
     }
 
@@ -100,7 +110,9 @@ public class SkyRfidJavaApp extends Application {
         settingsPane = new SettingsPane();
     }
     /**
-     * Used when application launches. Marked for removal. Superseded by resetWorkingPanes().
+     * @deprecated 
+     * Used when application launches. Loads the working panes.
+     * Superseded by resetWorkingPanes().
      */
     private static void initializeRootPane() {
         
@@ -159,10 +171,33 @@ public class SkyRfidJavaApp extends Application {
      * Replaces the working panes with a settings pane
      */
     public static void openSettingsPane() {
+//        Stage s = new Stage();
+//        s.setHeight(500);
+//        appStage.setHeight(600);
         rootPane.getChildren().clear();
+        
         rootPane.setTop(pgmMenu.getPane());
         settingsPane.resetForm();
         rootPane.setCenter(settingsPane.getPane());
+    }
+    public static void setStageSize(StageSizeEnum size) {
+        switch (size) {
+            case RW_SMALL:
+                appStage.setHeight(AppConstants.APP_SIZE_RW_SMALL_HEIGHT);
+                appStage.setWidth(AppConstants.APP_SIZE_RW_SMALL_WIDTH);
+                break;
+            case CONFIG:                
+                appStage.setHeight(AppConstants.APP_SIZE_CONFIG_HEIGHT);
+                appStage.setWidth(AppConstants.APP_SIZE_CONFIG_WIDTH);
+                break;                
+            case RW_LARGE:
+            default:                
+                appStage.setHeight(AppConstants.APP_SIZE_RW_LARGE_HEIGHT);
+                appStage.setWidth(AppConstants.APP_SIZE_RW_LARGE_WIDTH);                        
+        }
+    }
+    public static void showStageSize() {
+        System.out.println("stage width " + appStage.getWidth() + " height " + appStage.getHeight());
     }
    
 }

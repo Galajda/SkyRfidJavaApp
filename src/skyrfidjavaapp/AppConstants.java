@@ -17,7 +17,7 @@
 package skyrfidjavaapp;
 
 /**
- *
+ * Container for string constants used throughout the program.
  * @author MichalG
  */
 public class AppConstants 
@@ -74,5 +74,12 @@ public class AppConstants
     public static final String STYLE_TEXT_FLD_NEUTRAL = "-fx-border-color: black; -fx-border-width: 2;"
             + "-fx-border-radius:5; -fx-background-color: #ffffff;"; //white
     
+    //window sizes
+    public static final int APP_SIZE_RW_SMALL_HEIGHT = 220;
+    public static final int APP_SIZE_RW_SMALL_WIDTH = 560;
+    public static final int APP_SIZE_RW_LARGE_HEIGHT = 230;
+    public static final int APP_SIZE_RW_LARGE_WIDTH = 650;
+    public static final int APP_SIZE_CONFIG_HEIGHT = 350;
+    public static final int APP_SIZE_CONFIG_WIDTH = 700;
 
 }
