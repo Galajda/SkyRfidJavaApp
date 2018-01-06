@@ -20,38 +20,34 @@ package skyrfidjavaapp;
  *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
-public class TagEncoding {
-    
+public class TagEncoding {    
     /**
-     * 
-     * @param encodedArray the array of char bytes as read by the USB device
-     * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
+     * Transforms the bytes from the USB device into human-readable format.
+     * @param encoded_array the array of char bytes as read by the USB device
+     * @param array_length Is this necessary? Can it be derived within the fcn from the array?
      * @return a human-readable sequence of numbers representing a barcode
      */
-    public static String decode(char[] encodedArray, int arrayLength) {
+    public static String decode(char[] encoded_array, int array_length) {
         System.out.println("decoding char array");
-//        System.out.println("char array length " + inputStream.length);
-//        for (int i = 0; i <arrayLength; i++) {
+//        System.out.println("char array length " + encoded_array.length);
+//        for (int i = 0; i <array_length; i++) {
 //            System.out.print("element" + i + ": " + String.format("%04x", (int)encodedArray[i]));
 //            System.out.print(" break up into ");
-//            System.out.print("1st: " + (char)(encodedArray[i] - (encodedArray[i]/0x100)*0x100)
-//                    + ", 2nd: " + (char)(encodedArray[i]/0x100) + ", ");
+//            System.out.print("1st: " + (char)(encoded_array[i] - (encoded_array[i]/0x100)*0x100)
+//                    + ", 2nd: " + (char)(encoded_array[i]/0x100) + ", ");
 //            System.out.println();
 //        }
 //        System.out.println();
         StringBuilder builder = new StringBuilder();
-        for (int i = 0; i <arrayLength; i++) {
-//            int chunk = (int)encodedArray[i];
-            builder.append((char)(encodedArray[i] - (encodedArray[i]/0x100)*0x100));
-            builder.append((char)(encodedArray[i]/0x100));
-//            builder.append((chunk - (chunk/0x100)*0x100)-0x30);
-//            builder.append((chunk/0x100)-0x30);
+        for (int i = 0; i <array_length; i++) {
+            builder.append((char)(encoded_array[i] - (encoded_array[i]/0x100)*0x100));
+            builder.append((char)(encoded_array[i]/0x100));
         }
         return builder.toString();
     }
    
     /**
-     * 
+     * @deprecated See decode()
      * @param inputStream the array of char bytes as read by the USB device
      * @param arrayLength Is this necessary? Can it be derived within the fcn from inputStream?
      * @return a human-readable sequence of numbers representing a barcode
@@ -76,18 +72,15 @@ public class TagEncoding {
         }
         return builder.toString();
     }
-    /**
-     * Used when writing data to a tag
+    /**Transforms human-readable data into a byte array, which is written to a tag.
      * @param barcode the human-readable barcode of the item to be tagged
      * @return an array of char bytes which are written to the tag
      */
     public static char[] encode(String barcode) {
 //        System.out.println("tag encoding class is encoding a barcode string " + barcode);
         //if bc has odd length, pad right end with null 0x0 or space 0x20
-        
-        
-//        char[] bcArray = new char[barcode.length()];
-        char[] bcArray = barcode.toCharArray();
+               
+//        char[] bcArray = barcode.toCharArray();
 //        System.out.println("the barcode char array is");
 //        System.out.print("\t");
 //        for (int i=0;i<bcArray.length;i++) {
@@ -104,7 +97,6 @@ public class TagEncoding {
         }
 //        System.out.println();
 //        System.out.println("leaving encode fcn");
-//        return new char[]{0x0, 0x1};
         return writeBuffer;
     }
 }
