@@ -54,12 +54,18 @@ public class ToggleSingleMultiPane
         //action events. change text of label and button, change bool multi read mode
     private void btnChooseSingleMulti_Click()
     {
-        FxMsgBox.show("Multiple card reading\nis under construction.\nThe button changes,\nbut the action is always single.", 
-                "Change single/multi read");
+//        FxMsgBox.show("Multiple card reading\nis under construction.\nThe button changes,\nbut the action is always single.", 
+//                "Change single/multi read");
         AppState state;
 //        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state = new AppState(AppConstants.SETTINGS_CURRENT);
-        state.setMultiRead(!state.isMultiRead());
+        if (state.getReadWriteMode().equals(ReadWriteModeEnum.WRITE_MODE)) {
+            FxMsgBox.show(AppConstants.ERR_TOGGLE_SINGLE_MULTI_MSG, AppConstants.ERR_TOGGLE_SINGLE_MULTI_TITLE);
+            state.setMultiRead(false);
+        }
+        else {
+            state.setMultiRead(!state.isMultiRead());
+        }
         setLblAndButtonTxt();
         System.out.println("single/multi toggle event asks to reset panes");
         SkyRfidJavaApp.resetWorkingPanes();

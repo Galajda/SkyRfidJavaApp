@@ -30,6 +30,9 @@ public class AppConstants
     public static final String DELETE_CONFIG_SUCCESS_MSG = "Configuration deleted.";
     public static final String SAVE_CONFIG_SUCCESS_TITLE = "Save configuration";
     public static final String SAVE_CONFIG_SUCCESS_MSG = "Configuration saved.";
+    public static final String ERR_TOGGLE_SINGLE_MULTI_TITLE = "Cannot change single/multi";
+    public static final String ERR_TOGGLE_SINGLE_MULTI_MSG = "Only one tag may be\nwritten at a time.";
+    
     
     //RFID reader constants
     public static final char READ_SINGLE_CARD = 0x36;
