@@ -64,7 +64,7 @@ public class ReadPane
     ReadPane() {
 //        System.out.println("read pane constructor running");        
         pane = new VBox();
-        pane.setMinWidth(250);
+        pane.setMinWidth(220);
         
         lblWelcome = new Label("Welcome to the RFID reader.\nThe read mode is under construction.");
         pane.getChildren().add(lblWelcome);        

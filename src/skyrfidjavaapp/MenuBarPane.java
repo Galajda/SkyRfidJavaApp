@@ -118,10 +118,12 @@ public class MenuBarPane
                 
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
-                FxMsgBox.show("pretend you see a small window", "Menu action");
+//                FxMsgBox.show("pretend you see a small window", "Menu action");
+                SkyRfidJavaApp.setStageSize(StageSizeEnum.RW_SMALL);
                 break;
             case MenuBarPane.FILE_MENU_LG_WIN:
-                FxMsgBox.show("pretend you see a large window", "Menu action");
+//                FxMsgBox.show("pretend you see a large window", "Menu action");
+                SkyRfidJavaApp.setStageSize(StageSizeEnum.RW_LARGE);
                 break;
             case MenuBarPane.FILE_MENU_CONFIG:                
 //                FxMsgBox.show("config is not yet configged", "Menu action");

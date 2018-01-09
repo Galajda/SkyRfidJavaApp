@@ -58,8 +58,6 @@ public class SkyRfidJavaApp extends Application {
         state.resetAppState(); 
         SkyRfidJavaApp.initializePanes();
 //        SkyRfidJavaApp.initializeRootPane();
-        System.out.println("app start asks to reset panes");
-        SkyRfidJavaApp.resetWorkingPanes();
                 
         Scene scene = new Scene(rootPane, 700, 250);
 //        primaryStage.setHeight(600);
@@ -81,7 +79,9 @@ public class SkyRfidJavaApp extends Application {
 //        appStage.setMinWidth(700);
 //        appStage.setMinHeight(250);
 //        appStage.setMaxWidth(900);
-//        appStage.setMaxHeight(600);
+//        appStage.setMaxHeight(600);        
+        System.out.println("app start asks to reset panes");
+        SkyRfidJavaApp.resetWorkingPanes();
         appStage.setScene(scene);
         appStage.show();
         
@@ -129,8 +129,10 @@ public class SkyRfidJavaApp extends Application {
      * such as displaying the data from a tag and providing quick access to common parameters. The 
      * working panes are contrasted with the settings pane, where more advanced changes may 
      * be made to the configuration.
+     * Because this method changes the dimensions of the stage, the stage must be initialized before 
+     * calling this method.
      */
-    public static void resetWorkingPanes() {    
+    public static void resetWorkingPanes() {   
 //        ObservableList<Node> currentNodes = rootPane.getChildren();
 //        System.out.println("there are " + currentNodes.size() + " nodes in the root pane");
 //        rootPane.getChildren().clear();
@@ -165,7 +167,7 @@ public class SkyRfidJavaApp extends Application {
             default:                                 
                 rootPane.setCenter(idlePane.getPane());                        
         }
-        
+        SkyRfidJavaApp.setStageSize(StageSizeEnum.RW_LARGE);
     }
     /**
      * Replaces the working panes with a settings pane
@@ -179,6 +181,7 @@ public class SkyRfidJavaApp extends Application {
         rootPane.setTop(pgmMenu.getPane());
         settingsPane.resetForm();
         rootPane.setCenter(settingsPane.getPane());
+//        SkyRfidJavaApp.setStageSize(StageSizeEnum.CONFIG);
     }
     public static void setStageSize(StageSizeEnum size) {
         switch (size) {

@@ -32,8 +32,7 @@ public class AppConstants
     public static final String SAVE_CONFIG_SUCCESS_MSG = "Configuration saved.";
     public static final String ERR_TOGGLE_SINGLE_MULTI_TITLE = "Cannot change single/multi";
     public static final String ERR_TOGGLE_SINGLE_MULTI_MSG = "Only one tag may be\nwritten at a time.";
-    
-    
+        
     //RFID reader constants
     public static final char READ_SINGLE_CARD = 0x36;
     public static final char READ_MULTI_CARDS = 0x16;
@@ -80,8 +79,8 @@ public class AppConstants
     //window sizes
     public static final int APP_SIZE_RW_SMALL_HEIGHT = 220;
     public static final int APP_SIZE_RW_SMALL_WIDTH = 560;
-    public static final int APP_SIZE_RW_LARGE_HEIGHT = 230;
-    public static final int APP_SIZE_RW_LARGE_WIDTH = 650;
+    public static final int APP_SIZE_RW_LARGE_HEIGHT = 250;
+    public static final int APP_SIZE_RW_LARGE_WIDTH = 700;
     public static final int APP_SIZE_CONFIG_HEIGHT = 350;
     public static final int APP_SIZE_CONFIG_WIDTH = 700;
 

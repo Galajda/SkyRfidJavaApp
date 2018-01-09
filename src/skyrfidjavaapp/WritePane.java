@@ -41,15 +41,16 @@ public class WritePane
     WritePane()
     {        
         pane = new VBox();
-        pane.setMinWidth(250);
+        pane.setMinWidth(220);
         
         lblWelcome = new Label("Welcome to the RFID reader.\nThe write mode is under construction.");
         pane.getChildren().add(lblWelcome);
         
         txtBarcodeInput = new TextField();
         resetTextField();
-        txtBarcodeInput.setPrefWidth(200);
-        txtBarcodeInput.setMaxWidth(200);
+//        txtBarcodeInput.setPrefWidth(200);
+        txtBarcodeInput.setMinWidth(100);
+        txtBarcodeInput.setMaxWidth(400);
         txtBarcodeInput.setPrefHeight(30);
         txtBarcodeInput.setOnKeyReleased(e -> txtBarcodeInput_KeyUp(e));
         pane.getChildren().add(txtBarcodeInput);
@@ -104,7 +105,7 @@ public class WritePane
     }
     private void resetTextField() {
         txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_NEUTRAL);        
-        txtBarcodeInput.clear();
+        txtBarcodeInput.clear();        
         txtBarcodeInput.setPromptText("enter barcode");
         //prompt text is erased when cursor enters field
     }

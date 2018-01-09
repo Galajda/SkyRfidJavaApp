@@ -20,7 +20,8 @@ How to coordinate change of app state with change of panes?
     I choose 2.
 The timer task must complete before the next timer event fires.
     There is no harm in calling cancel() multiple times.
-Window size constants. You must clean & build the project after changing a value.
+Window size. You must clean & build the project after changing a size constant.
+    I choose not to use a scroll pane.
 
 Should I use the dll's hex_a and a_hex functions to convert data?
 
