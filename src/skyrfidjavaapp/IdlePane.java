@@ -21,6 +21,7 @@ import javafx.scene.control.Label;
 
 import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
+import cogimag.javafx.FxComboBox;
 /**
  * The idle pane allows the program to remain running without taking any action
  * on RFID tags. It may be used during development to test features.
@@ -33,11 +34,11 @@ public class IdlePane
     
 //    private final Button btnShowConfirmation;
 //    private final Button btnShowLogin;
-    private final Button btnSmallWindow;
-    private final Button btnMediumWindow;
-    private final Button btnLargeWindow;
-    private final Button btnShowCurrentSize;
-    
+//    private final Button btnSmallWindow;
+//    private final Button btnMediumWindow;
+//    private final Button btnLargeWindow;
+//    private final Button btnShowCurrentSize;
+    private final FxComboBox myComboBox;
     IdlePane()
     {
         lblWelcome = new Label("Welcome to the RFID reader.\nThe program is in idle mode.");
@@ -53,15 +54,20 @@ public class IdlePane
 //        btnShowLogin.setOnAction(e -> btnShowLogin_Click(e));
 //        pane.getChildren().add(btnShowLogin);
                
-        this.btnSmallWindow = new Button("Small R/W window");
-        btnSmallWindow.setOnAction(e -> btnResize(e, StageSizeEnum.RW_SMALL));
-        this.btnMediumWindow = new Button("Large R/W window");
-        btnMediumWindow.setOnAction(e -> btnResize(e, StageSizeEnum.RW_LARGE));
-        this.btnLargeWindow = new Button("Config window");
-        btnLargeWindow.setOnAction(e -> btnResize(e, StageSizeEnum.CONFIG));
-        btnShowCurrentSize = new Button("Show current size");
-        btnShowCurrentSize.setOnAction(e -> SkyRfidJavaApp.showStageSize());
-        pane.getChildren().addAll(btnSmallWindow,btnMediumWindow,btnLargeWindow,btnShowCurrentSize);
+//        this.btnSmallWindow = new Button("Small R/W window");
+//        btnSmallWindow.setOnAction(e -> btnResize(e, StageSizeEnum.RW_SMALL));
+//        this.btnMediumWindow = new Button("Large R/W window");
+//        btnMediumWindow.setOnAction(e -> btnResize(e, StageSizeEnum.RW_LARGE));
+//        this.btnLargeWindow = new Button("Config window");
+//        btnLargeWindow.setOnAction(e -> btnResize(e, StageSizeEnum.CONFIG));
+//        btnShowCurrentSize = new Button("Show current size");
+//        btnShowCurrentSize.setOnAction(e -> SkyRfidJavaApp.showStageSize());
+        
+        myComboBox = new FxComboBox();
+        myComboBox.getItems().addAll("one", "two", "three", "ka", "four");
+        
+        pane.getChildren().add(myComboBox);
+//        pane.getChildren().addAll(btnSmallWindow,btnMediumWindow,btnLargeWindow,btnShowCurrentSize);
     }
     VBox getPane()
     {
