@@ -23,7 +23,7 @@ import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.layout.Pane;
+//import javafx.scene.layout.Pane;
 //import javafx.scene.input.MouseEvent;
 
 
@@ -105,6 +105,7 @@ public class MenuBarPane
     private void FileMenuItem_Click(ActionEvent e)
     {        
         MenuItem eventSource = (MenuItem)e.getSource();
+        //just pass the stupid menu item to the function!
         switch (eventSource.getText()) {
             case MenuBarPane.FILE_MENU_RESET:                
 //                FxMsgBox.show("pretend to reset", "Menu action");
@@ -115,32 +116,36 @@ public class MenuBarPane
                  //reload stage
                 System.out.println("menu bar pane file menu asks to reset panes");
                 SkyRfidJavaApp.resetWorkingPanes();
-                
+                e.consume();
                 break;
             case MenuBarPane.FILE_MENU_SM_WIN:
 //                FxMsgBox.show("pretend you see a small window", "Menu action");
                 SkyRfidJavaApp.setStageSize(StageSizeEnum.RW_SMALL);
+//                e.consume();
                 break;
             case MenuBarPane.FILE_MENU_LG_WIN:
 //                FxMsgBox.show("pretend you see a large window", "Menu action");
                 SkyRfidJavaApp.setStageSize(StageSizeEnum.RW_LARGE);
+                e.consume();
                 break;
             case MenuBarPane.FILE_MENU_CONFIG:                
 //                FxMsgBox.show("config is not yet configged", "Menu action");
                 SkyRfidJavaApp.openSettingsPane();
+                e.consume();
+               
                 break;
             case MenuBarPane.FILE_MENU_EXIT:                
 //                FxMsgBox.show("exit", "Menu action");
                 System.exit(0);
             default:                
-                FxMsgBox.show("event source is " + eventSource.getText(), "source debugging");
-                FxMsgBox.show("event type is " +e.getEventType().toString(), "source debugging");                
+                FxMsgBox.show("event source is " + eventSource.getText(), "FileMenuItem_Click");
+                FxMsgBox.show("event type is " +e.getEventType().toString(), "FileMenuItem_Click");                
         }
         
     }
     private void ModeSelectMenu_Click (ActionEvent e)
     {
-        Pane p;
+//        Pane p;
         MenuItem eventSource = (MenuItem)e.getSource();
 //        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         AppState state = new AppState(AppConstants.SETTINGS_CURRENT);

@@ -27,8 +27,10 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Region;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.event.ActionEvent;
-import javafx.geometry.Pos;
+//import javafx.geometry.Pos;
 import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
@@ -45,9 +47,13 @@ import javafx.scene.layout.Priority;
  */
 public class SettingsPane {        
     private final VBox mainPane; //main container
+    private static final String PANE_ID_MAIN = "main pane";
     private final GridPane configNamePane; //holds the config name cbo box
+    private static final String PANE_ID_CONFIG_NAME = "config name pane";
     private final GridPane controlsPane; //holds the rest of the controls so they can be hidden as a group
+    private static final String PANE_ID_CONTROLS = "controls pane";
     private final HBox closeBtnPane;
+    private static final String PANE_ID_CLOSE_BTN = "close button pane";
     private AppState state;
     
     //heading
@@ -96,8 +102,10 @@ public class SettingsPane {
     //constructor
     public SettingsPane() {
         this.mainPane = new VBox(5);
+        this.mainPane.setId(PANE_ID_MAIN);
 //        mainPane.setMinHeight(300);
         configNamePane = new GridPane();
+        configNamePane.setId(SettingsPane.PANE_ID_CONFIG_NAME);
         configNamePane.setVgap(5);
         //row 0 of name pane
         //heading         
@@ -131,6 +139,7 @@ public class SettingsPane {
         mainPane.getChildren().add(configNamePane);
         
         controlsPane = new GridPane();
+        controlsPane.setId(SettingsPane.PANE_ID_CONTROLS);
         controlsPane.setVgap(5);
         //add these controls to sub pane, add sub pane at end.
         //row 0 of controls pane 
@@ -198,6 +207,16 @@ public class SettingsPane {
         //row 5 of controls pane 
         //buttons
         btnSaveConfig = new Button("Save");
+        //error: scene is not available when pane is initialized
+//        btnSaveConfig.getScene().getAccelerators().put(
+//                new KeyCodeCombination(KeyCode.S,KeyCombination.SHORTCUT_DOWN),
+//                new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        btnSaveConfig.fire();
+//                    }                    
+//                }
+//        );
         btnSaveConfig.setOnAction(e -> btnSaveConfig_Click(e));
         controlsPane.add(btnSaveConfig, 0, 5);
         
@@ -209,28 +228,29 @@ public class SettingsPane {
         btnUseConfig.setOnAction(e -> btnUseConfig_Click(e));
         controlsPane.add(btnUseConfig, 2, 5);
         
+        controlsPane.setVisible(false);
+        this.mainPane.getChildren().add(this.controlsPane);
         
-        btnCloseSettingsPane = new Button("Close");
-        
-//        btnCloseSettingsPane.setAlignment(Pos.BOTTOM_RIGHT);
-//        btnCloseSettingsPane.setPadding(new Insets(0,10,0,0));
+        closeBtnPane = new HBox();
+        closeBtnPane.setId(SettingsPane.PANE_ID_CLOSE_BTN);
+        btnCloseSettingsPane = new Button("Close");        
         HBox.setMargin(this.btnCloseSettingsPane, new Insets(0,20,0,0));
+//        VBox.setMargin(this.btnCloseSettingsPane, new Insets(0,0,0,500));
         //changes alignment of text within the button
         btnCloseSettingsPane.setOnAction(e -> btnCloseSettingsPane_Click(e));
 //        controlsPane.add(btnCloseSettingsPane, 3, 5);
+        //technique from D Lowe JavaFX for Dummies
         spacerCloseBtn = new Region();
         HBox.setHgrow(this.spacerCloseBtn, Priority.ALWAYS);
-        closeBtnPane = new HBox(this.spacerCloseBtn,this.btnCloseSettingsPane);
+        closeBtnPane.getChildren().addAll(this.spacerCloseBtn,this.btnCloseSettingsPane);
         
         
-        controlsPane.setVisible(false);
-        this.mainPane.getChildren().add(this.controlsPane);
 //        this.mainPane.getChildren().add(this.btnCloseSettingsPane);
         this.mainPane.getChildren().add(this.closeBtnPane);
 //        System.out.println("setting left margin to main pane width " + mainPane.getWidth() +
 //                " minus button width " + btnCloseSettingsPane.getWidth());
         //both zero
-        VBox.setMargin(this.btnCloseSettingsPane, new Insets(0,0,0,500));
+        
         
     }
 
@@ -239,10 +259,10 @@ public class SettingsPane {
     }
     /**
      * Called when a change is made to the config name combo box.
-     * When the "new" config is selected, a text field is displayed
+     * When the "new" option is selected, a text field is displayed
      * where the user can enter a name for the new config. If an existing
      * config is selected, its values are loaded into the form.
-     * @param e 
+     * @param e ActionEvent for combo box selection change
      */
     private void configSelector_Selected(ActionEvent e) {
         String selectedConfig = (cboConfigName.getValue() == null)? "" : cboConfigName.getValue();   
@@ -251,9 +271,18 @@ public class SettingsPane {
         System.out.println("you selected config " + selectedConfig);
         Boolean isNewConfig = selectedConfig.equals("new");        
         lblConfigName.setVisible(isNewConfig);
-        txtConfigName.setVisible(isNewConfig);        
+        txtConfigName.setVisible(isNewConfig);   
+        
+        if (isNewConfig) {
+            System.out.println("found new config. resetting form with false");
+            this.resetForm(false);
+        }
+        if (!selectedConfig.equals("")) {
+//            resetForm(false); 
+            this.controlsPane.setVisible(true);
+            
+        }
         //if existing config, load these values
-        if (!selectedConfig.equals("")) {this.controlsPane.setVisible(true);}
         if (!isNewConfig && !selectedConfig.equals("")) {            
             state = new AppState(selectedConfig); 
         //AppState loads default config in case of empty string, which should not happen
@@ -277,7 +306,7 @@ public class SettingsPane {
      * further down the list. If a second match is found, this is selected. If none
      * is found, the search resumes at the top of the list. If the depressed key
      * does not match any of the choices, nothing happens. This routine does not
-     * interrupt the action of the arrow keys.
+     * interrupt the action of the arrow keys.<br/>
      * Unlike text field events, combo box events raise compiler warnings
      * due to possible type mismatch when deriving the source from the event. In order
      * to prevent these warnings, the combo box is passed directly to the handler, so that
@@ -290,10 +319,10 @@ public class SettingsPane {
         //since I have the calling object, I think it is easier to pass this
         //to the handler        
         
-        System.out.println("keyboard shortcut on combo box " + combo_box.getId());        
-        System.out.println("key pressed " + e.getCode());
+//        System.out.println("keyboard shortcut on combo box " + combo_box.getId());        
+//        System.out.println("key pressed " + e.getCode());
 //        System.out.println("event get text " + e.getText());
-        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
+//        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
         //index = 0 is first item in list. if none selected, index = -1
         int firstMatchLocation = (combo_box.getSelectionModel().getSelectedIndex() < 0) ? 0 : combo_box.getSelectionModel().getSelectedIndex();
         Boolean foundSecondMatch = false;
@@ -303,20 +332,23 @@ public class SettingsPane {
             if (e.getText().equalsIgnoreCase(combo_box.getItems().get(i).substring(0,1))) {
                 combo_box.getSelectionModel().select(i);
                 foundSecondMatch = true;
-                System.out.println("matched " + e.getText() + " with " + combo_box.getItems().get(i));
+                e.consume();
+//                System.out.println("matched " + e.getText() + " with " + combo_box.getItems().get(i));
                 break;
             }
         }
         //if no second match is found, start from the 0 index
         if (!foundSecondMatch) {
             for (String item : combo_box.getItems() ) {
-                System.out.println("\tcycling through options. item " + item);            
+//                System.out.println("\tcycling through options. item " + item);            
                 if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
                     combo_box.getSelectionModel().select(item);
+                    e.consume();
                     break;
                 }
             }
-        }        
+        }
+//        e.consume();
     }
     /**
      * Triggers validation for text field entries. This event covers the case where
@@ -325,7 +357,7 @@ public class SettingsPane {
      * the source of key released is the next control in the tab order, too late to validate the previous control.
      * @param e 
      */
-    private void txtFldKeyPress(KeyEvent e) {        
+    private void txtFldKeyPress(KeyEvent e) {       
 //        System.out.println("event type " + e.getEventType());
         
         if (e.getCode().equals(KeyCode.ENTER) || e.getCode().equals(KeyCode.TAB)) {
@@ -337,6 +369,10 @@ public class SettingsPane {
                 System.out.println("key press text field id:" + src.getId() + ":");            
                 this.txtFldInputValidator(src);                     
             }
+//            e.consume();
+        }
+        else {
+            
         }
     }
     /**
@@ -429,8 +465,8 @@ public class SettingsPane {
                     txtTheftOn.getText(), txtTheftOff.getText());
             }
             else {
-            //if existing, set new values
-            //fast way: delete and recreate? it created a new config with empty name
+                //if existing, set new values
+                //fast way: delete and recreate? it created a new config with empty name
                 System.out.println("saving new values to " + cboConfigName.getValue());
                 state = new AppState(cboConfigName.getValue());
                 state.setAntiTheftAction(AppState.theftStringToEnum(cboTheftAction.getValue()));
@@ -442,7 +478,7 @@ public class SettingsPane {
                 state.setReadWriteMode(AppState.readWriteStringToEnum(cboReadWriteMode.getValue()));
             }
             FxMsgBox.show(AppConstants.SAVE_CONFIG_SUCCESS_MSG, AppConstants.SAVE_CONFIG_SUCCESS_TITLE);
-            this.resetForm();
+            this.resetForm(true);
             //reset form only if config was valid and was saved successfully
         }
         else {
@@ -466,7 +502,7 @@ public class SettingsPane {
                 if (state.deleteConfiguration(selectedConfig)) {
                     FxMsgBox.show(AppConstants.DELETE_CONFIG_SUCCESS_MSG, AppConstants.DELETE_CONFIG_SUCCESS_TITLE);
                     state = new AppState(AppConstants.SETTINGS_DEFAULT); //in case previous state was the deleted one?
-                    this.resetForm();
+                    this.resetForm(true);
                 }
                 else {
                     FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
@@ -503,44 +539,54 @@ public class SettingsPane {
     }
     private void btnCloseSettingsPane_Click(ActionEvent e) {
         System.out.println("btn click close pane");
-        this.resetForm(); //so that it is blank when next used
+        this.resetForm(true); //so that it is blank when next used
         //show single/multi, r/w, theft panes with current values    
         SkyRfidJavaApp.resetWorkingPanes();
     }
     /**
      * The controls are embedded in sub-panes of the main pane. Cycling through the 
      * controls requires two layers of for loops.
+     * @param full_reset flag to indicate whether all controls are to be reset, or 
+     * only those in the controls pane
      */
-    public void resetForm() {
-        //TODO: reload config names to add any new configs or remove deleted configs
-        
+    public void resetForm(Boolean full_reset) {        
         for (Node n : mainPane.getChildren()) {
             if (n.getClass().equals(GridPane.class)) {
+                //they should all be grid panes
                 GridPane subPane = (GridPane)n;
-                for (Node ctl : subPane.getChildren()) {
-                //cannot use switch case because TextField.class is not considered a constant            
-                    if (ctl.getClass() == TextField.class) {
-//                        System.out.println("found a text field node " + ctl.getId());
-                        TextField tf = (TextField)ctl;
-//                        n.setStyle("");
-                        tf.setStyle("");
-                        tf.clear();
+                System.out.print("pane id " + subPane.getId());
+                System.out.print(" full reset= " + full_reset);
+                System.out.print(" sub pane id equals config name=" + 
+                        (subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME)));
+                System.out.println(" this || that=" +
+                        (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))));
+                if (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))) {     
+                    System.out.println("resetting pane " +subPane.getId());
+                    for (Node ctl : subPane.getChildren()) {
+                    //cannot use switch case because TextField.class is not considered a constant            
+                        if (ctl.getClass() == TextField.class) {
+    //                        System.out.println("found a text field node " + ctl.getId());
+                            TextField tf = (TextField)ctl;
+    //                        n.setStyle("");
+                            tf.setStyle("");
+                            tf.clear();
+                        }
+                        if (ctl.getClass().equals(ComboBox.class)) {
+                            ComboBox cbo = (ComboBox)ctl;                
+                            System.out.println("found combo box " + cbo.getId());
+    //                        System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
+                            //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.
+                            cbo.getSelectionModel().clearSelection();
+    //                        System.out.println("after clear selection value is " + cbo.getValue()); //null
+                        }
+                        if (ctl.getClass().equals(CheckBox.class)) {
+                            CheckBox chk = (CheckBox)ctl;
+    //                        System.out.println("found check box " + chk.getId());
+                            chk.setSelected(false);
+                        }
+                        //ignore labels and buttons
                     }
-                    if (ctl.getClass().equals(ComboBox.class)) {
-                        ComboBox cbo = (ComboBox)ctl;                
-//                        System.out.println("found combo box " + cbo.getId());
-//                        System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
-                        //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.
-                        cbo.getSelectionModel().clearSelection();
-//                        System.out.println("after clear selection value is " + cbo.getValue()); //null
-                    }
-                    if (ctl.getClass().equals(CheckBox.class)) {
-                        CheckBox chk = (CheckBox)ctl;
-//                        System.out.println("found check box " + chk.getId());
-                        chk.setSelected(false);
-                    }
-                    //ignore labels and buttons
-                }
+                }    
             }
         }
         

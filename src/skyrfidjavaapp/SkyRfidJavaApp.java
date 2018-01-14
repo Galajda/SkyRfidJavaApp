@@ -114,7 +114,7 @@ public class SkyRfidJavaApp extends Application {
      * Used when application launches. Loads the working panes.
      * Superseded by resetWorkingPanes().
      */
-    private static void initializeRootPane() {
+    public static void initializeRootPane() {
         
 //        rootPane.setTop(pgmMenu.getPane());
 //        rootPane.setLeft(singleMultiPane.getPane());
@@ -179,9 +179,9 @@ public class SkyRfidJavaApp extends Application {
         rootPane.getChildren().clear();
         
         rootPane.setTop(pgmMenu.getPane());
-        settingsPane.resetForm();
+        settingsPane.resetForm(true);
         rootPane.setCenter(settingsPane.getPane());
-//        SkyRfidJavaApp.setStageSize(StageSizeEnum.CONFIG);
+        SkyRfidJavaApp.setStageSize(StageSizeEnum.CONFIG);
     }
     public static void setStageSize(StageSizeEnum size) {
         switch (size) {
