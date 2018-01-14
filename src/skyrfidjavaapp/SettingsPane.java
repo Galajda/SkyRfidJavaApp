@@ -27,8 +27,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Region;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.KeyCombination;
-import javafx.scene.input.KeyCodeCombination;
+//import javafx.scene.input.KeyCombination;
+//import javafx.scene.input.KeyCodeCombination;
 import javafx.event.ActionEvent;
 //import javafx.geometry.Pos;
 import javafx.geometry.Insets;
@@ -36,6 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Priority;
 
+import cogimag.javafx.FxComboBox;
 
 /**
  *Configurations can be defined and modified through the settings pane. While certain
@@ -60,7 +61,8 @@ public class SettingsPane {
     private final Label lblGreeting;
     private final Label lblConfigSelector;
     private static final String CONFIG_SELECTOR_PROMPT = "Choose a configuration";
-    private final ComboBox<String> cboConfigName;
+//    private final ComboBox<String> cboConfigName;
+    private final FxComboBox cboConfigName;
     private static final String COMBO_BOX_ID_CONFIG_NAME = "config name combo box";
     private final Label lblConfigName;
     private final TextField txtConfigName;
@@ -117,12 +119,14 @@ public class SettingsPane {
         lblConfigSelector = new Label(SettingsPane.CONFIG_SELECTOR_PROMPT);
         configNamePane.add(lblConfigSelector, 0, 1);        
         state = new AppState(AppConstants.SETTINGS_CURRENT);
-        cboConfigName = new ComboBox<>();
+//        cboConfigName = new ComboBox<>();
+//        cboConfigName = new FxComboBox(SettingsPane.COMBO_BOX_ID_CONFIG_NAME, state.getConfigNames());
+        cboConfigName = new FxComboBox();
         cboConfigName.setId(SettingsPane.COMBO_BOX_ID_CONFIG_NAME);
         cboConfigName.setPromptText("Choose a configuration");
         cboConfigName.getItems().addAll(state.getConfigNames());
         cboConfigName.getItems().add("new");
-        cboConfigName.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboConfigName));
+//        cboConfigName.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboConfigName));
         cboConfigName.setOnAction(e -> configSelector_Selected(e));
         configNamePane.add(cboConfigName, 1, 1);        
         lblConfigName = new Label("Name");
@@ -270,33 +274,46 @@ public class SettingsPane {
         //use empty string instead.
         System.out.println("you selected config " + selectedConfig);
         Boolean isNewConfig = selectedConfig.equals("new");        
-        lblConfigName.setVisible(isNewConfig);
-        txtConfigName.setVisible(isNewConfig);   
         
         if (isNewConfig) {
             System.out.println("found new config. resetting form with false");
+//            System.out.println("found new config. taking no action");
             this.resetForm(false);
+//            this.cboConfigName.getSelectionModel().select("new");
         }
-        if (!selectedConfig.equals("")) {
-//            resetForm(false); 
-            this.controlsPane.setVisible(true);
-            
-        }
-        //if existing config, load these values
-        if (!isNewConfig && !selectedConfig.equals("")) {            
-            state = new AppState(selectedConfig); 
-        //AppState loads default config in case of empty string, which should not happen
-//            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
-//            System.out.println("its r/w value is " + state.getReadWriteMode().name());
-            this.cboConfigName.getSelectionModel().select(selectedConfig);
+        else if (!selectedConfig.equals("")) {
+            //if existing config, load these values
+            state = new AppState(selectedConfig);
             this.chkMultiRead.setSelected(state.isMultiRead());
             this.cboReadWriteMode.getSelectionModel().select(state.getReadWriteMode().name());
             this.txtReadFreq.setText(Integer.toString(state.getReadFreq()));
             this.txtXtraKeys.setText(state.getExtraKeys());
             this.cboTheftAction.getSelectionModel().select(state.getAntiTheftAction().name());
             this.txtTheftOn.setText(state.getAntiTheftOn());
-            this.txtTheftOff.setText(state.getAntiTheftOff());            
-        } 
+            this.txtTheftOff.setText(state.getAntiTheftOff());   
+        }
+        
+//        if (!isNewConfig && !selectedConfig.equals("")) {            
+//            state = new AppState(selectedConfig); 
+        //AppState loads default config in case of empty string, which should not happen
+//            System.out.println("its anti theft value is " + state.getAntiTheftAction().name());
+//            System.out.println("its r/w value is " + state.getReadWriteMode().name());
+//            this.cboConfigName.getSelectionModel().select(selectedConfig);
+//            this.chkMultiRead.setSelected(state.isMultiRead());
+//            this.cboReadWriteMode.getSelectionModel().select(state.getReadWriteMode().name());
+//            this.txtReadFreq.setText(Integer.toString(state.getReadFreq()));
+//            this.txtXtraKeys.setText(state.getExtraKeys());
+//            this.cboTheftAction.getSelectionModel().select(state.getAntiTheftAction().name());
+//            this.txtTheftOn.setText(state.getAntiTheftOn());
+//            this.txtTheftOff.setText(state.getAntiTheftOff());            
+//        } 
+        
+        //these commands must follow reset, not precede it.
+        lblConfigName.setVisible(isNewConfig);
+        txtConfigName.setVisible(isNewConfig);   
+        this.controlsPane.setVisible(!selectedConfig.equals(""));
+        
+//        e.consume();
     }
     /**
      * Matches key press with a value from the combo box. Java FX does not do this
@@ -319,7 +336,7 @@ public class SettingsPane {
         //since I have the calling object, I think it is easier to pass this
         //to the handler        
         
-//        System.out.println("keyboard shortcut on combo box " + combo_box.getId());        
+        System.out.println("keyboard shortcut on combo box " + combo_box.getId() + " handled in settings pane");        
 //        System.out.println("key pressed " + e.getCode());
 //        System.out.println("event get text " + e.getText());
 //        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
@@ -547,7 +564,11 @@ public class SettingsPane {
      * The controls are embedded in sub-panes of the main pane. Cycling through the 
      * controls requires two layers of for loops.
      * @param full_reset flag to indicate whether all controls are to be reset, or 
-     * only those in the controls pane
+     * only those in the controls pane. Full reset is called when config has changed.
+     * New configs are loaded into the config name combo box.
+     * Partial reset is called when user selects new config. Since no configs have
+     * been altered, the config name combo box does not need to be reset. If you try,
+     * you get an infinite recursion overflow from the configSelector_Selected function.
      */
     public void resetForm(Boolean full_reset) {        
         for (Node n : mainPane.getChildren()) {
@@ -558,7 +579,7 @@ public class SettingsPane {
                 System.out.print(" full reset= " + full_reset);
                 System.out.print(" sub pane id equals config name=" + 
                         (subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME)));
-                System.out.println(" this || that=" +
+                System.out.println(" this||that=" +
                         (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))));
                 if (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))) {     
                     System.out.println("resetting pane " +subPane.getId());
@@ -586,16 +607,17 @@ public class SettingsPane {
                         }
                         //ignore labels and buttons
                     }
-                }    
+                }
             }
         }
-        
-        state = new AppState(AppConstants.SETTINGS_DEFAULT);
-        //must reinstantiate app state so the changed xml doc is loaded
-        cboConfigName.getItems().clear();
-        cboConfigName.getItems().addAll(state.getConfigNames());
-        cboConfigName.getItems().add("new");
-        this.controlsPane.setVisible(false);
+        if (full_reset) {
+            //reinstantiate app state so the changed xml doc is loaded
+            state = new AppState(AppConstants.SETTINGS_DEFAULT);            
+            cboConfigName.getItems().clear();
+            cboConfigName.getItems().addAll(state.getConfigNames());
+            cboConfigName.getItems().add("new");
+            this.controlsPane.setVisible(false);
+        }
     }
     
     private Boolean isValidConfig() {
