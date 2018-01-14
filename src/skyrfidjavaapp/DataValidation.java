@@ -35,7 +35,7 @@ public class DataValidation {
         Pattern p = Pattern.compile("\\W");
         Matcher m = p.matcher(testName);
         
-        return !m.find() && (testName.length() < 25);
+        return !m.find() && (testName.length() > 0) && (testName.length() < 25);
     }
     public static Boolean isValidReadFreq(String testFreq) {
         //what is reasonable range? indicate this on settings page
