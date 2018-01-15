@@ -74,7 +74,8 @@ public class SettingsPane {
     
     //read/write parameters
     private final Label lblReadWriteMode;    
-    private final ComboBox<String> cboReadWriteMode;  
+//    private final ComboBox<String> cboReadWriteMode;  
+    private final FxComboBox cboReadWriteMode;  
     private static final String COMBO_BOX_ID_READ_WRITE = "read write combo box";
     private final Label lblReadFreq;
     private final TextField txtReadFreq;    
@@ -85,7 +86,8 @@ public class SettingsPane {
     
     //anti-theft parameters
     private final Label lblTheftAction;
-    private final ComboBox<String> cboTheftAction;
+//    private final ComboBox<String> cboTheftAction;
+    private final FxComboBox cboTheftAction;
     private static final String COMBO_BOX_ID_THEFT_ACTION = "theft action combo box";
     private final Label lblTheftOn;
     private final TextField txtTheftOn;
@@ -157,11 +159,11 @@ public class SettingsPane {
         //read/write
         lblReadWriteMode = new Label("read/write/idle");
         controlsPane.add(lblReadWriteMode, 0, 1);
-        cboReadWriteMode = new ComboBox<>();
+        cboReadWriteMode = new FxComboBox();
         cboReadWriteMode.setId(SettingsPane.COMBO_BOX_ID_READ_WRITE);
         cboReadWriteMode.getItems().addAll(ReadWriteModeEnum.IDLE_MODE.name(), 
                 ReadWriteModeEnum.READ_MODE.name(), ReadWriteModeEnum.WRITE_MODE.name());
-        cboReadWriteMode.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboReadWriteMode));
+//        cboReadWriteMode.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboReadWriteMode));
         controlsPane.add(cboReadWriteMode, 1, 1);
                 
         lblReadFreq = new Label("Msec between readings");
@@ -185,11 +187,11 @@ public class SettingsPane {
         //anti-theft
         lblTheftAction = new Label("Theft bit action");
         controlsPane.add(lblTheftAction, 0, 3);
-        cboTheftAction = new ComboBox<>();
+        cboTheftAction = new FxComboBox();
         cboTheftAction.setId(SettingsPane.COMBO_BOX_ID_THEFT_ACTION);
         cboTheftAction.getItems().addAll(AntiTheftEnum.NO_ACTION.name(),
                 AntiTheftEnum.TURN_ON.name(), AntiTheftEnum.TURN_OFF.name());
-        cboTheftAction.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboTheftAction));
+//        cboTheftAction.setOnKeyPressed(e -> comboBoxKeyboardShortcut(e, cboTheftAction));
         controlsPane.add(cboTheftAction, 1, 3);
         
         lblTheftOn = new Label("Value of theft on");
