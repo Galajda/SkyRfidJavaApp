@@ -29,6 +29,7 @@ import nu.xom.Attribute;
 import nu.xom.Text;
 import nu.xom.Serializer;
 import java.util.ArrayList;
+import cogimag.javafx.FxMessageBox;
 
 /**
  * The logic of the AppState. Parameters that determine the application's operation are stored in
@@ -75,14 +76,17 @@ public AppState(String configName) {
         }
         catch (nu.xom.ValidityException ex) {
             System.out.println("error app state constructor. invalid xml " + ex.getMessage());
-            FxMsgBox.show(InputErrorMsg.ERR_INVALID_XML_MSG, InputErrorMsg.ERR_XML_TITLE);
+//            FxMsgBox.show(InputErrorMsg.ERR_INVALID_XML_MSG, InputErrorMsg.ERR_XML_TITLE);
+            FxMessageBox.show(InputErrorMsg.ERR_XML_TITLE, InputErrorMsg.ERR_INVALID_XML_MSG);
             System.exit(1);
         }
         catch (Exception ex) {
             System.out.println("error app state constructor " + ex.getMessage());
             ex.printStackTrace();
-            FxMsgBox.show(InputErrorMsg.ERR_XML_UNKNOWN_MSG + "\n" +
-                    ex.getMessage(), InputErrorMsg.ERR_XML_TITLE);
+//            FxMsgBox.show(InputErrorMsg.ERR_XML_UNKNOWN_MSG + "\n" +
+//                    ex.getMessage(), InputErrorMsg.ERR_XML_TITLE);
+            FxMessageBox.show(InputErrorMsg.ERR_XML_TITLE, InputErrorMsg.ERR_XML_UNKNOWN_MSG + 
+                    "\n" + ex.getMessage());
             System.exit(1);
         }        
     }

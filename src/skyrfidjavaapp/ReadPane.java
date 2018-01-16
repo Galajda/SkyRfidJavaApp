@@ -23,6 +23,7 @@ import javafx.event.ActionEvent;
 import javafx.application.Platform;
 import java.util.Timer;
 import java.util.TimerTask;
+import cogimag.javafx.FxMessageBox;
 
 /**
  * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
@@ -116,7 +117,8 @@ public class ReadPane
 //    }    
     
     private void btnReadMulti_Click(ActionEvent e) {
-        FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
+//        FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
+        FxMessageBox.show("Warning: Test code", "multi read test uses common reader object\nerrors may occur if timer is running");
         System.out.println("got click to read deck");       
         reader = new TagReader();
 

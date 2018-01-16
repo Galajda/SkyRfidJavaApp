@@ -25,7 +25,7 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
 //import javafx.scene.layout.Pane;
 //import javafx.scene.input.MouseEvent;
-
+import cogimag.javafx.FxMessageBox;
 
 /**
  *
@@ -138,8 +138,10 @@ public class MenuBarPane
 //                FxMsgBox.show("exit", "Menu action");
                 System.exit(0);
             default:                
-                FxMsgBox.show("event source is " + eventSource.getText(), "FileMenuItem_Click");
-                FxMsgBox.show("event type is " +e.getEventType().toString(), "FileMenuItem_Click");                
+//                FxMsgBox.show("event source is " + eventSource.getText(), "FileMenuItem_Click");
+                FxMessageBox.show("FileMenuItem_Click", "event source is " + eventSource.getText());
+//                FxMsgBox.show("event type is " +e.getEventType().toString(), "FileMenuItem_Click");
+                FxMessageBox.show("FileMenuItem_Click", "event type is " +e.getEventType().toString());
         }
         
     }

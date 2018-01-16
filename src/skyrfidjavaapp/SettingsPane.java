@@ -21,7 +21,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.control.Label;
-import javafx.scene.control.ComboBox;
+//import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Button;
@@ -37,6 +37,8 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Priority;
 
 import cogimag.javafx.FxComboBox;
+import cogimag.javafx.FxMessageBox;
+import cogimag.javafx.FxConfirmDialog;
 
 /**
  *Configurations can be defined and modified through the settings pane. While certain
@@ -333,42 +335,42 @@ public class SettingsPane {
      * @param e the key press event
      * @param combo_box the variable representing the combo box
      */
-    private void comboBoxKeyboardShortcut(KeyEvent e, ComboBox<String> combo_box) {
-        //idea from SO 13362607 is to check the type of each element.
-        //since I have the calling object, I think it is easier to pass this
-        //to the handler        
-        
-        System.out.println("keyboard shortcut on combo box " + combo_box.getId() + " handled in settings pane");        
-//        System.out.println("key pressed " + e.getCode());
-//        System.out.println("event get text " + e.getText());
-//        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
-        //index = 0 is first item in list. if none selected, index = -1
-        int firstMatchLocation = (combo_box.getSelectionModel().getSelectedIndex() < 0) ? 0 : combo_box.getSelectionModel().getSelectedIndex();
-        Boolean foundSecondMatch = false;
-        //start searching for a new match after the first match
-        //if no first match is found, this loop is skipped, foundSecondMatch remains false
-        for (int i=firstMatchLocation+1; i<combo_box.getItems().size(); i++) {
-            if (e.getText().equalsIgnoreCase(combo_box.getItems().get(i).substring(0,1))) {
-                combo_box.getSelectionModel().select(i);
-                foundSecondMatch = true;
-                e.consume();
-//                System.out.println("matched " + e.getText() + " with " + combo_box.getItems().get(i));
-                break;
-            }
-        }
-        //if no second match is found, start from the 0 index
-        if (!foundSecondMatch) {
-            for (String item : combo_box.getItems() ) {
-//                System.out.println("\tcycling through options. item " + item);            
-                if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
-                    combo_box.getSelectionModel().select(item);
-                    e.consume();
-                    break;
-                }
-            }
-        }
-//        e.consume();
-    }
+//    private void comboBoxKeyboardShortcut(KeyEvent e, ComboBox<String> combo_box) {
+//        //idea from SO 13362607 is to check the type of each element.
+//        //since I have the calling object, I think it is easier to pass this
+//        //to the handler        
+//        
+//        System.out.println("keyboard shortcut on combo box " + combo_box.getId() + " handled in settings pane");        
+////        System.out.println("key pressed " + e.getCode());
+////        System.out.println("event get text " + e.getText());
+////        System.out.println("selected item index " + combo_box.getSelectionModel().getSelectedIndex());
+//        //index = 0 is first item in list. if none selected, index = -1
+//        int firstMatchLocation = (combo_box.getSelectionModel().getSelectedIndex() < 0) ? 0 : combo_box.getSelectionModel().getSelectedIndex();
+//        Boolean foundSecondMatch = false;
+//        //start searching for a new match after the first match
+//        //if no first match is found, this loop is skipped, foundSecondMatch remains false
+//        for (int i=firstMatchLocation+1; i<combo_box.getItems().size(); i++) {
+//            if (e.getText().equalsIgnoreCase(combo_box.getItems().get(i).substring(0,1))) {
+//                combo_box.getSelectionModel().select(i);
+//                foundSecondMatch = true;
+//                e.consume();
+////                System.out.println("matched " + e.getText() + " with " + combo_box.getItems().get(i));
+//                break;
+//            }
+//        }
+//        //if no second match is found, start from the 0 index
+//        if (!foundSecondMatch) {
+//            for (String item : combo_box.getItems() ) {
+////                System.out.println("\tcycling through options. item " + item);            
+//                if (e.getText().equalsIgnoreCase(item.substring(0, 1))) {
+//                    combo_box.getSelectionModel().select(item);
+//                    e.consume();
+//                    break;
+//                }
+//            }
+//        }
+////        e.consume();
+//    }
     /**
      * Triggers validation for text field entries. This event covers the case where
      * the user exits the text field by Enter or Tab keys.      
@@ -426,31 +428,36 @@ public class SettingsPane {
             case SettingsPane.TXT_FLD_ID_CONFIG_NAME:
                 validInput = DataValidation.isValidConfigName(text_field.getText());
                 if (!validInput) {
-                    FxMsgBox.show(InputErrorMsg.ERR_CONFIG_NAME, InputErrorMsg.ERR_INPUT_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_CONFIG_NAME, InputErrorMsg.ERR_INPUT_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_INPUT_TITLE, InputErrorMsg.ERR_CONFIG_NAME);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_READ_FREQ:
                 validInput = DataValidation.isValidReadFreq(text_field.getText());
                 if (!validInput) {
-                    FxMsgBox.show(InputErrorMsg.ERR_READ_FREQ, InputErrorMsg.ERR_INPUT_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_READ_FREQ, InputErrorMsg.ERR_INPUT_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_INPUT_TITLE, InputErrorMsg.ERR_READ_FREQ);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_THEFT_OFF:
                 validInput = DataValidation.isValidTheftValue(text_field.getText());
                 if (!validInput) {
-                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_INPUT_TITLE, InputErrorMsg.ERR_THEFT_VALUE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_THEFT_ON:
                 validInput = DataValidation.isValidTheftValue(text_field.getText());
                 if (!validInput) {
-                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_THEFT_VALUE, InputErrorMsg.ERR_INPUT_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_INPUT_TITLE, InputErrorMsg.ERR_THEFT_VALUE);
                 }
                 break;
             case SettingsPane.TXT_FLD_ID_XTRA_KEYS:
                 validInput = DataValidation.isValidXtraKeys(text_field.getText());
                 if (!validInput) {
-                    FxMsgBox.show(InputErrorMsg.ERR_XTRA_KEYS, InputErrorMsg.ERR_INPUT_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_XTRA_KEYS, InputErrorMsg.ERR_INPUT_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_INPUT_TITLE, InputErrorMsg.ERR_XTRA_KEYS);
                 }
                 break;                          
             default:
@@ -496,12 +503,14 @@ public class SettingsPane {
                 state.setReadFreq(Integer.parseInt(txtReadFreq.getText()));
                 state.setReadWriteMode(AppState.readWriteStringToEnum(cboReadWriteMode.getValue()));
             }
-            FxMsgBox.show(AppConstants.SAVE_CONFIG_SUCCESS_MSG, AppConstants.SAVE_CONFIG_SUCCESS_TITLE);
+//            FxMsgBox.show(AppConstants.SAVE_CONFIG_SUCCESS_MSG, AppConstants.SAVE_CONFIG_SUCCESS_TITLE);
+            FxMessageBox.show(AppConstants.SAVE_CONFIG_SUCCESS_TITLE, AppConstants.SAVE_CONFIG_SUCCESS_MSG);
             this.resetForm(true);
             //reset form only if config was valid and was saved successfully
         }
         else {
-            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_SAVE_TITLE);
+//            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_SAVE_TITLE);
+            FxMessageBox.show(InputErrorMsg.ERR_CANNOT_SAVE_TITLE, InputErrorMsg.ERR_INVALID_PAGE_MSG);
         }        
     }
     /**
@@ -514,26 +523,32 @@ public class SettingsPane {
             //ensures that config name is not null
             String selectedConfig = cboConfigName.getValue(); //might be "new", in which case delete will fail
             //TODO: add ok/cancel msg box. proceed if ok
-            FxMsgBox confirmationDialog = new FxMsgBox();
-            Boolean okDelete = confirmationDialog.confirm("are you sure you want to delete?", "confirm delete");
+//            FxMsgBox confirmationDialog = new FxMsgBox();
+//            Boolean okDelete = confirmationDialog.confirm("are you sure you want to delete?", "confirm delete");
+            FxConfirmDialog confirmationDialog = new FxConfirmDialog();
+            Boolean okDelete = confirmationDialog.confirm(AppConstants.DELETE_CONFIG_CONFIRM_TITLE, AppConstants.DELETE_CONFIG_CONFIRM_MSG);
             System.out.println("response to confirmation " + okDelete);
             if (okDelete) {
                 if (state.deleteConfiguration(selectedConfig)) {
-                    FxMsgBox.show(AppConstants.DELETE_CONFIG_SUCCESS_MSG, AppConstants.DELETE_CONFIG_SUCCESS_TITLE);
+//                    FxMsgBox.show(AppConstants.DELETE_CONFIG_SUCCESS_MSG, AppConstants.DELETE_CONFIG_SUCCESS_TITLE);
+                    FxMessageBox.show(AppConstants.DELETE_CONFIG_SUCCESS_TITLE, AppConstants.DELETE_CONFIG_SUCCESS_MSG);
                     state = new AppState(AppConstants.SETTINGS_DEFAULT); //in case previous state was the deleted one?
                     this.resetForm(true);
                 }
                 else {
-                    FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+//                    FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+                    FxMessageBox.show(InputErrorMsg.ERR_CANNOT_DELETE_TITLE, InputErrorMsg.ERR_CANNOT_DELETE_MSG);
                 }
             //do not allow delete default or current        
             }
             else {
-                FxMsgBox.show(InputErrorMsg.CANCEL_DELETE_MSG, InputErrorMsg.CANCEL_DELETE_TITLE);
+//                FxMsgBox.show(InputErrorMsg.CANCEL_DELETE_MSG, InputErrorMsg.CANCEL_DELETE_TITLE);
+                FxMessageBox.show(InputErrorMsg.CANCEL_DELETE_TITLE, InputErrorMsg.CANCEL_DELETE_MSG);
             }
         }
         else {
-            FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+//            FxMsgBox.show(InputErrorMsg.ERR_CANNOT_DELETE_MSG, InputErrorMsg.ERR_CANNOT_DELETE_TITLE);
+            FxMessageBox.show(InputErrorMsg.ERR_CANNOT_DELETE_TITLE, InputErrorMsg.ERR_CANNOT_DELETE_MSG);
             //use different message?
         }        
     }
@@ -553,7 +568,8 @@ public class SettingsPane {
             state.setReadWriteMode(AppState.readWriteStringToEnum(this.cboReadWriteMode.getValue()));        
         }
         else {
-            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_USE_TITLE);
+//            FxMsgBox.show(InputErrorMsg.ERR_INVALID_PAGE_MSG, InputErrorMsg.ERR_CANNOT_USE_TITLE);
+            FxMessageBox.show(InputErrorMsg.ERR_CANNOT_USE_TITLE, InputErrorMsg.ERR_INVALID_PAGE_MSG);
         }
     }
     private void btnCloseSettingsPane_Click(ActionEvent e) {
@@ -586,6 +602,7 @@ public class SettingsPane {
                 if (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))) {     
                     System.out.println("resetting pane " +subPane.getId());
                     for (Node ctl : subPane.getChildren()) {
+                        System.out.println("ctl class " + ctl.getClass());
                     //cannot use switch case because TextField.class is not considered a constant            
                         if (ctl.getClass() == TextField.class) {
     //                        System.out.println("found a text field node " + ctl.getId());
@@ -594,8 +611,9 @@ public class SettingsPane {
                             tf.setStyle("");
                             tf.clear();
                         }
-                        if (ctl.getClass().equals(ComboBox.class)) {
-                            ComboBox cbo = (ComboBox)ctl;                
+                        if (ctl.getClass().equals(FxComboBox.class)) {
+                            
+                            FxComboBox cbo = (FxComboBox)ctl;                
                             System.out.println("found combo box " + cbo.getId());
     //                        System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
                             //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.

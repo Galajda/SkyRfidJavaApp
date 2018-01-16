@@ -28,6 +28,9 @@ public class AppConstants
     //messages
     public static final String DELETE_CONFIG_SUCCESS_TITLE = "Delete configuration";
     public static final String DELETE_CONFIG_SUCCESS_MSG = "Configuration deleted.";
+    public static final String DELETE_CONFIG_CONFIRM_TITLE = "Confirm delete";
+    public static final String DELETE_CONFIG_CONFIRM_MSG = "Are you sure you want to delete?";
+    
     public static final String SAVE_CONFIG_SUCCESS_TITLE = "Save configuration";
     public static final String SAVE_CONFIG_SUCCESS_MSG = "Configuration saved.";
     public static final String ERR_TOGGLE_SINGLE_MULTI_TITLE = "Cannot change single/multi";

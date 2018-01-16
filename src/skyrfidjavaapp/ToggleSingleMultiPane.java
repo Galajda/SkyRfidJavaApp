@@ -19,7 +19,7 @@ package skyrfidjavaapp;
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
-
+import cogimag.javafx.FxMessageBox;
 /**
  *
  * @author MichalG
@@ -60,7 +60,8 @@ public class ToggleSingleMultiPane
 //        state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
         state = new AppState(AppConstants.SETTINGS_CURRENT);
         if (state.getReadWriteMode().equals(ReadWriteModeEnum.WRITE_MODE)) {
-            FxMsgBox.show(AppConstants.ERR_TOGGLE_SINGLE_MULTI_MSG, AppConstants.ERR_TOGGLE_SINGLE_MULTI_TITLE);
+//            FxMsgBox.show(AppConstants.ERR_TOGGLE_SINGLE_MULTI_MSG, AppConstants.ERR_TOGGLE_SINGLE_MULTI_TITLE);
+            FxMessageBox.show(AppConstants.ERR_TOGGLE_SINGLE_MULTI_TITLE, AppConstants.ERR_TOGGLE_SINGLE_MULTI_MSG);
             state.setMultiRead(false);
         }
         else {
