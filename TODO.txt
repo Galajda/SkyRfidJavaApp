@@ -1,7 +1,8 @@
-All panes:
-    Only settings pane?
+All panes:    
     Replace built-in fx msg box with msg box from library
     Replace built-in combo box with combo box from library
+    Delete FxMsgBox class
+
 App title:
     Concatenate app title with name of current configuration 
 
@@ -23,9 +24,16 @@ Toggle single multi pane:
 Write pane:
     Communicate errors to user: no device, no tag, bad input
     Validate input before writing
+    Replace delayed reset with animation
     
 Read pane:    
     If detect multiple tags in single mode, throw error.
+    Bug when USB device is pulled out. Timer continues to run. Desired behavior:
+        Stop the timer. Show message box. Instruct user to replace the device
+        and reset the app from the File menu.
+        How do you differentiate absence of tag from absence of device?
+    Implement stay quiet.
+    
 TagActor:
     Move uid to parent?
     
@@ -48,6 +56,10 @@ Settings pane:
         the settings from the existing config. The form must be cleared. resetForm() starts an infinite
         loop, since it changes the config name combo box. 
 
+MenuBarPane:
+    and buttons
+    SO 24499500 recommends assigning accelerators as well as mnemonics. The mnemonics
+    interfere with combo box keyboard shortcuts.
 
 AppConstants:
     remove style strings. they ahve been exported to the cogimag library.
@@ -63,7 +75,8 @@ Config names xml and dtd:
 
 RoboTypist:
     recognize escape chars like \n \l from extra keys
-
+    send keys interferes with typing, clicks
+    extend getKeycode to more chars !@#$%
 dll functions
     does stay quiet state persist after tag leaves field? rf.exe can call stay quiet 
         and reset to ready. when stay quiet tag leaves field and is 
