@@ -593,16 +593,16 @@ public class SettingsPane {
             if (n.getClass().equals(GridPane.class)) {
                 //they should all be grid panes
                 GridPane subPane = (GridPane)n;
-                System.out.print("pane id " + subPane.getId());
-                System.out.print(" full reset= " + full_reset);
-                System.out.print(" sub pane id equals config name=" + 
-                        (subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME)));
-                System.out.println(" this||that=" +
-                        (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))));
+//                System.out.print("pane id " + subPane.getId());
+//                System.out.print(" full reset= " + full_reset);
+//                System.out.print(" sub pane id equals config name=" + 
+//                        (subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME)));
+//                System.out.println(" this||that=" +
+//                        (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))));
                 if (full_reset || !(subPane.getId().equals(SettingsPane.PANE_ID_CONFIG_NAME))) {     
-                    System.out.println("resetting pane " +subPane.getId());
+//                    System.out.println("resetting pane " +subPane.getId());
                     for (Node ctl : subPane.getChildren()) {
-                        System.out.println("ctl class " + ctl.getClass());
+//                        System.out.println("ctl class " + ctl.getClass());
                     //cannot use switch case because TextField.class is not considered a constant            
                         if (ctl.getClass() == TextField.class) {
     //                        System.out.println("found a text field node " + ctl.getId());
@@ -614,7 +614,7 @@ public class SettingsPane {
                         if (ctl.getClass().equals(FxComboBox.class)) {
                             
                             FxComboBox cbo = (FxComboBox)ctl;                
-                            System.out.println("found combo box " + cbo.getId());
+//                            System.out.println("found combo box " + cbo.getId());
     //                        System.out.println("cbo value property class " + cbo.valueProperty().getClass().getName());
                             //SO 12142518 how to clear a combo box offers more complex solutions. this seems to work.
                             cbo.getSelectionModel().clearSelection();
