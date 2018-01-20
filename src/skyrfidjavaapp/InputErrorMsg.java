@@ -27,6 +27,11 @@ public class InputErrorMsg {
     public static final String ERR_XML_UNKNOWN_MSG = "Unknown problem with settings file" +
             "\nPlease take a screen shot and notify author.";
     
+    public static final String ERR_INVALID_BARCODE_TITLE = "Cannot write tag";
+    public static final String ERR_INVALID_BARCODE_MSG = "The barcode must consist of" +
+            "\nletters, numbers and punctuation." +
+            "\nand be 14 characters long.";
+    
     public static final String ERR_INPUT_TITLE = "Invalid input";
     public static final String ERR_CONFIG_NAME = "The configuration name must consist of" +
             "\nletters, numbers and punctuation." +
@@ -38,9 +43,6 @@ public class InputErrorMsg {
     public static final String ERR_THEFT_VALUE = "The anti-theft (AFI) value" +
             "\nmust be a hexadecimal number" +
             "\nbetween 0x00 and 0xff.";
-    public static final String ERR_BARCODE = "The barcode must consist of" +
-            "\nletters, numbers and punctuation." +
-            "\nand be 14 characters long.";
     public static final String ERR_CANNOT_SAVE_TITLE = "Cannot save configuration";
     public static final String ERR_CANNOT_USE_TITLE = "Cannot use configuration";
     

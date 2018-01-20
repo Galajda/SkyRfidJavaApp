@@ -24,6 +24,7 @@ import javafx.scene.input.KeyEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 import javafx.application.Platform;
+import cogimag.javafx.FxMessageBox;
 
 
 /**
@@ -68,18 +69,25 @@ public class WritePane
     private void txtBarcodeInput_KeyUp(KeyEvent e) {
 //        System.out.println("key release " + e.getCode());
         if (e.getCode().equals(KeyCode.ENTER)) {
-            writer = new TagWriter();
-            System.out.println("you entered barcode " + txtBarcodeInput.getText());
-            boolean writeSuccess = writer.WriteOneTag(txtBarcodeInput.getText());
-            writer.closePort();
-            System.out.println("write result " + writeSuccess);
-            if (writeSuccess) {
-                txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
-                //change theft bit
+            if (DataValidation.isValidBarcode(txtBarcodeInput.getText())) {
+                writer = new TagWriter();
+                System.out.println("you entered barcode " + txtBarcodeInput.getText());
+                boolean writeSuccess = writer.WriteOneTag(txtBarcodeInput.getText());
+                writer.closePort();
+                System.out.println("write result " + writeSuccess);
+                if (writeSuccess) {
+                    txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_OK);
+                    //change theft bit
+                }
+                else {
+                    txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);
+                }
             }
             else {
                 txtBarcodeInput.setStyle(AppConstants.STYLE_TEXT_FLD_FAIL);
+                FxMessageBox.show(InputErrorMsg.ERR_INVALID_BARCODE_TITLE, InputErrorMsg.ERR_INVALID_BARCODE_MSG);
             }
+            
             //wait, reset text field 
             Timer tmr = new Timer();
             tmr.schedule(new DelayedResetTextField(), 1000);
@@ -90,6 +98,7 @@ public class WritePane
 //            System.out.println("end wait " + System.currentTimeMillis());
 //            txtBarcodeInput.clear();
 //            txtBarcodeInput.setStyle(this.STYLE_WRITE_NEUTRAL);
+            
         }
     }
     class DelayedResetTextField extends TimerTask {
