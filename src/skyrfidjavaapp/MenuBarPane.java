@@ -17,6 +17,7 @@
 package skyrfidjavaapp;
 
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.layout.HBox;
 
 import javafx.scene.control.Menu;
@@ -68,7 +69,22 @@ public class MenuBarPane
         
         fileMenu = new Menu("_File");        
         resetMenu = new MenuItem(MenuBarPane.FILE_MENU_RESET);
-        resetMenu.setOnAction(e-> FileMenuItem_Click(e));
+//        resetMenu.setOnAction(e-> FileMenuItem_Click(e));
+        resetMenu.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                System.out.println("handling reset menu item in anon inner class");
+                AppState state = new AppState(AppConstants.SETTINGS_CURRENT);
+                state.resetAppState(); 
+                 //reload stage
+                System.out.println("menu bar pane file menu asks to reset panes");
+                SkyRfidJavaApp.resetWorkingPanes();
+                
+            }
+        });
+        
+        
+        
         smallWinMenu = new MenuItem(MenuBarPane.FILE_MENU_SM_WIN);
         smallWinMenu.setOnAction(e-> FileMenuItem_Click(e));
         largeWinMenu = new MenuItem(MenuBarPane.FILE_MENU_LG_WIN);
