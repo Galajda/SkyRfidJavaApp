@@ -49,8 +49,7 @@ public class RoboTypist {
      * keys will not be sent.
      * @param card the string to be sent to the current input focus, plus any extra characters
      */
-    public void sendKeys(String card)
-    {
+    public void sendKeys(String card) {
         out.println("send keys does app have focus? " + this.doesAppHaveFocus());
         if (!this.doesAppHaveFocus() && isRobotOnline) {
 //            out.println("in send keys method");
@@ -68,9 +67,23 @@ public class RoboTypist {
                 //how to recognize escape chars?
                 r.keyPress(getKeycode(c));
                 r.keyRelease(getKeycode(c));
+                //SO 15260282
+//                r.keyPress(KeyEvent.getExtendedKeyCodeForChar(c));
+//                r.keyRelease(KeyEvent.getExtendedKeyCodeForChar(c));
+                
                 //out.println("the char array ele c is " + c );
                 r.delay(100);
             }
+            
+            //you cannot press keys on the second level
+//            r.keyPress(KeyEvent.VK_ASTERISK);
+//            r.keyRelease(KeyEvent.VK_ASTERISK);
+//            r.keyPress(KeyEvent.VK_AT);
+//            r.keyRelease(KeyEvent.VK_AT);
+            r.keyPress(KeyEvent.VK_SHIFT);
+            r.keyPress(KeyEvent.VK_8);
+            r.keyRelease(KeyEvent.VK_SHIFT);
+            r.keyRelease(KeyEvent.VK_8);
 //            out.println("for loop finished");
             //let the caller decide what else to send
 //            r.keyPress(KeyEvent.VK_ENTER);
@@ -78,16 +91,13 @@ public class RoboTypist {
         }        
     }
     
-    private static int getKeycode(char ch)
-    {
+    private static int getKeycode(char ch) {
         //convert a char to the Java keycode values VK_A, VK_B, VK_1, VK_2, etc.
         int kc=88;  //default is the letter x
-        if (ch >= 'a' && ch <= 'z')
-        {
+        if (ch >= 'a' && ch <= 'z') {
             kc = ch-32;
         }
-        if ((ch >= 'A' && ch <= 'Z' ) | (ch >= '0' && ch <= '9'))
-        {
+        if ((ch >= 'A' && ch <= 'Z' ) | (ch >= '0' && ch <= '9')) {
             kc=ch+0;
         }
         return kc;

@@ -18,10 +18,15 @@ package skyrfidjavaapp;
 
 import javafx.scene.layout.VBox;
 import javafx.scene.control.Label;
-
+import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
+//import javafx.scene.input.KeyEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.input.KeyCode;
 import cogimag.javafx.FxComboBox;
+
+import java.awt.event.KeyEvent;
 /**
  * The idle pane allows the program to remain running without taking any action
  * on RFID tags. It may be used during development to test features.
@@ -31,22 +36,25 @@ public class IdlePane
 {
     private final VBox pane;
     private final Label lblWelcome;
-    
+    private final Label lblTestIntro;
+    private final TextField txtCharInput;
+    private final Button btnGetCharCode;
 //    private final Button btnShowConfirmation;
 //    private final Button btnShowLogin;
 //    private final Button btnSmallWindow;
 //    private final Button btnMediumWindow;
 //    private final Button btnLargeWindow;
 //    private final Button btnShowCurrentSize;
-    private final FxComboBox myComboBox;
+//    private final FxComboBox myComboBox;
     IdlePane()
     {
-        lblWelcome = new Label("Welcome to the RFID reader.\nThe program is in idle mode.");
-        
         pane = new VBox();
         pane.setMinWidth(180);
+        lblWelcome = new Label("Welcome to the RFID reader.\nThe program is in idle mode.");
         pane.getChildren().add(lblWelcome);
         
+        lblTestIntro = new Label("test feature: extend send keys to full keyboard");
+        pane.getChildren().add(lblTestIntro);
 //        btnShowConfirmation = new Button("Show confirmation box");
 //        btnShowConfirmation.setOnAction(e -> btnShowConfirmation_Click(e));
 //        pane.getChildren().add(btnShowConfirmation);
@@ -61,19 +69,65 @@ public class IdlePane
 //        this.btnLargeWindow = new Button("Config window");
 //        btnLargeWindow.setOnAction(e -> btnResize(e, StageSizeEnum.CONFIG));
 //        btnShowCurrentSize = new Button("Show current size");
-//        btnShowCurrentSize.setOnAction(e -> SkyRfidJavaApp.showStageSize());
-        
-        myComboBox = new FxComboBox();
-        myComboBox.getItems().addAll("one", "two", "three", "ka", "four");
-        
-        pane.getChildren().add(myComboBox);
+//        btnShowCurrentSize.setOnAction(e -> SkyRfidJavaApp.showStageSize());        
+//        myComboBox = new FxComboBox();
+//        myComboBox.getItems().addAll("one", "two", "three", "ka", "four");        
+//        pane.getChildren().add(myComboBox);
 //        pane.getChildren().addAll(btnSmallWindow,btnMediumWindow,btnLargeWindow,btnShowCurrentSize);
+        
+        txtCharInput = new TextField();
+        txtCharInput.setMaxWidth(50);
+//        txtCharInput.setOnKeyReleased(new EventHandler<KeyEvent>() {
+//            @Override
+//            public void handle(KeyEvent event) {
+//                System.out.println("handling key release");
+//                System.out.println("\tcode name " + event.getCode().getName());
+//                System.out.println("\tchar " + event.getCharacter().toString());
+//                System.out.println("\tcode value of " + Enum.valueOf(KeyCode.class, event.getCode().toString()));
+//                System.out.println("\tcode hash code " + event.getCode().hashCode());
+//                txtCharInput.setText("");
+//            }            
+//        });
+        
+        pane.getChildren().add(txtCharInput);
+        
+        
+        btnGetCharCode = new Button("Get the char code");
+        btnGetCharCode.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                char keystroke = txtCharInput.getText().charAt(0);
+                System.out.println("literal value " + txtCharInput.getText());
+                System.out.println("\tchar hex value " + String.format("%04x", (int)keystroke));
+                System.out.println("\tkey text " + KeyEvent.getKeyText(keystroke));
+                    //mapping of key text to keys is inaccurate
+                int extKeyCode = KeyEvent.getExtendedKeyCodeForChar(keystroke);
+                System.out.println("\textended keycode " + extKeyCode);
+//                System.out.println("\tucase? " + Character.isUpperCase(keystroke)); //@ is not considered ucase
+                System.out.println("\tchar type " + Character.getType(keystroke));                
+                System.out.println("\tnumeric value " + Character.getNumericValue(keystroke));
+                System.out.println("\tis it a letter? " + Character.isLetter(keystroke));
+                System.out.println("\tstring val of char " + String.valueOf(keystroke));
+                System.out.println("\tstring to lcase " + String.valueOf(keystroke).toLowerCase()); 
+                    //does not downshift symbols, e.g. ! -> 1
+                txtCharInput.clear();
+                txtCharInput.requestFocus();
+//                System.out.println("\tasterisk sign " + (KeyEvent.VK_ASTERISK));
+            }
+            
+            
+        });
+        
+        pane.getChildren().add(btnGetCharCode);
     }
     VBox getPane()
     {
+        
         return this.pane;
     }
-    
+    private void processKey(char ch) {
+        
+    }
 //    private void btnShowConfirmation_Click(ActionEvent e) {
 //        FxMsgBox confirmDialog = new FxMsgBox();
 //        Boolean confirmationResponse = confirmDialog.confirm("click ok or cancel", "confirm the action");
@@ -86,7 +140,7 @@ public class IdlePane
 //        System.out.println("login success " + loginSuccess);
 //    }
     
-    private void btnResize(ActionEvent e, StageSizeEnum size) {
-        SkyRfidJavaApp.setStageSize(size);
-    }
+//    private void btnResize(ActionEvent e, StageSizeEnum size) {
+//        SkyRfidJavaApp.setStageSize(size);
+//    }
 }
