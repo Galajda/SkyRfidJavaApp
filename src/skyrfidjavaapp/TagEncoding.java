@@ -98,5 +98,5 @@ public class TagEncoding {
 //        System.out.println();
 //        System.out.println("leaving encode fcn");
         return writeBuffer;
-    }
+    }    
 }
