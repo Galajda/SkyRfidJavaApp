@@ -17,9 +17,10 @@
 package skyrfidjavaapp;
 /**
  * The TagActor class combines the USB device methods that are common to reading
- * and writing, such as opening and closing the port. The read and write classes
- * are derived from TagActor. Methods specific to reading and writing are 
- * contained in the child classes.
+ * and writing, such as opening and closing the port and changing the AFI byte. 
+ * For better performance, local variables store critical values of the app state.
+ * The read and write classes are derived from TagActor. Methods specific to 
+ * reading and writing are contained in the child classes.
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class TagActor {    
@@ -29,7 +30,7 @@ public class TagActor {
     
     protected final AppState state;
     protected final AntiTheftEnum theftAction;
-    protected char theftValue;
+    protected final char theftValue;
     
     
     protected final ReadWriteModeEnum r_w_mode;
@@ -95,10 +96,7 @@ public class TagActor {
         System.out.print(String.format("%04x", (int)card_id[0]));
 //        System.out.println(" to value " + String.format("%04x", (int)TagActor.theftValue));
         System.out.println(" to value " + String.format("%04x", (int)this.theftValue));
-        dll.fw_write_afi(device_handle, (char)0x22, this.theftValue , card_id);
-                
-                            
+        dll.fw_write_afi(device_handle, (char)0x22, this.theftValue , card_id);                
     }
-    
     
 }
