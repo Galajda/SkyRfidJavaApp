@@ -98,17 +98,19 @@ public class IdlePane
             public void handle(ActionEvent event) {
                 char keystroke = txtCharInput.getText().charAt(0);
                 System.out.println("literal value " + txtCharInput.getText());
+                System.out.println("\tcode point " + txtCharInput.getText().codePointAt(0));
                 System.out.println("\tchar hex value " + String.format("%04x", (int)keystroke));
-                System.out.println("\tkey text " + KeyEvent.getKeyText(keystroke));
+//                System.out.println("\tkey text " + KeyEvent.getKeyText(keystroke));
                     //mapping of key text to keys is inaccurate
                 int extKeyCode = KeyEvent.getExtendedKeyCodeForChar(keystroke);
                 System.out.println("\textended keycode " + extKeyCode);
 //                System.out.println("\tucase? " + Character.isUpperCase(keystroke)); //@ is not considered ucase
                 System.out.println("\tchar type " + Character.getType(keystroke));                
                 System.out.println("\tnumeric value " + Character.getNumericValue(keystroke));
-                System.out.println("\tis it a letter? " + Character.isLetter(keystroke));
+                System.out.println("\tis it a letter or digit? " + Character.isLetterOrDigit(keystroke));
                 System.out.println("\tstring val of char " + String.valueOf(keystroke));
                 System.out.println("\tstring to lcase " + String.valueOf(keystroke).toLowerCase()); 
+                System.out.println("\tstring to ucase " + String.valueOf(keystroke).toUpperCase()); 
                     //does not downshift symbols, e.g. ! -> 1
                 txtCharInput.clear();
                 txtCharInput.requestFocus();
