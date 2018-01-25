@@ -216,6 +216,7 @@ public class SettingsPane {
         //buttons
         btnSaveConfig = new Button("Save");
         //error: scene is not available when pane is initialized
+        //SO 12710468
 //        btnSaveConfig.getScene().getAccelerators().put(
 //                new KeyCodeCombination(KeyCode.S,KeyCombination.SHORTCUT_DOWN),
 //                new Runnable() {
