@@ -1,6 +1,4 @@
 All panes:    
-    Replace built-in fx msg box with msg box from library
-    Replace built-in combo box with combo box from library
     Delete FxMsgBox class
 
 App title:
@@ -37,9 +35,8 @@ Read pane:
 TagActor:
     Move uid to parent?
     
-TheftBitWorker:
-    replace on/off enum with the new value
-    delete the whole thing.
+TheftBitWorker:    
+    delete. function has been moved to TagActor.
 
 Settings pane:    
     Show and hide buttons to guide user to proper operation. zB do not allow use config before saving. 
@@ -55,14 +52,19 @@ Settings pane:
     New config. If a new config is chosen after an existing config has been loaded, the form keeps
         the settings from the existing config. The form must be cleared. resetForm() starts an infinite
         loop, since it changes the config name combo box. 
+    Extra keys. Accept list of chars, such as 0x0d (carriage return). Format 0x00, 0x01, 0x02.
+    
 
 MenuBarPane:
     and buttons
     SO 24499500 recommends assigning accelerators as well as mnemonics. The mnemonics
-    interfere with combo box keyboard shortcuts.
+    interfere with combo box keyboard shortcuts. You may set an accelerator for a MenuItem.
+    Other controls do not accept accelerators directly. You must assign them to the scene. If you
+    want accelerators, SO 12710468 recommends working with KeyCodeCombination SHORTCUT_DOWN for multi-
+    platform support.
 
 AppConstants:
-    remove style strings. they ahve been exported to the cogimag library.
+    remove style strings. they have been exported to the cogimag library.
 
 AppSettingsEnum:
     delete. string constants suffice.
@@ -75,8 +77,12 @@ Config names xml and dtd:
 
 RoboTypist:
     recognize escape chars like \n \l from extra keys
-    send keys interferes with typing, clicks
+    send keys interferes with typing, clicks. This seems to be due to the delay. By
+        shortening the delay from 100 to 10 ms, the typist finishes before the 
+        next read cycle, giving the system time to respond to mouse & keyboard input.
     extend getKeycode to more chars !@#$%
+    SO 14572270 suggests alternative to Robot. Fire KeyEvent
+
 dll functions
     does stay quiet state persist after tag leaves field? rf.exe can call stay quiet 
         and reset to ready. when stay quiet tag leaves field and is 
