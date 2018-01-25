@@ -54,7 +54,9 @@ public class DataValidation {
         return !m.find() && (freq > 9) && (freq < 10001);
     }
     public static Boolean isValidXtraKeys(String testValue) {
-        //any other conditions?
+        //TODO: accept comma-separated list of hex-format strings,
+        //as for isValidTheftValue
+        //idea: split string on comma, test each element with isValidTheftValue
         return (testValue.length()<20);
     }
     public static Boolean isValidTheftValue(String testValue) {
@@ -64,7 +66,12 @@ public class DataValidation {
         
         return m.find() && (testValue.length() == 4);
     }
-    
+    /**
+     * Tests format of barcode before it is written to the tag. Currently 
+     * accepting word characters. Length must be 14 characters.
+     * @param barcode Candidate barcode.
+     * @return <code>true</code> if input satisfies criteria, painful shock if not.
+     */
     public static Boolean isValidBarcode(String barcode) {
         //word chars
         Pattern p = Pattern.compile("\\w{14}");
