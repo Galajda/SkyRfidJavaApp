@@ -72,7 +72,7 @@ public class RoboTypist {
 //                r.keyRelease(KeyEvent.getExtendedKeyCodeForChar(c));
                 
                 //out.println("the char array ele c is " + c );
-                r.delay(100);
+                r.delay(10);
             }
             
             //you cannot press keys on the second level
@@ -80,11 +80,13 @@ public class RoboTypist {
 //            r.keyRelease(KeyEvent.VK_ASTERISK);
 //            r.keyPress(KeyEvent.VK_AT);
 //            r.keyRelease(KeyEvent.VK_AT);
-            r.keyPress(KeyEvent.VK_SHIFT);
-            r.keyPress(KeyEvent.VK_8);
-            r.keyRelease(KeyEvent.VK_SHIFT);
-            r.keyRelease(KeyEvent.VK_8);
+//            r.keyPress(KeyEvent.VK_SHIFT);
+//            r.keyPress(KeyEvent.VK_8);
+//            r.keyRelease(KeyEvent.VK_SHIFT);
+//            r.keyRelease(KeyEvent.VK_8);
 //            out.println("for loop finished");
+            r.keyPress(KeyEvent.VK_ENTER); //0x0d
+            r.keyRelease(KeyEvent.VK_ENTER); //this works
             //let the caller decide what else to send
 //            r.keyPress(KeyEvent.VK_ENTER);
 //            r.keyRelease(KeyEvent.VK_ENTER);            
@@ -124,5 +126,12 @@ public class RoboTypist {
         return activeWindowTitle.equals(AppConstants.APP_TITLE) || 
                 activeWindowTitle.toLowerCase().contains(pkgNameLc);
         
+    }
+    
+    public static boolean isShiftedChar(char c) {
+        
+        
+        
+        return true;
     }
 }
