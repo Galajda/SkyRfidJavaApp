@@ -24,6 +24,8 @@ import javafx.application.Platform;
 import java.util.Timer;
 import java.util.TimerTask;
 import cogimag.javafx.FxMessageBox;
+import cogimag.java.keyboard.RoboSteno;
+import cogimag.java.keyboard.KeyMap_EN_US;
 
 /**
  * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
@@ -226,7 +228,9 @@ public class ReadPane
                 default:
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
-                    roboWriter.sendKeys(oneCard + this.xtraKeys);
+//                    roboWriter.sendKeys(oneCard + this.xtraKeys);
+                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
+                    roboSteno.type("hello");
             }
             //display for 1 sec, then show next number.
         }
