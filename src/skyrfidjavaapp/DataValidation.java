@@ -77,7 +77,8 @@ public class DataValidation {
         Pattern p = Pattern.compile("\\w{14}");
         Matcher m = p.matcher(barcode);
         
-        return m.find() && (barcode.length() == 14);
+//        return m.find() && (barcode.length() == 14);
+        return true;
     }
     
 }

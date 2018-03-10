@@ -64,6 +64,8 @@ public class ReadPane
     private boolean runRabbitRun = true; //flag to stop the auto read timer
     
     private final RoboTypist roboWriter;
+    private final RoboSteno roboSteno;
+    
     //constructor
     ReadPane() {
 //        System.out.println("read pane constructor running");        
@@ -90,6 +92,7 @@ public class ReadPane
         pane.getChildren().add(btnStopReading);
         
         roboWriter = new RoboTypist();
+        roboSteno = new RoboSteno(new KeyMap_EN_US());
 //        portFailureCounter = 0;
 //        tmr = new Timer();
         
@@ -230,8 +233,14 @@ public class ReadPane
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
 //                    roboWriter.sendKeys(oneCard + this.xtraKeys);
-                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
-                    roboSteno.type("hello");
+//                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
+//                    roboSteno.type(oneCard);
+//                    roboWriter.sendKeys(oneCard);
+                    if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
+//                    if (!roboWriter.doesAppHaveFocus()) { 
+//                        cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new KeyMap_EN_US(), oneCard);
+//                    }
+                    
             }
             //display for 1 sec, then show next number.
         }
