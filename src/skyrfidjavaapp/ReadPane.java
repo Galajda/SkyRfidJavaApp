@@ -27,6 +27,7 @@ import cogimag.javafx.FxMessageBox;
 import cogimag.java.keyboard.RoboSteno;
 import cogimag.java.keyboard.KeyMap_EN_US;
 
+
 /**
  * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
  * that users want fast reading in a production environment. Local variables provide faster 
