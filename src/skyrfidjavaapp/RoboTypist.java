@@ -54,7 +54,7 @@ public class RoboTypist {
 //        if (!this.doesAppHaveFocus() && isRobotOnline) {
         if (!this.doesAppHaveFocus()) {
             
-            cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new cogimag.java.keyboard.KeyMap_EN_US(), card);
+            cogimag.java.keyboard.AwtKeyEventSteno.fireEvent(new cogimag.java.keyboard.AwtKeyMap_EN_US(), card);
 //            out.println("in send keys method");
             
             //take string arg for convenience, convert to char array

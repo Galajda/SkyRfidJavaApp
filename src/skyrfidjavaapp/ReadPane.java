@@ -24,8 +24,9 @@ import javafx.application.Platform;
 import java.util.Timer;
 import java.util.TimerTask;
 import cogimag.javafx.FxMessageBox;
-import cogimag.java.keyboard.RoboSteno;
-import cogimag.java.keyboard.KeyMap_EN_US;
+import cogimag.java.keyboard.AwtRoboSteno;
+
+import cogimag.java.keyboard.AwtKeyMap_EN_US;
 
 
 /**
@@ -73,7 +74,7 @@ public class ReadPane
     private boolean runRabbitRun = true; //flag to stop the auto read timer
     
     private final RoboTypist roboWriter;
-    private final RoboSteno roboSteno;
+    private final AwtRoboSteno roboSteno;
     
     //constructor
     ReadPane() {
@@ -105,7 +106,7 @@ public class ReadPane
         pane.getChildren().add(btnReadOnce);
         
         roboWriter = new RoboTypist();
-        roboSteno = new RoboSteno(new KeyMap_EN_US());
+        roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
 //        portFailureCounter = 0;
 //        tmr = new Timer();
         
@@ -261,7 +262,7 @@ public class ReadPane
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
 //                    roboWriter.sendKeys(oneCard + this.xtraKeys);
-                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
+                    AwtRoboSteno roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
                     roboSteno.type(oneCard);
                     roboWriter.sendKeys(oneCard);
                     if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
