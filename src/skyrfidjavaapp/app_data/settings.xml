@@ -4,21 +4,21 @@
 <settings>
     <parameter_set id="default">
         <!--<type>default</type>-->
-        <theft_bit_action>TURN_ON</theft_bit_action>
+        <theft_bit_action>NO_ACTION</theft_bit_action>
         <read_write_mode>IDLE_MODE</read_write_mode>
         <multi_read>false</multi_read>
-        <read_frequency>10000</read_frequency>
-        <extra_keystrokes>fawlty</extra_keystrokes>
+        <read_frequency>7000</read_frequency>
+        <extra_keystrokes>\nnewline\n</extra_keystrokes>
         <anti_theft_on>0xff</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
     <parameter_set id="current">
         <!--<type>current</type>-->
-        <theft_bit_action>TURN_ON</theft_bit_action>
+        <theft_bit_action>NO_ACTION</theft_bit_action>
         <read_write_mode>READ_MODE</read_write_mode>
         <multi_read>false</multi_read>
         <read_frequency>7000</read_frequency>
-        <extra_keystrokes>\n\n\ttab in</extra_keystrokes>
+        <extra_keystrokes>\nnewline\n</extra_keystrokes>
         <anti_theft_on>0xff</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
