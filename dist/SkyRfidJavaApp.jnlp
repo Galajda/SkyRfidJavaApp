@@ -8,9 +8,9 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SkyRfidJavaApp.jar" size="131168" download="eager" />
+    <jar href="SkyRfidJavaApp.jar" size="131459" download="eager" />
     <jar href="lib\AbsoluteLayout.jar" size="2847" download="eager" />
-    <jar href="lib\Cogimag.jar" size="126082" download="eager" />
+    <jar href="lib\Cogimag.jar" size="126399" download="eager" />
     <jar href="lib\jna.jar" size="1440500" download="eager" />
     <jar href="lib\xom-1.2.10.jar" size="313253" download="eager" />
   </resources>
