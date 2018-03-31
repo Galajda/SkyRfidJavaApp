@@ -53,6 +53,7 @@ public class RoboTypist {
         out.println("send keys does app have focus? " + this.doesAppHaveFocus());
 //        if (!this.doesAppHaveFocus() && isRobotOnline) {
         if (!this.doesAppHaveFocus()) {
+            
             cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new cogimag.java.keyboard.KeyMap_EN_US(), card);
 //            out.println("in send keys method");
             

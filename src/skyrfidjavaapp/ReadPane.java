@@ -29,6 +29,12 @@ import cogimag.java.keyboard.KeyMap_EN_US;
 
 
 /**
+ * TODO: KeyEventDispatcher cannot be used. It has 2 problems.
+ * 1) it is written for awt key events
+ * 2) it sends events only to the application
+ * Solution: use RoboSteno. Rewrite the RoboTypist class to extend RoboSteno,
+ * incorporating the test for app focus
+ * 
  * The ReadPane keeps private variables for app state, unlike other panes. It is presumed
  * that users want fast reading in a production environment. Local variables provide faster 
  * access to application data. The price for this is the need to update the local variables 
@@ -55,6 +61,9 @@ public class ReadPane
                 + "-fx-min-width: 70; -fx-max-width:200; -fx-min-height: 30;";
     private final Button btnStartReading;
     private final Button btnStopReading;
+    
+    private final Button btnReadOnce;
+    
     private TagReader reader;
     private int readFrequency = 2000; //eventually get this from app state
     
@@ -90,6 +99,10 @@ public class ReadPane
         btnStopReading = new Button("Stop the automatic reader");
         btnStopReading.setOnAction(e -> btnStopReading_Click(e));
         pane.getChildren().add(btnStopReading);
+        
+        btnReadOnce = new Button("read once");
+        btnReadOnce.setOnAction(e -> btnReadOnce_Click(e));
+        pane.getChildren().add(btnReadOnce);
         
         roboWriter = new RoboTypist();
         roboSteno = new RoboSteno(new KeyMap_EN_US());
@@ -162,13 +175,25 @@ public class ReadPane
 //        System.out.println("btn click to stop the auto reader.");
     }
     
+    private void btnReadOnce_Click(ActionEvent e) {
+        reader  = new TagReader();
+        runRabbitRun = true;
+        tmr = new Timer();
+        tmr.schedule(new AutoRead(), 5000);
+//        String[] cardData = reader.readOneCard();     
+//                        System.out.println("read one card " + cardData);
+//        displayTags(cardData);        
+        
+    }
+    
+    
     public void startTimer() {
         reader  = new TagReader();
         runRabbitRun = true;
         tmr = new Timer(); //instantiating tmr here rather than in constructor allows restarting
         tmr.schedule(new AutoRead(), 0, this.readFrequency);
         //Fixed-delay execution is deliberately chosen over fixed-rate execution
-        //so that tasks do not overlap. If this works as I expect, no adjustment will be 
+        //so that tasks do not overlap. If this works as I hope, no adjustment will be 
         //needed for multiple cards. A possible complication is the runLater method within
         //the timer task. If this runs independently of the timer, then the display may be confused.
     }
@@ -214,6 +239,9 @@ public class ReadPane
         }   
     }
     private void displayTags(String[] deck) {
+        System.out.println("displaying tags. thread count = " + Thread.activeCount() +
+                " current thread = " + Thread.currentThread());
+        
         for (String oneCard : deck) {
             switch (oneCard) {
                 case DeviceErrorCodes.ERR_NO_HANDLE:                
@@ -233,11 +261,11 @@ public class ReadPane
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
 //                    roboWriter.sendKeys(oneCard + this.xtraKeys);
-//                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
-//                    roboSteno.type(oneCard);
-//                    roboWriter.sendKeys(oneCard);
+                    RoboSteno roboSteno = new RoboSteno(new KeyMap_EN_US());
+                    roboSteno.type(oneCard);
+                    roboWriter.sendKeys(oneCard);
                     if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
-//                    if (!roboWriter.doesAppHaveFocus()) { 
+//                    if (!roboWriter.doesAppHaveFocus()) {                         
 //                        cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new KeyMap_EN_US(), oneCard);
 //                    }
                     
