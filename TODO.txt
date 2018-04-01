@@ -64,6 +64,8 @@ MenuBarPane:
     Other controls do not accept accelerators directly. You must assign them to the scene. If you
     want accelerators, SO 12710468 recommends working with KeyCodeCombination SHORTCUT_DOWN for multi-
     platform support.
+    Switching from read pane to config pane does not stop timer. Fixed.
+    
 
 AppConstants:
     remove style strings. they have been exported to the cogimag library.

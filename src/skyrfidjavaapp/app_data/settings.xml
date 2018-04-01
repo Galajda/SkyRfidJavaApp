@@ -15,10 +15,10 @@
     <parameter_set id="current">
         <!--<type>current</type>-->
         <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>READ_MODE</read_write_mode>
+        <read_write_mode>IDLE_MODE</read_write_mode>
         <multi_read>false</multi_read>
         <read_frequency>7000</read_frequency>
-        <extra_keystrokes>xtra\nline\nb4\t</extra_keystrokes>
+        <extra_keystrokes>\nnewline\n\t</extra_keystrokes>
         <anti_theft_on>0xff</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>

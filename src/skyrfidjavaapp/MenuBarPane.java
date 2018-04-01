@@ -146,6 +146,7 @@ public class MenuBarPane
                 break;
             case MenuBarPane.FILE_MENU_CONFIG:                
 //                FxMsgBox.show("config is not yet configged", "Menu action");
+                
                 SkyRfidJavaApp.openSettingsPane();
                 e.consume();
                
