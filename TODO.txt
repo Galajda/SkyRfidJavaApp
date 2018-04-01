@@ -52,7 +52,9 @@ Settings pane:
     New config. If a new config is chosen after an existing config has been loaded, the form keeps
         the settings from the existing config. The form must be cleared. resetForm() starts an infinite
         loop, since it changes the config name combo box. 
-    Extra keys. Accept list of chars, such as 0x0d (carriage return). Format 0x00, 0x01, 0x02.
+    Extra keys. Provide a combo box with choices taken from KeyMap renderings. "Add" button, label with result. 
+	"Clear" button? These features are built into Cogimag library ControlledStringInputComponenent.
+
     
 
 MenuBarPane:
@@ -62,6 +64,8 @@ MenuBarPane:
     Other controls do not accept accelerators directly. You must assign them to the scene. If you
     want accelerators, SO 12710468 recommends working with KeyCodeCombination SHORTCUT_DOWN for multi-
     platform support.
+    Switching from read pane to config pane does not stop timer. Fixed.
+    
 
 AppConstants:
     remove style strings. they have been exported to the cogimag library.

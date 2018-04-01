@@ -17,94 +17,71 @@
 package skyrfidjavaapp;
 
 import com.sun.jna.Native;
-import java.awt.Robot;
-import java.awt.AWTException;
+//import java.awt.Robot;
+//import java.awt.AWTException;
 //import java.lang.SecurityException;
-import java.awt.event.KeyEvent;
-import static java.lang.System.out;
+//import java.awt.event.KeyEvent;
+//import static java.lang.System.out;
+
+import cogimag.java.keyboard.AwtKeyMap;
+import cogimag.java.keyboard.AwtRoboSteno;
+
 //import javafx.scene.input.KeyCode;
 /**
  *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
-public class RoboTypist {
-    private static Robot r;
-    private static boolean isRobotOnline;    
+public class RoboTypist extends AwtRoboSteno {
+//    private static Robot r;
+//    private static boolean isRobotOnline;    
     
-    public RoboTypist() {
-        isRobotOnline = true;
-        try {
-            r = new Robot();
-        }        
-        catch (AWTException | SecurityException ex)
-        {
-            out.println("cannot initialize robot" + ex.getMessage());
-            isRobotOnline = false;
-        }
+//    public RoboTypist() {
+//        isRobotOnline = true;
+//        try {
+//            r = new Robot();
+//        }        
+//        catch (AWTException | SecurityException ex)
+//        {
+//            out.println("cannot initialize robot" + ex.getMessage());
+//            isRobotOnline = false;
+//        }
+//    }
+    
+    public RoboTypist(AwtKeyMap m) {
+        super(m);
     }
     
     /**
      * This function shall decide whether to send keys or not, depending
      * upon the active window on the screen. If the RFID program (or IDE) is active,
      * keys will not be sent.
-     * @param card the string to be sent to the current input focus, plus any extra characters
+     * @param data the string to be sent to the current input focus, plus any extra characters
      */
-    public void sendKeys(String card) {
-        out.println("send keys does app have focus? " + this.doesAppHaveFocus());
-        if (!this.doesAppHaveFocus() && isRobotOnline) {
-//            out.println("in send keys method");
-            
-            //take string arg for convenience, convert to char array
-            char[] charArray = card.toCharArray();
-            //break the string into chars, press each char
+    @Override
+    public void type(String data) {
+//        out.println("robo typist does app have focus? " + this.doesAppHaveFocus());
+//        if (!this.doesAppHaveFocus() && isRobotOnline) {
+        if (!this.doesAppHaveFocus()) {
+//            System.out.println("typing " + data + " to anyone");
+            super.type(data);
+//            cogimag.java.keyboard.AwtKeyEventSteno.fireEvent(new cogimag.java.keyboard.AwtKeyMap_EN_US(), card);
 
-    //        out.println("3 sec to start keys");
-    //        r.delay(3000);
-
-            for (char c : charArray) //does this ensure same order?
-            {
-                //keycode = c-32; //works for lower case letters, not for upper case or numerals. make array?
-                //how to recognize escape chars?
-                r.keyPress(getKeycode(c));
-                r.keyRelease(getKeycode(c));
-                //SO 15260282
-//                r.keyPress(KeyEvent.getExtendedKeyCodeForChar(c));
-//                r.keyRelease(KeyEvent.getExtendedKeyCodeForChar(c));
-                
-                //out.println("the char array ele c is " + c );
-                r.delay(10);
-            }
             
-            //you cannot press keys on the second level
-//            r.keyPress(KeyEvent.VK_ASTERISK);
-//            r.keyRelease(KeyEvent.VK_ASTERISK);
-//            r.keyPress(KeyEvent.VK_AT);
-//            r.keyRelease(KeyEvent.VK_AT);
-//            r.keyPress(KeyEvent.VK_SHIFT);
-//            r.keyPress(KeyEvent.VK_8);
-//            r.keyRelease(KeyEvent.VK_SHIFT);
-//            r.keyRelease(KeyEvent.VK_8);
-//            out.println("for loop finished");
-            r.keyPress(KeyEvent.VK_ENTER); //0x0d
-            r.keyRelease(KeyEvent.VK_ENTER); //this works
-            //let the caller decide what else to send
-//            r.keyPress(KeyEvent.VK_ENTER);
-//            r.keyRelease(KeyEvent.VK_ENTER);            
-        }        
+        }      
     }
     
-    private static int getKeycode(char ch) {
-        //convert a char to the Java keycode values VK_A, VK_B, VK_1, VK_2, etc.
-        int kc=88;  //default is the letter x
-        if (ch >= 'a' && ch <= 'z') {
-            kc = ch-32;
-        }
-        if ((ch >= 'A' && ch <= 'Z' ) | (ch >= '0' && ch <= '9')) {
-            kc=ch+0;
-        }
-        return kc;
-    }
-    private boolean doesAppHaveFocus () {
+//    private static int getKeycode(char ch) {
+//        //convert a char to the Java keycode values VK_A, VK_B, VK_1, VK_2, etc.
+//        int kc=88;  //default is the letter x
+//        if (ch >= 'a' && ch <= 'z') {
+//            kc = ch-32;
+//        }
+//        if ((ch >= 'A' && ch <= 'Z' ) | (ch >= '0' && ch <= '9')) {
+//            kc=ch+0;
+//        }
+//        return kc;
+//    }
+    public boolean doesAppHaveFocus () {
 //        out.println("looking for active window");
         final User32Interface winDll = User32Interface.INSTANCE;
         final int hWnd = winDll.GetForegroundWindow();
@@ -116,6 +93,7 @@ public class RoboTypist {
         winDll.GetWindowTextA(hWnd, winText, 128); //fcn returns value through var winText
 //        final String activeWindowTitle = (Native.toString(winText)==null)? "" : Native.toString(winText);
         final String activeWindowTitle = Native.toString(winText); 
+        
             //winText is initialized in declaration, therefore never null
 //        out.println("win text " + activeWindowTitle);
 //        out.println("foreground window title length from string length " + activeWindowTitle.length());     
@@ -123,15 +101,13 @@ public class RoboTypist {
         //package name should be in lower case. change it to be certain
 //        out.println("pkg name " + pkgNameLc);
 //        out.println("does win title contain pkg name? " + activeWindowTitle.toLowerCase().contains(pkgNameLc));
-        return activeWindowTitle.equals(AppConstants.APP_TITLE) || 
+//        out.println("does win title contain app title? " + activeWindowTitle.contains(AppConstants.APP_TITLE));
+        return activeWindowTitle.contains(AppConstants.APP_TITLE) || 
                 activeWindowTitle.toLowerCase().contains(pkgNameLc);
         
     }
     
-    public static boolean isShiftedChar(char c) {
-        
-        
-        
-        return true;
-    }
+//    public static boolean isShiftedChar(char c) {        
+//        return true;
+//    }
 }

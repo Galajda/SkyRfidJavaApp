@@ -36,7 +36,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Priority;
 
-import cogimag.javafx.FxComboBox;
+import cogimag.javafx.input.FxComboBox;
 import cogimag.javafx.FxMessageBox;
 import cogimag.javafx.FxConfirmDialog;
 

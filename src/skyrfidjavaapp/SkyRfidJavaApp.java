@@ -176,6 +176,7 @@ public class SkyRfidJavaApp extends Application {
 //        Stage s = new Stage();
 //        s.setHeight(500);
 //        appStage.setHeight(600);
+        readPane.stopTimer();
         rootPane.getChildren().clear();
         
         rootPane.setTop(pgmMenu.getPane());

@@ -23,8 +23,8 @@ import javafx.scene.control.Button;
 //import javafx.scene.input.KeyEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.input.KeyCode;
-import cogimag.javafx.FxComboBox;
+//import javafx.scene.input.KeyCode;
+//import cogimag.javafx.input.FxComboBox;
 
 import java.awt.event.KeyEvent;
 /**
