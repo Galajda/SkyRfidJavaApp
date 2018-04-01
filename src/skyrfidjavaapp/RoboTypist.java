@@ -17,17 +17,21 @@
 package skyrfidjavaapp;
 
 import com.sun.jna.Native;
-import java.awt.Robot;
-import java.awt.AWTException;
+//import java.awt.Robot;
+//import java.awt.AWTException;
 //import java.lang.SecurityException;
-import java.awt.event.KeyEvent;
-import static java.lang.System.out;
+//import java.awt.event.KeyEvent;
+//import static java.lang.System.out;
+
+import cogimag.java.keyboard.AwtKeyMap;
+import cogimag.java.keyboard.AwtRoboSteno;
+
 //import javafx.scene.input.KeyCode;
 /**
  *
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
-public class RoboTypist {
+public class RoboTypist extends AwtRoboSteno {
 //    private static Robot r;
 //    private static boolean isRobotOnline;    
     
@@ -43,41 +47,25 @@ public class RoboTypist {
 //        }
 //    }
     
+    public RoboTypist(AwtKeyMap m) {
+        super(m);
+    }
+    
     /**
      * This function shall decide whether to send keys or not, depending
      * upon the active window on the screen. If the RFID program (or IDE) is active,
      * keys will not be sent.
-     * @param card the string to be sent to the current input focus, plus any extra characters
+     * @param data the string to be sent to the current input focus, plus any extra characters
      */
-    public void sendKeys(String card) {
-        out.println("send keys does app have focus? " + this.doesAppHaveFocus());
+    @Override
+    public void type(String data) {
+//        out.println("robo typist does app have focus? " + this.doesAppHaveFocus());
 //        if (!this.doesAppHaveFocus() && isRobotOnline) {
         if (!this.doesAppHaveFocus()) {
-            
-            cogimag.java.keyboard.AwtKeyEventSteno.fireEvent(new cogimag.java.keyboard.AwtKeyMap_EN_US(), card);
-//            out.println("in send keys method");
-            
-            //take string arg for convenience, convert to char array
-//            char[] charArray = card.toCharArray();
-            
-            //break the string into chars, press each char
+//            System.out.println("typing " + data + " to anyone");
+            super.type(data);
+//            cogimag.java.keyboard.AwtKeyEventSteno.fireEvent(new cogimag.java.keyboard.AwtKeyMap_EN_US(), card);
 
-    //        out.println("3 sec to start keys");
-    //        r.delay(3000);hello
-
-//            for (char c : charArray) //does this ensure same order?
-//            {
-                //keycode = c-32; //works for lower case letters, not for upper case or numerals. make array?
-                //how to recognize escape chars?
-//                r.keyPress(getKeycode(c));
-//                r.keyRelease(getKeycode(c));
-                //SO 15260282
-//                r.keyPress(KeyEvent.getExtendedKeyCodeForChar(c));
-//                r.keyRelease(KeyEvent.getExtendedKeyCodeForChar(c));
-                
-                //out.println("the char array ele c is " + c );
-//                r.delay(10);
-//            }
             
         }      
     }

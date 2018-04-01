@@ -68,13 +68,13 @@ public class ReadPane
     private TagReader reader;
     private int readFrequency = 2000; //eventually get this from app state
     
-    private String xtraKeys = "";
+    private String xtraKeys;
 //    private int portFailureCounter;
     private Timer tmr;
     private boolean runRabbitRun = true; //flag to stop the auto read timer
     
     private final RoboTypist roboWriter;
-    private final AwtRoboSteno roboSteno;
+//    private final AwtRoboSteno roboSteno;
     
     //constructor
     ReadPane() {
@@ -105,8 +105,9 @@ public class ReadPane
         btnReadOnce.setOnAction(e -> btnReadOnce_Click(e));
         pane.getChildren().add(btnReadOnce);
         
-        roboWriter = new RoboTypist();
-        roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
+        roboWriter = new RoboTypist(new cogimag.java.keyboard.AwtKeyMap_EN_US());
+        xtraKeys = "";
+//        roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
 //        portFailureCounter = 0;
 //        tmr = new Timer();
         
@@ -261,11 +262,13 @@ public class ReadPane
                 default:
                     lblDecodedData.setStyle(this.LBL_STYLE_OK);
                     lblDecodedData.setText(oneCard);
-//                    roboWriter.sendKeys(oneCard + this.xtraKeys);
-                    AwtRoboSteno roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
-                    roboSteno.type(oneCard);
-                    roboWriter.sendKeys(oneCard);
-                    if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
+//                    System.out.println("the card is:" + oneCard + ": its length is " + oneCard.length());
+                    roboWriter.type(oneCard + xtraKeys);
+//                    roboWriter.type("some stuff");
+//                    AwtRoboSteno roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
+//                    roboSteno.type(oneCard);
+//                    roboWriter.type(oneCard);
+//                    if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
 //                    if (!roboWriter.doesAppHaveFocus()) {                         
 //                        cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new KeyMap_EN_US(), oneCard);
 //                    }

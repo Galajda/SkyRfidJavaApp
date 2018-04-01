@@ -53,7 +53,7 @@ Settings pane:
         the settings from the existing config. The form must be cleared. resetForm() starts an infinite
         loop, since it changes the config name combo box. 
     Extra keys. Provide a combo box with choices taken from KeyMap renderings. "Add" button, label with result. 
-	"Clear" button?
+	"Clear" button? These features are built into Cogimag library ControlledStringInputComponenent.
 
     
 
