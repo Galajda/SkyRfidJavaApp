@@ -32,20 +32,6 @@ import cogimag.java.keyboard.AwtRoboSteno;
  * @author Michal G. <Michal.G at cogitatummagnumtelae.com>
  */
 public class RoboTypist extends AwtRoboSteno {
-//    private static Robot r;
-//    private static boolean isRobotOnline;    
-    
-//    public RoboTypist() {
-//        isRobotOnline = true;
-//        try {
-//            r = new Robot();
-//        }        
-//        catch (AWTException | SecurityException ex)
-//        {
-//            out.println("cannot initialize robot" + ex.getMessage());
-//            isRobotOnline = false;
-//        }
-//    }
     
     public RoboTypist(AwtKeyMap m) {
         super(m);
@@ -66,21 +52,9 @@ public class RoboTypist extends AwtRoboSteno {
             super.type(data);
 //            cogimag.java.keyboard.AwtKeyEventSteno.fireEvent(new cogimag.java.keyboard.AwtKeyMap_EN_US(), card);
 
-            
         }      
     }
     
-//    private static int getKeycode(char ch) {
-//        //convert a char to the Java keycode values VK_A, VK_B, VK_1, VK_2, etc.
-//        int kc=88;  //default is the letter x
-//        if (ch >= 'a' && ch <= 'z') {
-//            kc = ch-32;
-//        }
-//        if ((ch >= 'A' && ch <= 'Z' ) | (ch >= '0' && ch <= '9')) {
-//            kc=ch+0;
-//        }
-//        return kc;
-//    }
     public boolean doesAppHaveFocus () {
 //        out.println("looking for active window");
         final User32Interface winDll = User32Interface.INSTANCE;
@@ -107,7 +81,4 @@ public class RoboTypist extends AwtRoboSteno {
         
     }
     
-//    public static boolean isShiftedChar(char c) {        
-//        return true;
-//    }
 }
