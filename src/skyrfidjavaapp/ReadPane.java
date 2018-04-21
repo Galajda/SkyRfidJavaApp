@@ -107,10 +107,7 @@ public class ReadPane
         
         roboWriter = new RoboTypist(new cogimag.java.keyboard.AwtKeyMap_EN_US());
         xtraKeys = "";
-//        roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
-//        portFailureCounter = 0;
-//        tmr = new Timer();
-        
+
 //        AppState state = new AppState(AppSettingsEnum.SETTINGS_CURRENT);
 //        System.out.println("read pane constructor sees multi read " + state.isMultiRead());
 //        System.out.println("read pane constructor sees anti theft action " + state.getAntiTheftAction());
@@ -130,13 +127,7 @@ public class ReadPane
     public void setXtraKeys(String keys) {
         xtraKeys = keys;
     }
-//    public void setTheftOnValue(String theft_on_value) {
-//        theftOn = theft_on_value;
-//    }        
-//    public void setTheftOffValue(String theft_off_value) {
-//        this.theftOff = theft_off_value;
-//    }    
-    
+
     private void btnReadMulti_Click(ActionEvent e) {
 //        FxMsgBox.show("multi read test uses common reader object\nerrors may occur if timer is running", "Warning: Test code");
         FxMessageBox.show("Warning: Test code", "multi read test uses common reader object\nerrors may occur if timer is running");
@@ -264,14 +255,6 @@ public class ReadPane
                     lblDecodedData.setText(oneCard);
 //                    System.out.println("the card is:" + oneCard + ": its length is " + oneCard.length());
                     roboWriter.type(oneCard + xtraKeys);
-//                    roboWriter.type("some stuff");
-//                    AwtRoboSteno roboSteno = new AwtRoboSteno(new AwtKeyMap_EN_US());
-//                    roboSteno.type(oneCard);
-//                    roboWriter.type(oneCard);
-//                    if (!roboWriter.doesAppHaveFocus()) { roboSteno.type(oneCard + xtraKeys);}
-//                    if (!roboWriter.doesAppHaveFocus()) {                         
-//                        cogimag.java.keyboard.KeyEventDispatcher.fireEvent(new KeyMap_EN_US(), oneCard);
-//                    }
                     
             }
             //display for 1 sec, then show next number.
