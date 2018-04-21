@@ -15,11 +15,11 @@
     <parameter_set id="current">
         <!--<type>current</type>-->
         <theft_bit_action>NO_ACTION</theft_bit_action>
-        <read_write_mode>IDLE_MODE</read_write_mode>
+        <read_write_mode>READ_MODE</read_write_mode>
         <multi_read>false</multi_read>
-        <read_frequency>7000</read_frequency>
-        <extra_keystrokes>\nnewline\n\t</extra_keystrokes>
-        <anti_theft_on>0xff</anti_theft_on>
+        <read_frequency>2000</read_frequency>
+        <extra_keystrokes>\n\n\t</extra_keystrokes>
+        <anti_theft_on>0x00</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
     <parameter_set id="figged">
@@ -101,6 +101,15 @@
         <read_frequency>114</read_frequency>
         <extra_keystrokes>doo wop</extra_keystrokes>
         <anti_theft_on>0x01</anti_theft_on>
+        <anti_theft_off>0x00</anti_theft_off>
+    </parameter_set>
+    <parameter_set id="vals_fig">
+        <theft_bit_action>NO_ACTION</theft_bit_action>
+        <read_write_mode>WRITE_MODE</read_write_mode>
+        <multi_read>false</multi_read>
+        <read_frequency>2000</read_frequency>
+        <extra_keystrokes>\n\n\t</extra_keystrokes>
+        <anti_theft_on>0x00</anti_theft_on>
         <anti_theft_off>0x00</anti_theft_off>
     </parameter_set>
 </settings>

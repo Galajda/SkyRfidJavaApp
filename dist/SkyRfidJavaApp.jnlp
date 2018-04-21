@@ -8,7 +8,7 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-    <jar href="SkyRfidJavaApp.jar" size="131177" download="eager" />
+    <jar href="SkyRfidJavaApp.jar" size="129321" download="eager" />
     <jar href="lib\AbsoluteLayout.jar" size="2847" download="eager" />
     <jar href="lib\Cogimag.jar" size="176687" download="eager" />
     <jar href="lib\jna.jar" size="1440500" download="eager" />
